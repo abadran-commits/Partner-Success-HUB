@@ -831,6 +831,7 @@ const kpiQuality = [
 // them. It is NOT security — there is no backend, so any password is accepted and the
 // check can be bypassed by anyone reading the page source.
 const amAccounts = [
+  { name: "Ahmed Badran",          email: "a.badran@walaplus.com",        role: "Partner Success Manager", team: "All Teams" },
   { name: "Ahmed Abozeid",         email: "ahmed.abozeid@walaplus.com",   role: "Partner Success Manager", team: "All Teams" },
   { name: "Engy Magdy",            email: "engy.magdy@walaplus.com",      role: "Account Manager", team: "Egypt" },
   { name: "Samar Mansour",         email: "samar.mansour@walaplus.com",   role: "Account Manager", team: "Egypt" },
@@ -843,6 +844,22 @@ const amAccounts = [
 ];
 function initialsOf(name) {
   return name.split(" ").filter(Boolean).slice(0, 2).map(w => w[0]).join("").toUpperCase();
+}
+
+// Known accounts win, so their real name and role show. Any other walaplus.com work
+// address is still accepted, with a display name derived from the address — that way the
+// rest of the team can sign in without each one being hardcoded here.
+function accountForEmail(input) {
+  const email = String(input || "").trim().toLowerCase();
+  const known = amAccounts.find(a => a.email.toLowerCase() === email);
+  if (known) return known;
+  if (/^[^@\s]+@walaplus\.com$/.test(email)) {
+    const name = email.split("@")[0].split(/[._-]+/).filter(Boolean)
+      .map(p => p.length === 1 ? p.toUpperCase() + "." : p[0].toUpperCase() + p.slice(1))
+      .join(" ");
+    return { name, email, role: "Account Manager", team: "All Teams" };
+  }
+  return null;
 }
 
 function GoogleMark({ size = 16 }) {
@@ -873,8 +890,8 @@ function SignIn({ onSignIn }) {
 
   function submit(e) {
     e.preventDefault();
-    const acct = amAccounts.find(a => a.email.toLowerCase() === email.trim().toLowerCase());
-    if (!acct) { setErr("No Account Manager found with that email address."); return; }
+    const acct = accountForEmail(email);
+    if (!acct) { setErr("Use your WalaPlus work email — it must end in @walaplus.com."); return; }
     if (!pw.trim()) { setErr("Enter your password to continue."); return; }
     setErr("");
     onSignIn(acct);
@@ -915,7 +932,7 @@ function SignIn({ onSignIn }) {
           <button type="button" className="auth-google" onClick={() => setErr("Google sign-in needs a backend identity provider — use your work email above for now.")}><GoogleMark size={17} /> Sign in with Google</button>
 
           <div className="auth-hint">
-            <b>Demo access.</b> There is no authentication server behind this yet, so any password works. Sign in with any Account Manager address, for example <b>doha.sadek@walaplus.com</b>.
+            <b>Demo access.</b> There is no authentication server behind this yet, so any <b>@walaplus.com</b> address signs in and any password works. Your name is used to attribute the edits you make.
           </div>
 
           <p className="auth-terms">By continuing, you agree to the WalaPlus Terms of Service and Privacy Policy.</p>
