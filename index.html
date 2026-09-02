@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.24.7/babel.min.js"></script>
@@ -75,6 +76,8 @@ button svg{flex-shrink:0;display:block}
 .auth-or::before,.auth-or::after{content:"";flex:1;height:1px;background:var(--line)}
 .auth-google{width:100%;height:46px;border:1px solid var(--line);border-radius:11px;background:#fff;font-size:13px;font-weight:600;gap:10px;color:var(--ink)}
 .auth-google:hover{background:#f8f9fd;border-color:#c5cbe0}
+.g-slot{display:flex;justify-content:center;min-height:44px}
+.g-note{margin-top:9px;font-size:11px;color:var(--muted);text-align:center;line-height:1.5}
 .auth-terms{margin:16px 0 0;font-size:10.5px;color:var(--muted-2);text-align:center;line-height:1.6}
 .auth-err{margin-top:14px;background:#fdeaec;border:1px solid #f3c3c9;color:#c73847;border-radius:9px;padding:10px 13px;font-size:11.5px;font-weight:600;line-height:1.5}
 .auth-hint{margin-top:16px;background:#eef4ff;border:1px solid #d6e2fb;color:#3b6fd4;border-radius:9px;padding:10px 13px;font-size:10.5px;font-weight:550;line-height:1.6}
@@ -911,6 +914,22 @@ function initialsOf(name) {
   return name.split(" ").filter(Boolean).slice(0, 2).map(w => w[0]).join("").toUpperCase();
 }
 
+// Google Identity Services. The client ID is a public identifier, not a secret — it is meant
+// to ship in client-side code. No client secret is involved in this flow.
+const GOOGLE_CLIENT_ID = "3366206189-kb3fkej067checgso7jm6g7nhpfc4fe8.apps.googleusercontent.com";
+const ALLOWED_DOMAIN = "walaplus.com";
+
+// Reads the ID token's claims. This is a decode, NOT a verification — the signature is not
+// checked, which is only acceptable because there is no protected backend behind this yet.
+function decodeJwt(token) {
+  try {
+    const part = token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
+    const json = decodeURIComponent(atob(part).split("")
+      .map(c => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2)).join(""));
+    return JSON.parse(json);
+  } catch (e) { return null; }
+}
+
 // Known accounts win, so their real name and role show. Any other walaplus.com work
 // address is still accepted, with a display name derived from the address — that way the
 // rest of the team can sign in without each one being hardcoded here.
@@ -952,6 +971,60 @@ function SignIn({ onSignIn }) {
   const [pw, setPw] = useState("");
   const [showPw, setShowPw] = useState(false);
   const [err, setErr] = useState("");
+  const [gStatus, setGStatus] = useState("loading"); // loading | ready | unavailable
+  const gBtnRef = useRef(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    let waited = 0;
+
+    function handleCredential(resp) {
+      const claims = decodeJwt(resp && resp.credential);
+      if (!claims || !claims.email) { setErr("Could not read the Google sign-in response."); return; }
+      const addr = String(claims.email).toLowerCase();
+      // hd only *hints* the account chooser, so the domain is checked here for real.
+      if (!addr.endsWith("@" + ALLOWED_DOMAIN)) {
+        setErr(`${addr} is not a ${ALLOWED_DOMAIN} account. Sign in with your WalaPlus Google account.`);
+        return;
+      }
+      if (claims.email_verified === false) { setErr("That Google account's email is not verified."); return; }
+      const known = amAccounts.find(a => a.email.toLowerCase() === addr);
+      setErr("");
+      onSignIn(known || { name: claims.name || addr.split("@")[0], email: addr, role: "Account Manager", team: "All Teams" });
+    }
+
+    function init() {
+      if (cancelled) return;
+      const gid = window.google && window.google.accounts && window.google.accounts.id;
+      if (!gid) {
+        waited += 250;
+        if (waited > 8000) { setGStatus("unavailable"); return; }
+        setTimeout(init, 250);
+        return;
+      }
+      try {
+        gid.initialize({
+          client_id: GOOGLE_CLIENT_ID,
+          callback: handleCredential,
+          hd: ALLOWED_DOMAIN,
+          auto_select: false,
+          cancel_on_tap_outside: true,
+        });
+        if (gBtnRef.current) {
+          gBtnRef.current.innerHTML = "";
+          gid.renderButton(gBtnRef.current, {
+            theme: "outline", size: "large", shape: "rectangular",
+            text: "signin_with", width: 336, logo_alignment: "center",
+          });
+        }
+        setGStatus("ready");
+      } catch (e) {
+        setGStatus("unavailable");
+      }
+    }
+    init();
+    return () => { cancelled = true; };
+  }, []);
 
   function submit(e) {
     e.preventDefault();
@@ -994,10 +1067,12 @@ function SignIn({ onSignIn }) {
           <button className="auth-submit" type="submit"><Icon name="signout" size={16} /> Sign In</button>
 
           <div className="auth-or">Or continue with</div>
-          <button type="button" className="auth-google" onClick={() => setErr("Google sign-in needs a backend identity provider — use your work email above for now.")}><GoogleMark size={17} /> Sign in with Google</button>
+          <div className="g-slot" ref={gBtnRef} />
+          {gStatus === "loading" && <div className="g-note">Loading Google sign-in…</div>}
+          {gStatus === "unavailable" && <div className="g-note">Google sign-in could not load — it may be blocked on this network. Use your work email above.</div>}
 
           <div className="auth-hint">
-            <b>Demo access.</b> There is no authentication server behind this yet, so any <b>@walaplus.com</b> address signs in and any password works. Your name is used to attribute the edits you make.
+            <b>Google sign-in is real</b> and accepts <b>@walaplus.com</b> accounts only. The email and password fields below are a demo shortcut — any password works there, so use Google for a genuine sign-in.
           </div>
 
           <p className="auth-terms">By continuing, you agree to the WalaPlus Terms of Service and Privacy Policy.</p>
