@@ -56,6 +56,44 @@ button svg{flex-shrink:0;display:block}
 .brand span{display:block;color:#7481a3;font-size:9.5px;margin-top:2px;text-transform:uppercase;letter-spacing:1.3px;font-weight:600}
 .sidebar nav{padding:16px 12px;flex:1;overflow-y:auto}
 .nav-divider{height:1px;background:#ffffff14;margin:10px 6px 12px}
+
+/* ===== Settings ===== */
+.set-layout{display:grid;grid-template-columns:238px 1fr;gap:36px;align-items:start;max-width:1180px}
+.set-nav{position:sticky;top:88px}
+.set-group{margin-bottom:20px}
+.set-group>p{margin:0 0 7px;font-size:9.5px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);padding:0 11px}
+.set-nav button{display:flex;align-items:center;gap:10px;width:100%;border:0;background:transparent;padding:8px 11px;border-radius:8px;font-size:12.5px;font-weight:550;color:var(--ink-soft);text-align:left;position:relative;margin:1px 0}
+.set-nav button:hover{background:var(--line-soft)}
+.set-nav button.active{background:#eceff5;font-weight:700;color:var(--ink)}
+.set-nav button.active::before{content:"";position:absolute;left:-11px;top:5px;bottom:5px;width:3px;border-radius:0 3px 3px 0;background:#0f8558}
+.set-nav button i{color:#7d899f;display:inline-flex;flex-shrink:0;font-style:normal}
+.set-nav button.active i{color:#0f8558}
+.set-panel h1{margin:0;font-size:23px;font-weight:700;letter-spacing:-.5px;color:var(--ink)}
+.set-intro{margin:9px 0 0;font-size:12.5px;color:var(--muted);line-height:1.65;max-width:660px}
+.set-sec{padding:24px 0;border-bottom:1px solid var(--line)}
+.set-sec:last-child{border-bottom:0;padding-bottom:6px}
+.set-sec h2{margin:0 0 5px;font-size:16px;font-weight:650;letter-spacing:-.2px;color:var(--ink)}
+.set-sec>p{margin:0 0 16px;font-size:12px;color:var(--muted);line-height:1.65;max-width:640px}
+.set-row{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.set-row:last-child{margin-bottom:0}
+.set-field{display:flex;flex-direction:column;gap:6px}
+.set-field>label{font-size:11px;font-weight:650;color:var(--ink-soft)}
+.set-field select,.set-field input{height:38px;border:1px solid var(--line);border-radius:9px;padding:0 12px;font-size:12.5px;font-weight:550;background:#fff;min-width:196px;outline:0;color:var(--ink)}
+.set-field.narrow select,.set-field.narrow input{min-width:118px}
+.set-field select:focus,.set-field input:focus{border-color:#b7bdf7;box-shadow:0 0 0 3px #4f5bf01a}
+.set-save{height:38px;padding:0 18px;border:1px solid var(--line);background:#fff;border-radius:9px;font-size:12px;font-weight:650;color:var(--ink)}
+.set-save:hover{background:#f8f9fd;border-color:#c5cbe0}
+.set-badge{display:inline-block;border:1px solid #d0b9f0;color:#7c4dcc;background:#f7f2ff;border-radius:20px;padding:3px 10px;font-size:9.5px;font-weight:700;margin-left:9px;vertical-align:middle;letter-spacing:.2px}
+.set-badge.live{border-color:#a9e0c8;color:#0f8558;background:#e9f8f1}
+.set-check{display:flex;gap:11px;align-items:flex-start;margin-bottom:13px}
+.set-check input{margin-top:2px;width:15px;height:15px;accent-color:#0f8558;flex-shrink:0}
+.set-check b{display:block;font-size:12.5px;font-weight:650;color:var(--ink)}
+.set-check span{display:block;font-size:11.5px;color:var(--muted);margin-top:2px;line-height:1.55;max-width:600px}
+.set-note{background:#eef4ff;border:1px solid #d6e2fb;color:#3b6fd4;border-radius:9px;padding:11px 14px;font-size:11.5px;font-weight:600;display:flex;gap:9px;align-items:flex-start;line-height:1.55;margin-top:16px;max-width:660px}
+.set-saved{color:#0f8558;font-size:11.5px;font-weight:650;align-self:center}
+.set-table{width:100%;margin-top:4px}
+.set-table th{font-size:9px;letter-spacing:.7px}
+@media(max-width:900px){.set-layout{grid-template-columns:1fr;gap:18px}.set-nav{position:static}.set-nav button.active::before{display:none}}
 .sidebar nav>button,.sidebar-bottom>button{width:100%;height:40px;border:0;background:transparent;color:#8d97b5;border-radius:10px;text-align:left;padding:0 11px;display:flex;align-items:center;gap:11px;margin:2px 0;font-size:12.5px;font-weight:500;position:relative}
 .sidebar nav>button span,.sidebar-bottom>button span{width:17px;height:17px;display:inline-flex;align-items:center;justify-content:center;opacity:.85;flex-shrink:0}
 .sidebar nav>button:hover span,.sidebar nav>button.nav-active span{opacity:1}
@@ -9623,6 +9661,28 @@ function PSTCRM() {
   const [promoSortKey, setPromoSortKey] = useState(null);
   const [promoSortDir, setPromoSortDir] = useState("asc");
 
+  // ===== Settings =====
+  const [settingsTab, setSettingsTab] = useState("general");
+  const [savedFlash, setSavedFlash] = useState("");
+  const [settings, setSettings] = useState({
+    orgName: "WalaPlus Partner Success",
+    fiscalYear: "FY 2026",
+    currency: "SAR",
+    timezone: "Asia/Riyadh (GMT+3)",
+    dateFormat: "DD/MM/YYYY",
+    weekStart: "Sunday",
+    onTrackAt: 90,
+    atRiskAt: 70,
+    fyStartMonth: "Jan",
+    autoLockPast: true,
+    dqThreshold: 95,
+    emailDigest: "Weekly",
+    notifyAtRisk: true,
+    notifyRenewals: true,
+  });
+  function setSetting(key, value) { setSettings(s => ({ ...s, [key]: value })); }
+  function saveSettings(section) { setSavedFlash(section); setTimeout(() => setSavedFlash(""), 2400); }
+
   const [kpiDetail, setKpiDetail] = useState(null);
 
   // Quarterly tracking — targets/actuals are editable, and closed quarters (Q1/Q2) start locked.
@@ -9637,7 +9697,9 @@ function PSTCRM() {
   }
   function isQLocked(name, q) {
     const v = qLocks[`${name}::${q}`];
-    return v !== undefined ? v : (q === "Q1" || q === "Q2");
+    if (v !== undefined) return v;
+    // Default lock state follows Settings → Quarterly Periods.
+    return settings.autoLockPast ? (q === "Q1" || q === "Q2") : false;
   }
   function toggleQLock(name, q) {
     const wasLocked = isQLocked(name, q);
@@ -9829,11 +9891,12 @@ function PSTCRM() {
     return withCat.map((k) => {
       const pctv = k.target > 0 ? Math.round(k.achieved / k.target * 100) : 100;
       const ratio = k.target > 0 ? k.achieved / k.target : 1;
-      const status = ratio >= 0.9 ? "On Track" : ratio >= 0.7 ? "At Risk" : "Off Track";
+      // Status bands come from Settings → KPI Thresholds, so changing them re-grades live.
+      const status = ratio >= settings.onTrackAt / 100 ? "On Track" : ratio >= settings.atRiskAt / 100 ? "At Risk" : "Off Track";
       const gap = Number((k.target - k.achieved).toFixed(1));
       return { ...k, pctv, status, gap, dept: scopeDept, owner: scopeOwner };
     });
-  }, [scopedMerchants, scopedAMs, kpiDept, kpiAM]);
+  }, [scopedMerchants, scopedAMs, kpiDept, kpiAM, settings.onTrackAt, settings.atRiskAt]);
 
   const filteredKpiRows = kpiRows.filter((k) =>
     (kpiCategory === "All" || k.cat === kpiCategory) &&
@@ -10316,7 +10379,7 @@ function PSTCRM() {
           <button><span><Icon name="activities" /></span> Activities</button><button><span><Icon name="contracts" /></span> Contracts</button>
           <button><span><Icon name="offers" /></span> Offers</button><button><span><Icon name="tasks" /></span> Tasks <em>12</em></button><button><span><Icon name="reports" /></span> Reports</button>
         </nav>
-        <div className="sidebar-bottom"><button><span><Icon name="settings" /></span> Settings</button><button><span><Icon name="signout" /></span> Sign Out</button></div>
+        <div className="sidebar-bottom"><button className={view === "settings" ? "nav-active" : ""} onClick={() => setView("settings")}><span><Icon name="settings" /></span> Settings</button><button><span><Icon name="signout" /></span> Sign Out</button></div>
       </aside>
 
       <main>
@@ -10329,6 +10392,7 @@ function PSTCRM() {
             {view === "pipeline" && <strong>Revenue Pipeline</strong>}
             {view === "ophub" && <strong>AM Operations Hub</strong>}
             {view === "promos" && <strong>Special Promos</strong>}
+            {view === "settings" && <strong>Settings</strong>}
             {view === "merchants" && <strong>Merchants</strong>}
             {view === "directory" && <span>Teams</span>}
             {view === "team" && <><span>Teams</span><b>/</b><strong>{team} Team</strong></>}
@@ -10910,6 +10974,206 @@ function PSTCRM() {
             </table></div>
             {promoRows.length===0 && <div className="empty-state"><p>No promos yet — click "Add Promo" to log the first one.</p></div>}
             {promoRows.length>0 && filteredPromoRows.length===0 && <div className="empty-state"><p>No promos match these filters.</p></div>}
+          </div>
+        </section>}
+
+        {view === "settings" && <section className="content">
+          <div className="page-title"><div><p className="eyebrow">CONFIGURATION</p><h1>Settings</h1><p>Workspace, KPI, and data settings for the Partner Success Hub</p></div></div>
+
+          <div className="set-layout">
+            <nav className="set-nav">
+              <div className="set-group"><p>Workspace</p>
+                <button className={settingsTab==="general"?"active":""} onClick={()=>setSettingsTab("general")}><i><Icon name="settings" size={15} /></i>General</button>
+                <button className={settingsTab==="teams"?"active":""} onClick={()=>setSettingsTab("teams")}><i><Icon name="teams" size={15} /></i>Teams &amp; Members</button>
+              </div>
+              <div className="set-group"><p>KPI and tracking</p>
+                <button className={settingsTab==="thresholds"?"active":""} onClick={()=>setSettingsTab("thresholds")}><i><Icon name="trendUp" size={15} /></i>KPI Thresholds</button>
+                <button className={settingsTab==="periods"?"active":""} onClick={()=>setSettingsTab("periods")}><i><Icon name="calendar" size={15} /></i>Quarterly Periods</button>
+                <button className={settingsTab==="promocfg"?"active":""} onClick={()=>setSettingsTab("promocfg")}><i><Icon name="gift" size={15} /></i>Promo Options</button>
+              </div>
+              <div className="set-group"><p>Data and quality</p>
+                <button className={settingsTab==="quality"?"active":""} onClick={()=>setSettingsTab("quality")}><i><Icon name="check" size={15} /></i>Data Quality</button>
+                <button className={settingsTab==="audit"?"active":""} onClick={()=>setSettingsTab("audit")}><i><Icon name="history" size={15} /></i>Audit Log</button>
+              </div>
+              <div className="set-group"><p>Integrations</p>
+                <button className={settingsTab==="notifications"?"active":""} onClick={()=>setSettingsTab("notifications")}><i><Icon name="mail" size={15} /></i>Notifications</button>
+                <button className={settingsTab==="apps"?"active":""} onClick={()=>setSettingsTab("apps")}><i><Icon name="contracts" size={15} /></i>Connected Apps</button>
+              </div>
+            </nav>
+
+            <div className="set-panel">
+              {settingsTab==="general" && <>
+                <h1>General</h1>
+                <p className="set-intro">Core identity and formatting for this workspace. These values are used across every module.</p>
+                <div className="set-sec">
+                  <h2>Organization</h2>
+                  <p>How this workspace is identified across the platform.</p>
+                  <div className="set-row">
+                    <div className="set-field"><label>Organization name</label><input value={settings.orgName} onChange={e=>setSetting("orgName", e.target.value)} /></div>
+                    <div className="set-field"><label>Fiscal year</label><select value={settings.fiscalYear} onChange={e=>setSetting("fiscalYear", e.target.value)}>{["FY 2025","FY 2026","FY 2027"].map(o=><option key={o}>{o}</option>)}</select></div>
+                    <button className="set-save" onClick={()=>saveSettings("org")}>Save</button>
+                    {savedFlash==="org" && <span className="set-saved">✓ Saved</span>}
+                  </div>
+                </div>
+                <div className="set-sec">
+                  <h2>Regional formatting</h2>
+                  <p>Currency, timezone, and date display used in tables and reports.</p>
+                  <div className="set-row">
+                    <div className="set-field narrow"><label>Currency</label><select value={settings.currency} onChange={e=>setSetting("currency", e.target.value)}>{["SAR","AED","EGP","USD"].map(o=><option key={o}>{o}</option>)}</select></div>
+                    <div className="set-field"><label>Timezone</label><select value={settings.timezone} onChange={e=>setSetting("timezone", e.target.value)}>{["Asia/Riyadh (GMT+3)","Africa/Cairo (GMT+2)","Asia/Dubai (GMT+4)"].map(o=><option key={o}>{o}</option>)}</select></div>
+                    <div className="set-field narrow"><label>Date format</label><select value={settings.dateFormat} onChange={e=>setSetting("dateFormat", e.target.value)}>{["DD/MM/YYYY","MM/DD/YYYY","YYYY-MM-DD"].map(o=><option key={o}>{o}</option>)}</select></div>
+                    <div className="set-field narrow"><label>Week starts</label><select value={settings.weekStart} onChange={e=>setSetting("weekStart", e.target.value)}>{["Sunday","Monday","Saturday"].map(o=><option key={o}>{o}</option>)}</select></div>
+                    <button className="set-save" onClick={()=>saveSettings("region")}>Save</button>
+                    {savedFlash==="region" && <span className="set-saved">✓ Saved</span>}
+                  </div>
+                </div>
+              </>}
+
+              {settingsTab==="teams" && <>
+                <h1>Teams &amp; Members</h1>
+                <p className="set-intro">The teams in this workspace and the Account Managers assigned to each. Merchant records and KPIs are scoped by these.</p>
+                <div className="set-sec">
+                  <h2>Teams</h2>
+                  <p>{Object.keys(teamManagers).length} teams configured across the Partner Success organisation.</p>
+                  <div className="table-scroll"><table className="set-table">
+                    <thead><tr><th>TEAM</th><th>ACCOUNT MANAGERS</th><th>MEMBERS</th></tr></thead>
+                    <tbody>{Object.keys(teamManagers).map(t => (
+                      <tr key={t}>
+                        <td><span className="team-dot"><i style={{background: teamAccent[t]}} /><b>{t}</b></span></td>
+                        <td className="muted">{teamManagers[t].join(", ")}</td>
+                        <td><b>{teamManagers[t].length}</b></td>
+                      </tr>
+                    ))}</tbody>
+                  </table></div>
+                </div>
+              </>}
+
+              {settingsTab==="thresholds" && <>
+                <h1>KPI Thresholds <span className="set-badge live">Live</span></h1>
+                <p className="set-intro">The cut-offs that decide whether a KPI reads as On Track, At Risk, or Off Track. Changing these updates the KPI Management table immediately.</p>
+                <div className="set-sec">
+                  <h2>Status bands</h2>
+                  <p>A KPI's status is its current value divided by its target. Anything below the At Risk cut-off is Off Track.</p>
+                  <div className="set-row">
+                    <div className="set-field narrow"><label>On Track at or above (%)</label><input type="number" min={0} max={200} value={settings.onTrackAt} onChange={e=>setSetting("onTrackAt", Number(e.target.value))} /></div>
+                    <div className="set-field narrow"><label>At Risk at or above (%)</label><input type="number" min={0} max={200} value={settings.atRiskAt} onChange={e=>setSetting("atRiskAt", Number(e.target.value))} /></div>
+                    <button className="set-save" onClick={()=>saveSettings("bands")}>Save</button>
+                    {savedFlash==="bands" && <span className="set-saved">✓ Saved</span>}
+                  </div>
+                  <div className="set-note"><Icon name="help" size={14} /> <span>Right now {kpiTotals.onTrack} KPIs read On Track, {kpiTotals.atRisk} At Risk, and {kpiTotals.offTrack} Off Track under these thresholds.</span></div>
+                </div>
+              </>}
+
+              {settingsTab==="periods" && <>
+                <h1>Quarterly Periods <span className="set-badge live">Live</span></h1>
+                <p className="set-intro">How reporting quarters behave in the KPI detail view, including which periods are closed for editing.</p>
+                <div className="set-sec">
+                  <h2>Fiscal calendar</h2>
+                  <p>The month your fiscal year opens on. Quarters are derived from this.</p>
+                  <div className="set-row">
+                    <div className="set-field narrow"><label>Fiscal year starts</label><select value={settings.fyStartMonth} onChange={e=>setSetting("fyStartMonth", e.target.value)}>{monthList.map(m=><option key={m}>{m}</option>)}</select></div>
+                    <button className="set-save" onClick={()=>saveSettings("fy")}>Save</button>
+                    {savedFlash==="fy" && <span className="set-saved">✓ Saved</span>}
+                  </div>
+                </div>
+                <div className="set-sec">
+                  <h2>Period locking</h2>
+                  <p>Locked periods cannot be edited until someone reopens them. Every lock and unlock is recorded in the KPI's lock history.</p>
+                  <label className="set-check">
+                    <input type="checkbox" checked={settings.autoLockPast} onChange={e=>setSetting("autoLockPast", e.target.checked)} />
+                    <span><b>Auto-lock closed quarters</b><span>Q1 and Q2 open locked so historical actuals cannot be changed by accident. Turn this off to leave every quarter editable by default.</span></span>
+                  </label>
+                </div>
+              </>}
+
+              {settingsTab==="promocfg" && <>
+                <h1>Promo Options</h1>
+                <p className="set-intro">The dropdown values Account Managers pick from when logging a special promo.</p>
+                <div className="set-sec">
+                  <h2>Campaign types</h2>
+                  <p>Offered in the "Linked to Which Campaign" field.</p>
+                  <div className="segment-strip" style={{gridTemplateColumns:"repeat(auto-fill,minmax(150px,1fr))"}}>
+                    {promoCampaignTypes.map(c => <div key={c} className="segment-card" style={{cursor:"default"}}><b style={{fontSize:"12.5px"}}>{c}</b></div>)}
+                  </div>
+                </div>
+                <div className="set-sec">
+                  <h2>Competitive read</h2>
+                  <p>Offered in the Competitive field on each promo.</p>
+                  <div className="segment-strip" style={{gridTemplateColumns:"repeat(auto-fill,minmax(150px,1fr))"}}>
+                    {promoCompetitiveOptions.map(c => <div key={c} className="segment-card" style={{cursor:"default"}}><b style={{fontSize:"12.5px"}}>{c}</b></div>)}
+                  </div>
+                  <div className="set-note"><Icon name="help" size={14} /> <span>These lists are defined in the app today. Editing them from this screen needs a datastore behind the app — see Audit Log for the same limitation.</span></div>
+                </div>
+              </>}
+
+              {settingsTab==="quality" && <>
+                <h1>Data Quality</h1>
+                <p className="set-intro">The completeness bar a merchant record has to clear to count as good data.</p>
+                <div className="set-sec">
+                  <h2>Completeness target</h2>
+                  <p>A record counts as complete when it has a real category, an assigned Account Manager, and at least one store.</p>
+                  <div className="set-row">
+                    <div className="set-field narrow"><label>Target completeness (%)</label><input type="number" min={0} max={100} value={settings.dqThreshold} onChange={e=>setSetting("dqThreshold", Number(e.target.value))} /></div>
+                    <button className="set-save" onClick={()=>saveSettings("dq")}>Save</button>
+                    {savedFlash==="dq" && <span className="set-saved">✓ Saved</span>}
+                  </div>
+                </div>
+              </>}
+
+              {settingsTab==="audit" && <>
+                <h1>Audit Log</h1>
+                <p className="set-intro">Every change to a KPI target or actual is attributed to the person who made it and shown in that KPI's detail view.</p>
+                <div className="set-sec">
+                  <h2>Retention</h2>
+                  <p>How long change history is kept before it is cleared.</p>
+                  <div className="set-note"><Icon name="help" size={14} /> <span>Change history currently lives in the browser for the length of a session, so a refresh clears it. Persistent retention needs a datastore behind the app — that is the single biggest thing missing from the system today.</span></div>
+                </div>
+              </>}
+
+              {settingsTab==="notifications" && <>
+                <h1>Notifications</h1>
+                <p className="set-intro">What the platform emails you, and how often.</p>
+                <div className="set-sec">
+                  <h2>Digest</h2>
+                  <p>A rollup of KPI movement and pipeline changes.</p>
+                  <div className="set-row">
+                    <div className="set-field"><label>Send digest</label><select value={settings.emailDigest} onChange={e=>setSetting("emailDigest", e.target.value)}>{["Daily","Weekly","Monthly","Never"].map(o=><option key={o}>{o}</option>)}</select></div>
+                    <button className="set-save" onClick={()=>saveSettings("digest")}>Save</button>
+                    {savedFlash==="digest" && <span className="set-saved">✓ Saved</span>}
+                  </div>
+                </div>
+                <div className="set-sec">
+                  <h2>Alerts</h2>
+                  <p>Send an email the moment something needs attention.</p>
+                  <label className="set-check">
+                    <input type="checkbox" checked={settings.notifyAtRisk} onChange={e=>setSetting("notifyAtRisk", e.target.checked)} />
+                    <span><b>KPI drops to At Risk or Off Track</b><span>Alerts the KPI owner as soon as its status band changes for the worse.</span></span>
+                  </label>
+                  <label className="set-check">
+                    <input type="checkbox" checked={settings.notifyRenewals} onChange={e=>setSetting("notifyRenewals", e.target.checked)} />
+                    <span><b>Contract renewal due within 90 days</b><span>Alerts the assigned Account Manager ahead of the renewal window.</span></span>
+                  </label>
+                  <div className="set-note"><Icon name="help" size={14} /> <span>These preferences are stored in the interface. Actually sending mail needs a backend and an email provider connected.</span></div>
+                </div>
+              </>}
+
+              {settingsTab==="apps" && <>
+                <h1>Connected Apps</h1>
+                <p className="set-intro">External systems the Partner Success Hub can exchange data with.</p>
+                <div className="set-sec">
+                  <h2>Available connections</h2>
+                  <p>None are connected yet. Each needs a backend service before it can be enabled.</p>
+                  <div className="table-scroll"><table className="set-table">
+                    <thead><tr><th>SERVICE</th><th>PURPOSE</th><th>STATUS</th></tr></thead>
+                    <tbody>
+                      {[["Google Drive","Marketing artwork for special promos"],["Outlook / Exchange","Meeting sync for the Operations Hub"],["Power BI","Push merchant and KPI datasets"],["Salesforce","Two-way merchant record sync"]].map(([s,p]) => (
+                        <tr key={s}><td><b>{s}</b></td><td className="muted">{p}</td><td><span className="kpi-status-pill warn">Not connected</span></td></tr>
+                      ))}
+                    </tbody>
+                  </table></div>
+                </div>
+              </>}
+            </div>
           </div>
         </section>}
 
