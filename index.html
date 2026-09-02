@@ -43,6 +43,52 @@ button svg{flex-shrink:0;display:block}
 
 .app-shell{min-height:100vh}
 
+/* ===== Sign-in ===== */
+.auth-wrap{display:grid;grid-template-columns:minmax(400px,38%) 1fr;min-height:100vh;background:#fff}
+.auth-left{display:flex;align-items:center;justify-content:center;padding:40px 34px}
+.auth-card{width:100%;max-width:400px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:34px 32px 26px;box-shadow:0 18px 50px rgba(15,23,55,.07)}
+.auth-brand{display:flex;flex-direction:column;align-items:center;margin-bottom:20px}
+.auth-logo{width:60px;height:60px;border-radius:18px;background:linear-gradient(135deg,#34d8b0,#0f9c7f);color:#fff;display:grid;place-items:center;font-size:19px;font-weight:800;box-shadow:0 10px 26px #0f9c7f4d;margin-bottom:15px;letter-spacing:-.5px}
+.auth-card h1{margin:0;font-size:20px;font-weight:700;letter-spacing:-.4px;text-align:center;color:var(--ink)}
+.auth-sub{margin:6px 0 0;font-size:12.5px;color:var(--muted);text-align:center}
+.auth-field{margin-top:16px}
+.auth-field label{display:block;font-size:9.5px;font-weight:700;letter-spacing:.9px;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.auth-input{display:flex;align-items:center;gap:10px;height:46px;border:1px solid var(--line);border-radius:11px;padding:0 13px;background:#fbfbfe;transition:.15s}
+.auth-input:focus-within{border-color:#7fd8bd;background:#fff;box-shadow:0 0 0 3px #14b8a01f}
+.auth-input i{color:#9aa5ba;display:inline-flex;flex-shrink:0}
+.auth-input input{border:0;outline:0;background:transparent;flex:1;font-size:13px;font-weight:500;min-width:0;color:var(--ink)}
+.auth-eye{background:transparent;border:0;color:#9aa5ba;padding:2px;line-height:0}
+.auth-eye:hover{color:var(--ink)}
+.auth-submit{width:100%;height:48px;margin-top:20px;border:0;border-radius:11px;background:linear-gradient(135deg,#16b981,#0d9268);color:#fff;font-size:14px;font-weight:700;box-shadow:0 10px 24px #0d926840;gap:9px}
+.auth-submit:hover{transform:translateY(-1px);box-shadow:0 14px 30px #0d926855}
+.auth-or{display:flex;align-items:center;gap:12px;margin:20px 0 15px;color:var(--muted-2);font-size:9.5px;font-weight:700;letter-spacing:.9px;text-transform:uppercase}
+.auth-or::before,.auth-or::after{content:"";flex:1;height:1px;background:var(--line)}
+.auth-google{width:100%;height:46px;border:1px solid var(--line);border-radius:11px;background:#fff;font-size:13px;font-weight:600;gap:10px;color:var(--ink)}
+.auth-google:hover{background:#f8f9fd;border-color:#c5cbe0}
+.auth-terms{margin:16px 0 0;font-size:10.5px;color:var(--muted-2);text-align:center;line-height:1.6}
+.auth-err{margin-top:14px;background:#fdeaec;border:1px solid #f3c3c9;color:#c73847;border-radius:9px;padding:10px 13px;font-size:11.5px;font-weight:600;line-height:1.5}
+.auth-hint{margin-top:16px;background:#eef4ff;border:1px solid #d6e2fb;color:#3b6fd4;border-radius:9px;padding:10px 13px;font-size:10.5px;font-weight:550;line-height:1.6}
+.auth-hint b{font-weight:750}
+.auth-right{position:relative;overflow:hidden;background:linear-gradient(160deg,#f2fbf7 0%,#e6f7ef 55%,#d9f1e7 100%);padding:52px 54px;display:flex;flex-direction:column;justify-content:center}
+.auth-right::before{content:"";position:absolute;top:-30%;right:-20%;width:80%;height:135%;border-radius:50%;background:radial-gradient(circle at 32% 32%,#ffffff90,#ffffff00 70%)}
+.auth-right-inner{position:relative;max-width:780px}
+.auth-pill{display:inline-flex;align-items:center;gap:7px;background:#ffffffcc;border:1px solid #bfe6d4;color:#0f8558;border-radius:20px;padding:6px 14px;font-size:11px;font-weight:700}
+.auth-right h2{margin:18px 0 0;font-size:36px;line-height:1.17;font-weight:750;letter-spacing:-1.1px;color:#12352b}
+.auth-right h2 em{font-style:normal;color:#0f9c7f;display:block}
+.auth-right-inner>p{margin:16px 0 0;font-size:14px;color:#426157;line-height:1.68;max-width:560px}
+.auth-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:28px}
+.auth-stat{background:#ffffffb5;border:1px solid #fff;border-radius:14px;padding:16px;text-align:center;box-shadow:0 6px 18px rgba(15,110,90,.06)}
+.auth-stat b{display:block;font-size:24px;font-weight:750;color:#0f9c7f;letter-spacing:-.6px}
+.auth-stat span{display:block;font-size:11px;color:#4d6f65;font-weight:600;margin-top:4px}
+.auth-feats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+.auth-feat{background:#ffffffab;border:1px solid #fff;border-radius:12px;padding:13px 14px;display:flex;gap:11px;align-items:flex-start}
+.auth-feat i{width:30px;height:30px;border-radius:9px;background:#e3f5ec;color:#0f8558;display:grid;place-items:center;flex-shrink:0}
+.auth-feat b{display:block;font-size:12.5px;font-weight:700;color:#12352b}
+.auth-feat span{display:block;font-size:11px;color:#4d6f65;margin-top:2px;line-height:1.5}
+.auth-badges{display:flex;gap:24px;margin-top:24px;font-size:11.5px;font-weight:650;color:#3f6459;flex-wrap:wrap}
+.auth-badges span{display:flex;align-items:center;gap:7px}
+@media(max-width:1050px){.auth-wrap{grid-template-columns:1fr}.auth-right{display:none}}
+
 /* ===== Sidebar ===== */
 .sidebar{position:fixed;inset:0 auto 0 0;width:250px;
   background:
@@ -780,9 +826,132 @@ const kpiQuality = [
   { name: "Resolution SLA", unit: "%", target: 95, achieved: 92, previous: 89, real: false, owner: "Doha Sadek", desc: "Meet resolution SLA targets for merchant support tickets" },
   { name: "Approved Special Offers", unit: "", target: 0, achieved: 0, previous: 0, real: true, owner: "Donia Hesham", desc: "Track approved vs total special offers in the pipeline" },
 ];
-// Signed-in user — every target/actual edit and lock action is attributed to them.
-const CURRENT_USER = "Ahmed Abozeid";
-const CURRENT_USER_INITIALS = "AA";
+// ===== Account Manager sign-in =====
+// Front-end gate only: it identifies who is using the hub so edits can be attributed to
+// them. It is NOT security — there is no backend, so any password is accepted and the
+// check can be bypassed by anyone reading the page source.
+const amAccounts = [
+  { name: "Ahmed Abozeid",         email: "ahmed.abozeid@walaplus.com",   role: "Partner Success Manager", team: "All Teams" },
+  { name: "Engy Magdy",            email: "engy.magdy@walaplus.com",      role: "Account Manager", team: "Egypt" },
+  { name: "Samar Mansour",         email: "samar.mansour@walaplus.com",   role: "Account Manager", team: "Egypt" },
+  { name: "Abobakr Ali",           email: "abobakr.ali@walaplus.com",     role: "Account Manager", team: "Egypt" },
+  { name: "Abdullrhman Al Farram", email: "abdullrhman.alfarram@walaplus.com", role: "Account Manager", team: "KSA" },
+  { name: "Majed Bamukideh",       email: "majed.bamukideh@walaplus.com", role: "Account Manager", team: "KSA" },
+  { name: "Mohammed Alrudainy",    email: "mohammed.alrudainy@walaplus.com", role: "Account Manager", team: "KSA" },
+  { name: "Doha Sadek",            email: "doha.sadek@walaplus.com",      role: "Account Manager", team: "Aggregator" },
+  { name: "Donia Hesham",          email: "donia.hesham@walaplus.com",    role: "Account Manager", team: "Aggregator" },
+];
+function initialsOf(name) {
+  return name.split(" ").filter(Boolean).slice(0, 2).map(w => w[0]).join("").toUpperCase();
+}
+
+function GoogleMark({ size = 16 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 48 48" aria-hidden="true">
+      <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
+      <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
+      <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" />
+      <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
+    </svg>
+  );
+}
+
+const authFeatures = [
+  { icon: "trendUp",  title: "KPI Management",   desc: "Track every KPI against target with quarterly pace" },
+  { icon: "diamond",  title: "Revenue Pipeline", desc: "Quotation through to payment, per merchant" },
+  { icon: "gift",     title: "Special Promos",   desc: "Log offers, campaigns, and competitive read" },
+  { icon: "target",   title: "Tier A Dashboard", desc: "Performance segmentation across the cohort" },
+  { icon: "teams",    title: "Operations Hub",   desc: "Renewals, meetings, and relationship health" },
+  { icon: "history",  title: "Full Audit Trail", desc: "Every target and actual edit, attributed" },
+];
+
+function SignIn({ onSignIn }) {
+  const [email, setEmail] = useState("");
+  const [pw, setPw] = useState("");
+  const [showPw, setShowPw] = useState(false);
+  const [err, setErr] = useState("");
+
+  function submit(e) {
+    e.preventDefault();
+    const acct = amAccounts.find(a => a.email.toLowerCase() === email.trim().toLowerCase());
+    if (!acct) { setErr("No Account Manager found with that email address."); return; }
+    if (!pw.trim()) { setErr("Enter your password to continue."); return; }
+    setErr("");
+    onSignIn(acct);
+  }
+
+  return (
+    <div className="auth-wrap">
+      <div className="auth-left">
+        <form className="auth-card" onSubmit={submit}>
+          <div className="auth-brand">
+            <div className="auth-logo">PS</div>
+            <h1>Partner Success Hub</h1>
+            <p className="auth-sub">Sign in to access your dashboard</p>
+          </div>
+
+          <div className="auth-field">
+            <label htmlFor="au-email">Email</label>
+            <div className="auth-input">
+              <i><Icon name="mail" size={15} /></i>
+              <input id="au-email" type="email" autoComplete="username" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@walaplus.com" />
+            </div>
+          </div>
+
+          <div className="auth-field">
+            <label htmlFor="au-pw">Password</label>
+            <div className="auth-input">
+              <i><Icon name="lock" size={15} /></i>
+              <input id="au-pw" type={showPw ? "text" : "password"} autoComplete="current-password" value={pw} onChange={e => setPw(e.target.value)} placeholder="Enter your password" />
+              <button type="button" className="auth-eye" onClick={() => setShowPw(v => !v)} title={showPw ? "Hide password" : "Show password"} aria-label={showPw ? "Hide password" : "Show password"}><Icon name={showPw ? "eyeOff" : "eye"} size={15} /></button>
+            </div>
+          </div>
+
+          {err && <div className="auth-err">{err}</div>}
+
+          <button className="auth-submit" type="submit"><Icon name="signout" size={16} /> Sign In</button>
+
+          <div className="auth-or">Or continue with</div>
+          <button type="button" className="auth-google" onClick={() => setErr("Google sign-in needs a backend identity provider — use your work email above for now.")}><GoogleMark size={17} /> Sign in with Google</button>
+
+          <div className="auth-hint">
+            <b>Demo access.</b> There is no authentication server behind this yet, so any password works. Sign in with any Account Manager address, for example <b>doha.sadek@walaplus.com</b>.
+          </div>
+
+          <p className="auth-terms">By continuing, you agree to the WalaPlus Terms of Service and Privacy Policy.</p>
+        </form>
+      </div>
+
+      <div className="auth-right">
+        <div className="auth-right-inner">
+          <span className="auth-pill"><Icon name="star" size={13} /> Partner Success, reimagined</span>
+          <h2>The Complete Platform for<em>Partner Success Teams</em></h2>
+          <p>Manage your full merchant portfolio, track KPIs against target, run the revenue pipeline, and keep every special promo and renewal moving — in one place.</p>
+
+          <div className="auth-stats">
+            <div className="auth-stat"><b>5,842</b><span>Merchants Tracked</span></div>
+            <div className="auth-stat"><b>13</b><span>KPIs Monitored</span></div>
+            <div className="auth-stat"><b>4</b><span>Regional Teams</span></div>
+          </div>
+
+          <div className="auth-feats">
+            {authFeatures.map(f => (
+              <div className="auth-feat" key={f.title}>
+                <i><Icon name={f.icon} size={15} /></i>
+                <div><b>{f.title}</b><span>{f.desc}</span></div>
+              </div>
+            ))}
+          </div>
+
+          <div className="auth-badges">
+            <span><Icon name="lock" size={14} /> Internal use only</span>
+            <span><Icon name="check" size={14} /> Change history attributed</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 function fmtLogDate(d) { return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }); }
 function fmtLogTime(d) { return d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" }); }
 
@@ -9429,6 +9598,8 @@ const iconPaths = {
   lock: "M7.5 10.5V7a4.5 4.5 0 0 1 9 0v3.5M5.5 10.5h13a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-13a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1Z",
   unlock: "M7.5 10.5V7a4.5 4.5 0 0 1 8.7-1.6M5.5 10.5h13a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-13a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1Z",
   history: "M3.5 12a8.5 8.5 0 1 0 2.8-6.3L3.5 8M3.5 3.5v5h5M12 7.5V12l3 1.8",
+  eye: "M2 12s3.8-7 10-7 10 7 10 7-3.8 7-10 7-10-7-10-7Z M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z",
+  eyeOff: "M3 3l18 18M10.6 10.6a3 3 0 0 0 4.2 4.2M9.9 5.2A9.6 9.6 0 0 1 12 5c6.2 0 10 7 10 7a17.9 17.9 0 0 1-3.4 4.3M6.3 6.5A17.6 17.6 0 0 0 2 12s3.8 7 10 7a9.7 9.7 0 0 0 3.9-.8",
 };
 
 function Icon({ name, size = 15 }) {
@@ -9596,6 +9767,7 @@ function KpiTrendChart({ rows, target, label }) {
 }
 
 function PSTCRM() {
+  const [authUser, setAuthUser] = useState(null);
   const [view, setView] = useState("kpi");
   const [team, setTeam] = useState("Egypt");
   const [merchants, setMerchants] = useState(() => buildInitialMerchants());
@@ -9715,7 +9887,7 @@ function PSTCRM() {
   function addLog(kpiName, what, prev, next, type) {
     setChangeLog(l => [{
       id: `L-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
-      kpiName, what, prev, next, type, by: CURRENT_USER, at: new Date(),
+      kpiName, what, prev, next, type, by: authUser.name, at: new Date(),
     }, ...l]);
   }
   // One log row per field: the baseline is captured on the first keystroke and the row's "new"
@@ -9732,7 +9904,7 @@ function PSTCRM() {
       return [{
         id: existing ? existing.id : `L-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
         key, kpiName, what: `${q} ${fieldLabel}`, prev, next: newVal,
-        type: "edit", by: CURRENT_USER, at: new Date(),
+        type: "edit", by: authUser.name, at: new Date(),
       }, ...rest];
     });
   }
@@ -10358,6 +10530,9 @@ function PSTCRM() {
     </tr>
   );
 
+  // Every hook above has already run, so gating the render here keeps hook order stable.
+  if (!authUser) return <SignIn onSignIn={setAuthUser} />;
+
   return (
     <div className="app-shell">
       <aside className="sidebar">
@@ -10379,7 +10554,7 @@ function PSTCRM() {
           <button><span><Icon name="activities" /></span> Activities</button><button><span><Icon name="contracts" /></span> Contracts</button>
           <button><span><Icon name="offers" /></span> Offers</button><button><span><Icon name="tasks" /></span> Tasks <em>12</em></button><button><span><Icon name="reports" /></span> Reports</button>
         </nav>
-        <div className="sidebar-bottom"><button className={view === "settings" ? "nav-active" : ""} onClick={() => setView("settings")}><span><Icon name="settings" /></span> Settings</button><button><span><Icon name="signout" /></span> Sign Out</button></div>
+        <div className="sidebar-bottom"><button className={view === "settings" ? "nav-active" : ""} onClick={() => setView("settings")}><span><Icon name="settings" /></span> Settings</button><button onClick={() => { setAuthUser(null); setView("kpi"); }}><span><Icon name="signout" /></span> Sign Out</button></div>
       </aside>
 
       <main>
@@ -10404,7 +10579,7 @@ function PSTCRM() {
             <button className="lang-toggle"><Icon name="globe" size={14} /> عربي</button>
             <button className="icon-btn notification"><Icon name="bell" size={15} /></button>
             {["merchants","team","directory","merchant"].includes(view) && <button className="primary" onClick={() => openAddModal(view === "team" ? team : "Egypt")}><Icon name="plus" size={13} /> Add merchant</button>}
-            <button className="user-chip"><i>AA</i><p><b>Ahmed Abozeid</b><span>Partner Success Manager</span></p><Icon name="chevDown" size={12} /></button>
+            <button className="user-chip"><i>{initialsOf(authUser.name)}</i><p><b>{authUser.name}</b><span>{authUser.role}</span></p><Icon name="chevDown" size={12} /></button>
           </div>
         </header>
 
@@ -11559,7 +11734,7 @@ function PSTCRM() {
                           <td>{fmtLogDate(e.at)}<span className="log-time">{fmtLogTime(e.at)}</span></td>
                           <td><b>{e.what}</b></td>
                           <td><span className={`kpi-status-pill ${e.next === "Locked" ? "warn" : "good"}`}>{e.next === "Locked" ? "Locked" : "Unlocked"}</span></td>
-                          <td><span className="log-by"><i>{CURRENT_USER_INITIALS}</i>{e.by}</span></td>
+                          <td><span className="log-by"><i>{initialsOf(e.by)}</i>{e.by}</span></td>
                         </tr>
                       ))}</tbody>
                     </table></div>}
@@ -11577,7 +11752,7 @@ function PSTCRM() {
                           <td><b>{e.what}</b></td>
                           <td><span className="log-prev">{e.prev === "" ? "—" : e.prev}</span></td>
                           <td><span className="log-next">{e.next === "" ? "—" : e.next}</span></td>
-                          <td><span className="log-by"><i>{CURRENT_USER_INITIALS}</i>{e.by}</span></td>
+                          <td><span className="log-by"><i>{initialsOf(e.by)}</i>{e.by}</span></td>
                         </tr>
                       ))}</tbody>
                     </table></div>}
