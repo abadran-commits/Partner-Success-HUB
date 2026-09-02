@@ -90,18 +90,65 @@ button svg{flex-shrink:0;display:block}
 @media(max-width:1050px){.auth-wrap{grid-template-columns:1fr}.auth-right{display:none}}
 
 /* ===== Sidebar ===== */
-.sidebar{position:fixed;inset:0 auto 0 0;width:250px;
+.sidebar{position:fixed;inset:0 auto 0 0;width:268px;
   background:
-    radial-gradient(420px 260px at 0% 0%, #14544a 0%, transparent 60%),
-    linear-gradient(190deg,#052421,#0a3831 55%,#082e29);
+    radial-gradient(460px 280px at 0% 0%, #165c50 0%, transparent 62%),
+    linear-gradient(190deg,#04201d,#0a3831 52%,#062723);
   color:#a9d4c9;display:flex;flex-direction:column;z-index:10;
-  border-right:1px solid #ffffff0f}
-.brand{height:74px;padding:0 20px;border-bottom:1px solid #ffffff10;display:flex;gap:12px;align-items:center}
-.brand-mark{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,#34d8b0,#0f9c7f);color:#062a24;font-size:14px;font-weight:800;display:grid;place-items:center;box-shadow:0 8px 20px #0f9c7f4d, inset 0 1px 0 #ffffff33;letter-spacing:-.3px}
-.brand b{display:block;color:#f2fbf8;font-size:14.5px;font-weight:650;letter-spacing:-.1px}
-.brand span{display:block;color:#7481a3;font-size:9.5px;margin-top:2px;text-transform:uppercase;letter-spacing:1.3px;font-weight:600}
-.sidebar nav{padding:16px 12px;flex:1;overflow-y:auto}
-.nav-divider{height:1px;background:#ffffff14;margin:10px 6px 12px}
+  border-right:1px solid #ffffff0f;transition:width .22s cubic-bezier(.4,0,.2,1)}
+.sidebar.collapsed{width:78px}
+
+.brand{height:74px;padding:0 16px 0 18px;border-bottom:1px solid #ffffff10;display:flex;gap:12px;align-items:center;position:relative}
+.brand-mark{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#34d8b0,#0f9c7f);color:#062a24;font-size:14px;font-weight:800;display:grid;place-items:center;box-shadow:0 8px 20px #0f9c7f4d, inset 0 1px 0 #ffffff33;letter-spacing:-.3px;flex-shrink:0}
+.brand-txt{min-width:0;overflow:hidden}
+.brand b{display:block;color:#f2fbf8;font-size:14px;font-weight:650;letter-spacing:-.1px;white-space:nowrap}
+.brand span{display:block;color:#5f9c8c;font-size:9px;margin-top:2px;text-transform:uppercase;letter-spacing:1.3px;font-weight:700;white-space:nowrap}
+.nav-toggle{position:absolute;right:-13px;top:50%;transform:translateY(-50%);width:26px;height:26px;border-radius:50%;border:1px solid #1c5f53;background:#0b3d35;color:#7fd8bd;z-index:12;box-shadow:0 3px 10px #00000045;padding:0}
+.nav-toggle:hover{background:#12554a;color:#b6f0dd}
+.sidebar.collapsed .brand{padding:0;justify-content:center}
+.sidebar.collapsed .brand-txt{display:none}
+
+.nav-search{margin:14px 12px 4px;display:flex;align-items:center;gap:9px;height:38px;border-radius:10px;background:#ffffff0d;border:1px solid #ffffff12;padding:0 11px;color:#6ea495}
+.nav-search input{border:0;outline:0;background:transparent;color:#dff3ec;font-size:12px;width:100%;min-width:0}
+.nav-search input::placeholder{color:#5f9384}
+.nav-search kbd{font-size:8.5px;font-weight:700;color:#6ea495;background:#ffffff12;border-radius:4px;padding:2px 5px;font-family:inherit;flex-shrink:0}
+.sidebar.collapsed .nav-search{justify-content:center;padding:0;margin:14px 18px 4px}
+.sidebar.collapsed .nav-search input,.sidebar.collapsed .nav-search kbd{display:none}
+
+.sidebar nav{padding:12px 12px 16px;flex:1;overflow-y:auto;overflow-x:hidden}
+.nav-label{margin:14px 0 7px;padding:0 11px;font-size:8.5px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:#548a7c;white-space:nowrap}
+.sidebar.collapsed .nav-label{opacity:0;height:8px;margin:10px 0 0}
+
+.nav-item{width:100%;border:0;background:transparent;color:#9fc4b9;border-radius:11px;text-align:left;padding:10px 11px;display:flex;align-items:center;gap:12px;margin:3px 0;position:relative;transition:background .16s ease,color .16s ease}
+.nav-item .nav-ico{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;background:#ffffff0d;color:#8dbdb0;flex-shrink:0;transition:.16s}
+.nav-item:hover{background:#ffffff0c;color:#eefaf6}
+.nav-item:hover .nav-ico{background:#ffffff17;color:#cdeee3}
+.nav-txt{min-width:0;flex:1;overflow:hidden}
+.nav-txt b{display:block;font-size:12.5px;font-weight:600;letter-spacing:-.1px;white-space:nowrap;line-height:1.25}
+.nav-txt span{display:block;font-size:9.5px;color:#5f9c8c;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
+.nav-item.nav-active{background:linear-gradient(100deg,#1a6f5f66,#12564a1f);color:#fff;box-shadow:inset 0 0 0 1px #2dd4a733, 0 4px 14px #00000030}
+.nav-item.nav-active .nav-ico{background:linear-gradient(135deg,#34d8b0,#0f9c7f);color:#04231e;box-shadow:0 5px 14px #0f9c7f66}
+.nav-item.nav-active .nav-txt b{font-weight:700}
+.nav-item.nav-active .nav-txt span{color:#7fd0bb}
+.nav-item.nav-active::before{content:"";position:absolute;left:-12px;top:11px;bottom:11px;width:3px;border-radius:0 3px 3px 0;background:linear-gradient(180deg,#5eead4,#0f9c7f)}
+.nav-count{margin-left:auto;min-width:22px;height:20px;padding:0 7px;border-radius:20px;background:#ffffff14;color:#a5d6c8;font-size:9.5px;font-weight:750;display:grid;place-items:center;flex-shrink:0}
+.nav-item.nav-active .nav-count{background:#2dd4a72e;color:#a9f2dc}
+.nav-count.alert{background:#ef54682e;color:#ffb3bc}
+
+.sidebar.collapsed .nav-item{justify-content:center;padding:10px 0;gap:0}
+.sidebar.collapsed .nav-txt,.sidebar.collapsed .nav-count{display:none}
+.sidebar.collapsed .nav-item.nav-active::before{left:-12px}
+
+.nav-divider{height:1px;background:#ffffff14;margin:12px 8px}
+.sidebar-bottom{padding:10px 12px 14px;border-top:1px solid #ffffff10}
+.sidebar.collapsed .sidebar-bottom{padding:10px 12px 14px}
+.nav-user{display:flex;align-items:center;gap:10px;padding:9px 11px;margin-bottom:4px;border-radius:11px;background:#ffffff0a;border:1px solid #ffffff10}
+.nav-user i{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,#34d8b0,#0f9c7f);color:#04231e;display:grid;place-items:center;font-size:10.5px;font-weight:800;font-style:normal;flex-shrink:0}
+.nav-user div{min-width:0;overflow:hidden}
+.nav-user b{display:block;font-size:11.5px;color:#eefaf6;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nav-user span{display:block;font-size:9px;color:#5f9c8c;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sidebar.collapsed .nav-user{justify-content:center;padding:9px 0}
+.sidebar.collapsed .nav-user div{display:none}
 
 /* ===== Settings ===== */
 .set-layout{display:grid;grid-template-columns:238px 1fr;gap:36px;align-items:start;max-width:1180px}
@@ -140,29 +187,11 @@ button svg{flex-shrink:0;display:block}
 .set-table{width:100%;margin-top:4px}
 .set-table th{font-size:9px;letter-spacing:.7px}
 @media(max-width:900px){.set-layout{grid-template-columns:1fr;gap:18px}.set-nav{position:static}.set-nav button.active::before{display:none}}
-.sidebar nav>button,.sidebar-bottom>button{width:100%;height:40px;border:0;background:transparent;color:#8d97b5;border-radius:10px;text-align:left;padding:0 11px;display:flex;align-items:center;gap:11px;margin:2px 0;font-size:12.5px;font-weight:500;position:relative}
-.sidebar nav>button span,.sidebar-bottom>button span{width:17px;height:17px;display:inline-flex;align-items:center;justify-content:center;opacity:.85;flex-shrink:0}
-.sidebar nav>button:hover span,.sidebar nav>button.nav-active span{opacity:1}
-.sidebar nav>button:hover,.sidebar-bottom>button:hover{background:#ffffff0a;color:#eef0f9}
-.sidebar nav>button.nav-active{background:linear-gradient(90deg,#2dd4a726,#2dd4a706);color:#fff;box-shadow:inset 0 0 0 1px #2dd4a72e}
-.sidebar nav>button.nav-active::before{content:"";position:absolute;left:-12px;top:8px;bottom:8px;width:3px;border-radius:0 3px 3px 0;background:linear-gradient(180deg,#5eead4,#14b8a0)}
-.chev{margin-left:auto;font-size:10px;opacity:.7}
-.sidebar em{margin-left:auto;background:linear-gradient(135deg,#ff6b7a,#ef5468);color:#fff;border-radius:20px;padding:2px 7px;font-size:9.5px;font-style:normal;font-weight:700;box-shadow:0 3px 8px #ef546855}
-.subnav{margin:4px 4px 14px 25px;border-left:1px solid #ffffff16;padding-left:9px;display:flex;flex-direction:column;gap:1px}
-.subnav button{display:flex;align-items:center;width:100%;height:32px;background:transparent;border:0;border-radius:7px;color:#7883a4;font-size:11.5px;font-weight:500;text-align:left;padding:0 10px;gap:9px}
-.subnav button i{width:6px;height:6px;border-radius:50%;box-shadow:0 0 0 3px currentColor22}
-.subnav button:hover{color:#e6e9f6;background:#ffffff09}
-.subnav button.selected{color:#fff;background:linear-gradient(90deg,#ffffff14,#ffffff05);font-weight:650}
 .sidebar-bottom{padding:10px 12px 16px;border-top:1px solid #ffffff10}
-.user{display:flex;align-items:center;gap:10px;padding:12px 7px 0}
-.user>div{width:33px;height:33px;border-radius:10px;background:linear-gradient(135deg,#34d8b0,#0f9c7f);color:#062a24;display:grid;place-items:center;font-weight:700;font-size:11px;box-shadow:0 4px 12px #0f9c7f55}
-.user p{margin:0;min-width:0;flex:1}
-.user p b{display:block;color:#f1f3fb;font-size:11.5px;font-weight:600}
-.user p span{display:block;font-size:9.5px;color:#7581a0;margin-top:2px}
-.user button{border:0;background:transparent;color:#7683a3;letter-spacing:1px}
 
 /* ===== Main / header ===== */
-main{margin-left:250px;min-height:100vh}
+main{margin-left:268px;min-height:100vh;transition:margin-left .22s cubic-bezier(.4,0,.2,1)}
+main.nav-collapsed{margin-left:78px}
 header{height:66px;background:#fffffff2;backdrop-filter:blur(14px) saturate(160%);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:5}
 .crumbs{display:flex;align-items:center;gap:9px;font-size:12px;color:var(--muted-2)}
 .crumbs span{color:#93a0b8}
@@ -371,7 +400,7 @@ tbody tr:hover{background:#f8f9ff}
 .tab-placeholder p{color:#7c889e;font-size:11px;margin:0 0 18px}
 
 @media(max-width:1250px){.kpi-grid{grid-template-columns:repeat(3,1fr)}.kpi-grid-exec{grid-template-columns:repeat(2,1fr)}.summary-strip{grid-template-columns:repeat(3,1fr)}.summary-strip>div:nth-child(3){border-right:0}.profile-metrics{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:900px){.sidebar{width:74px}.brand{padding:0 17px}.brand>div:last-child,.sidebar nav>button:not(.nav-active),.sidebar nav>button.nav-active{font-size:0}.sidebar nav>button span{font-size:17px}.subnav{display:none}.sidebar-bottom>button,.user p,.user button{display:none}main{margin-left:74px}.header-actions label,.header-actions .icon-btn{display:none}.kpi-grid{grid-template-columns:repeat(2,1fr)}.kpi-grid-exec{grid-template-columns:1fr}.team-grid{grid-template-columns:1fr}.summary-strip{grid-template-columns:repeat(2,1fr)}.profile-grid{grid-template-columns:1fr}.profile-side{display:grid;grid-template-columns:repeat(2,1fr)}}
+@media(max-width:900px){.sidebar{width:78px}.brand{padding:0;justify-content:center}.brand-txt{display:none}.nav-toggle{display:none}.nav-search{justify-content:center;padding:0;margin:14px 18px 4px}.nav-search input,.nav-search kbd{display:none}.nav-label{opacity:0;height:8px;margin:10px 0 0}.nav-item{justify-content:center;padding:10px 0;gap:0}.nav-txt,.nav-count{display:none}.nav-user{justify-content:center;padding:9px 0}.nav-user div{display:none}main,main.nav-collapsed{margin-left:78px}.header-actions label,.header-actions .icon-btn{display:none}.kpi-grid{grid-template-columns:repeat(2,1fr)}.kpi-grid-exec{grid-template-columns:1fr}.team-grid{grid-template-columns:1fr}.summary-strip{grid-template-columns:repeat(2,1fr)}.profile-grid{grid-template-columns:1fr}.profile-side{display:grid;grid-template-columns:repeat(2,1fr)}}
 @media(max-width:620px){.sidebar{display:none}main{margin-left:0}header{padding:0 15px}.content{padding:18px 14px}.page-title{display:block}.page-actions{margin-top:12px;flex-wrap:wrap}.kpi-grid{grid-template-columns:1fr}.summary-strip{grid-template-columns:1fr}.summary-strip>div{border-right:0;border-bottom:1px solid #ffffff11}.filters{overflow:auto}.profile-hero{align-items:flex-start;flex-wrap:wrap}.profile-actions{width:100%}.profile-metrics,.profile-side{grid-template-columns:1fr}.team-stats{gap:10px}.header-actions .primary{white-space:nowrap}.page-title h1{font-size:22px}}
 
 /* ===== Merchants module: row actions, team badge, empty state, modal ===== */
@@ -9785,6 +9814,8 @@ function KpiTrendChart({ rows, target, label }) {
 
 function PSTCRM() {
   const [authUser, setAuthUser] = useState(null);
+  const [navCollapsed, setNavCollapsed] = useState(false);
+  const [navQuery, setNavQuery] = useState("");
   const [view, setView] = useState("kpi");
   const [team, setTeam] = useState("Egypt");
   const [merchants, setMerchants] = useState(() => buildInitialMerchants());
@@ -10547,34 +10578,66 @@ function PSTCRM() {
     </tr>
   );
 
+  // Sidebar modules. Counts are live, so the nav doubles as an at-a-glance status read:
+  // off-track KPIs show in red, the others show how much is logged in each module.
+  const navModules = [
+    { id: "kpi",      icon: "trendUp", label: "KPI Management",    desc: "Targets, pace, and status",      count: kpiTotals.offTrack, alert: kpiTotals.offTrack > 0 },
+    { id: "pipeline", icon: "diamond", label: "Revenue Pipeline",  desc: "Quotation to payment",           count: pipelineRows.length, alert: false },
+    { id: "promos",   icon: "gift",    label: "Special Promos",    desc: "Offers and campaigns",           count: promoRows.length,    alert: false },
+    { id: "ophub",    icon: "teams",   label: "AM Operations Hub", desc: "Renewals, meetings, health",     count: null,                alert: false },
+  ];
+
   // Every hook above has already run, so gating the render here keeps hook order stable.
   if (!authUser) return <SignIn onSignIn={setAuthUser} />;
 
   return (
     <div className="app-shell">
-      <aside className="sidebar">
-        <div className="brand"><div className="brand-mark">PS</div><div><b>Partner Success Hub</b><span>Leadership Platform</span></div></div>
+      <aside className={`sidebar ${navCollapsed ? "collapsed" : ""}`}>
+        <div className="brand">
+          <div className="brand-mark">PS</div>
+          <div className="brand-txt"><b>Partner Success Hub</b><span>Leadership Platform</span></div>
+          <button className="nav-toggle" onClick={() => setNavCollapsed(v => !v)} title={navCollapsed ? "Expand menu" : "Collapse menu"} aria-label={navCollapsed ? "Expand menu" : "Collapse menu"}>
+            <span style={{display:"flex", transform: navCollapsed ? "rotate(-90deg)" : "rotate(90deg)"}}><Icon name="chevDown" size={13} /></span>
+          </button>
+        </div>
+
+        <label className="nav-search" title="Search">
+          <Icon name="search" size={14} />
+          <input value={navQuery} onChange={e => setNavQuery(e.target.value)} placeholder="Search modules..." />
+          {!navQuery && <kbd>⌘K</kbd>}
+        </label>
+
         <nav>
-          <button className={view === "kpi" ? "nav-active" : ""} onClick={() => setView("kpi")}><span><Icon name="trendUp" /></span> KPI Management</button>
-          <button className={view === "pipeline" ? "nav-active" : ""} onClick={() => setView("pipeline")}><span><Icon name="diamond" /></span> Revenue Pipeline</button>
-          <button className={view === "promos" ? "nav-active" : ""} onClick={() => setView("promos")}><span><Icon name="gift" /></span> Special Promos</button>
-          <div className="nav-divider" />
-          <button className={view === "merchdash" ? "nav-active" : ""} onClick={() => setView("merchdash")}><span><Icon name="target" /></span> Tier A Dashboard</button>
-          <button className={view === "overall" ? "nav-active" : ""} onClick={() => setView("overall")}><span><Icon name="building" /></span> Overall Dashboard</button>
-          <button className={view === "ophub" ? "nav-active" : ""} onClick={() => setView("ophub")}><span><Icon name="teams" /></span> AM Operations Hub</button>
-          <button><span><Icon name="home" /></span> Overview</button>
-          <button className={view === "directory" || view === "team" ? "nav-active" : ""} onClick={() => setView("directory")}><span><Icon name="teams" /></span> Teams <b className="chev"><Icon name="chevDown" size={11} /></b></button>
-          <div className="subnav">
-            {Object.keys(teamManagers).map((key) => <button key={key} className={team === key && view === "team" ? "selected" : ""} onClick={() => openTeam(key)}><i style={{background: teamAccent[key]}} />{key} Team</button>)}
-          </div>
-          <button className={view === "merchants" || (view === "merchant" && merchantOrigin === "merchants") ? "nav-active" : ""} onClick={openMerchantsView}><span><Icon name="merchants" /></span> Merchants</button>
-          <button><span><Icon name="activities" /></span> Activities</button><button><span><Icon name="contracts" /></span> Contracts</button>
-          <button><span><Icon name="offers" /></span> Offers</button><button><span><Icon name="tasks" /></span> Tasks <em>12</em></button><button><span><Icon name="reports" /></span> Reports</button>
+          <p className="nav-label">Workspace</p>
+          {navModules.filter(m => !navQuery.trim() || m.label.toLowerCase().includes(navQuery.trim().toLowerCase())).map(m => (
+            <button key={m.id} className={`nav-item ${view === m.id ? "nav-active" : ""}`} onClick={() => setView(m.id)} title={navCollapsed ? m.label : ""}>
+              <span className="nav-ico"><Icon name={m.icon} size={16} /></span>
+              <span className="nav-txt"><b>{m.label}</b><span>{m.desc}</span></span>
+              {m.count !== null && <span className={`nav-count ${m.alert ? "alert" : ""}`}>{m.count}</span>}
+            </button>
+          ))}
+          {navQuery.trim() && navModules.filter(m => m.label.toLowerCase().includes(navQuery.trim().toLowerCase())).length === 0 &&
+            <p className="nav-label" style={{color:"#7fb3a4", letterSpacing:0, textTransform:"none", fontSize:"11px"}}>No module matches "{navQuery}"</p>}
         </nav>
-        <div className="sidebar-bottom"><button className={view === "settings" ? "nav-active" : ""} onClick={() => setView("settings")}><span><Icon name="settings" /></span> Settings</button><button onClick={() => { setAuthUser(null); setView("kpi"); }}><span><Icon name="signout" /></span> Sign Out</button></div>
+
+        <div className="sidebar-bottom">
+          <div className="nav-user" title={`${authUser.name} · ${authUser.role}`}>
+            <i>{initialsOf(authUser.name)}</i>
+            <div><b>{authUser.name}</b><span>{authUser.role}</span></div>
+          </div>
+          <div className="nav-divider" style={{margin:"8px 2px"}} />
+          <button className={`nav-item ${view === "settings" ? "nav-active" : ""}`} onClick={() => setView("settings")} title={navCollapsed ? "Settings" : ""}>
+            <span className="nav-ico"><Icon name="settings" size={16} /></span>
+            <span className="nav-txt"><b>Settings</b></span>
+          </button>
+          <button className="nav-item" onClick={() => { setAuthUser(null); setView("kpi"); }} title={navCollapsed ? "Sign Out" : ""}>
+            <span className="nav-ico"><Icon name="signout" size={16} /></span>
+            <span className="nav-txt"><b>Sign Out</b></span>
+          </button>
+        </div>
       </aside>
 
-      <main>
+      <main className={navCollapsed ? "nav-collapsed" : ""}>
         <header>
           <div className="crumbs">
             <span>Partner Success Hub</span><b>/</b>
