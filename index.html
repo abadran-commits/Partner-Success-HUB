@@ -5,12 +5,12 @@
 <title>Partner Success Hub</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.24.7/babel.min.js"></script>
 <style>
-:root{--font-geist-sans:'Inter'}
+:root{--font-geist-sans:'Plus Jakarta Sans'}
 
 
 :root{
@@ -26,8 +26,18 @@
   --shadow-sm:0 4px 16px rgba(15,23,55,.05);
   --shadow-md:0 10px 30px rgba(15,23,55,.08);
   --shadow-lg:0 24px 60px rgba(15,23,55,.14);
-  --font-ui: var(--font-geist-sans), Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-ui: var(--font-geist-sans), "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 }
+/* Softer, lighter type: Plus Jakarta Sans runs visually heavier than Inter at the same
+   numeric weight, so headings step down and body text sits lighter with looser tracking. */
+body{font-weight:400;letter-spacing:-.009em;line-height:1.5}
+h1,h2,h3,h4{letter-spacing:-.028em}
+b,strong{font-weight:600}
+table{letter-spacing:-.004em}
+th{font-weight:600!important;letter-spacing:.4px!important;color:#8892a6!important}
+.page-title h1{font-weight:600!important;letter-spacing:-.045em!important}
+.set-panel h1,.auth-card h1,.auth-right h2{font-weight:600!important}
+.kpi-stat b,.auth-stat b{font-weight:650!important;letter-spacing:-.035em}
 *{box-sizing:border-box}
 html{scrollbar-width:thin;scrollbar-color:#c7cde0 transparent}
 body{margin:0;background:
@@ -135,9 +145,35 @@ button svg{flex-shrink:0;display:block}
 .nav-item.nav-active .nav-count{background:#2dd4a72e;color:#a9f2dc}
 .nav-count.alert{background:#ef54682e;color:#ffb3bc}
 
+.nav-kbd{font-size:8.5px;font-weight:700;color:#5f9c8c;background:#ffffff12;border-radius:5px;padding:3px 6px;opacity:0;transition:opacity .15s ease;flex-shrink:0;letter-spacing:.3px}
+.nav-item:hover .nav-kbd{opacity:1}
+.sidebar.collapsed .nav-kbd{display:none}
+
+/* Hover flyout — replaces native tooltips once the rail is collapsed */
+.nav-item::after{content:attr(data-tip);position:absolute;left:calc(100% + 14px);top:50%;transform:translateY(-50%) translateX(-5px);background:#04231e;color:#dff3ec;border:1px solid #ffffff1f;padding:7px 12px;border-radius:9px;font-size:11.5px;font-weight:600;white-space:nowrap;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .16s ease,transform .16s ease;box-shadow:0 10px 26px #00000070;z-index:40}
+.sidebar.collapsed .nav-item:hover::after{opacity:1;visibility:visible;transform:translateY(-50%) translateX(0)}
+
 .sidebar.collapsed .nav-item{justify-content:center;padding:10px 0;gap:0}
 .sidebar.collapsed .nav-txt,.sidebar.collapsed .nav-count{display:none}
 .sidebar.collapsed .nav-item.nav-active::before{left:-12px}
+
+/* Portfolio health pulse */
+.nav-pulse{padding:11px 12px;margin-bottom:9px;border-radius:12px;background:#ffffff08;border:1px solid #ffffff10}
+.nav-pulse-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.nav-pulse-head span{font-size:8.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#548a7c}
+.nav-pulse-head b{font-size:12.5px;font-weight:700;color:#7fd8bd}
+.nav-pulse-bar{display:flex;gap:2px;height:5px}
+.nav-pulse-bar i{display:block;border-radius:4px;min-width:4px}
+.nav-pulse-bar i.good{background:linear-gradient(90deg,#34d8b0,#0f9c7f)}
+.nav-pulse-bar i.warn{background:#dda23f}
+.nav-pulse-bar i.bad{background:#e0596a}
+.nav-pulse-legend{display:flex;gap:13px;margin-top:9px}
+.nav-pulse-legend span{display:flex;align-items:center;gap:5px;font-size:9.5px;font-weight:650;color:#8dbdb0}
+.nav-pulse-legend em{width:6px;height:6px;border-radius:50%;display:inline-block;font-style:normal}
+.nav-pulse-legend em.good{background:#34d8b0}
+.nav-pulse-legend em.warn{background:#dda23f}
+.nav-pulse-legend em.bad{background:#e0596a}
+.sidebar.collapsed .nav-pulse{display:none}
 
 .nav-divider{height:1px;background:#ffffff14;margin:12px 8px}
 .sidebar-bottom{padding:10px 12px 14px;border-top:1px solid #ffffff10}
@@ -819,7 +855,7 @@ th.sortable:hover{color:#3f4b63}
 <body>
 <div id="root"></div>
 <script type="text/babel" data-presets="react">
-const { useState, useMemo, useRef } = React;
+const { useState, useMemo, useRef, useEffect } = React;
 
 
 const teamAccent = {
@@ -9817,6 +9853,29 @@ function PSTCRM() {
   const [navCollapsed, setNavCollapsed] = useState(false);
   const [navQuery, setNavQuery] = useState("");
   const [view, setView] = useState("kpi");
+  const navSearchRef = useRef(null);
+
+  // Sidebar keyboard shortcuts: ⌘K / Ctrl+K focuses module search (expanding the rail
+  // first if collapsed), ⌘1–4 jump straight to a module, Esc clears the search.
+  useEffect(() => {
+    const order = ["kpi", "pipeline", "promos", "ophub"];
+    function onKey(e) {
+      const mod = e.metaKey || e.ctrlKey;
+      if (mod && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setNavCollapsed(false);
+        setTimeout(() => navSearchRef.current && navSearchRef.current.focus(), 20);
+        return;
+      }
+      if (mod && /^[1-4]$/.test(e.key)) { e.preventDefault(); setView(order[Number(e.key) - 1]); return; }
+      if (e.key === "Escape" && document.activeElement === navSearchRef.current) {
+        setNavQuery("");
+        navSearchRef.current.blur();
+      }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
   const [team, setTeam] = useState("Egypt");
   const [merchants, setMerchants] = useState(() => buildInitialMerchants());
   const [selectedMerchantId, setSelectedMerchantId] = useState(null);
@@ -10601,19 +10660,20 @@ function PSTCRM() {
           </button>
         </div>
 
-        <label className="nav-search" title="Search">
+        <label className="nav-search" title="Search modules (Ctrl+K)">
           <Icon name="search" size={14} />
-          <input value={navQuery} onChange={e => setNavQuery(e.target.value)} placeholder="Search modules..." />
+          <input ref={navSearchRef} value={navQuery} onChange={e => setNavQuery(e.target.value)} placeholder="Search modules..." />
           {!navQuery && <kbd>⌘K</kbd>}
         </label>
 
         <nav>
           <p className="nav-label">Workspace</p>
-          {navModules.filter(m => !navQuery.trim() || m.label.toLowerCase().includes(navQuery.trim().toLowerCase())).map(m => (
-            <button key={m.id} className={`nav-item ${view === m.id ? "nav-active" : ""}`} onClick={() => setView(m.id)} title={navCollapsed ? m.label : ""}>
+          {navModules.filter(m => !navQuery.trim() || m.label.toLowerCase().includes(navQuery.trim().toLowerCase())).map((m, i) => (
+            <button key={m.id} className={`nav-item ${view === m.id ? "nav-active" : ""}`} onClick={() => setView(m.id)} data-tip={m.label}>
               <span className="nav-ico"><Icon name={m.icon} size={16} /></span>
               <span className="nav-txt"><b>{m.label}</b><span>{m.desc}</span></span>
               {m.count !== null && <span className={`nav-count ${m.alert ? "alert" : ""}`}>{m.count}</span>}
+              <span className="nav-kbd">⌘{i + 1}</span>
             </button>
           ))}
           {navQuery.trim() && navModules.filter(m => m.label.toLowerCase().includes(navQuery.trim().toLowerCase())).length === 0 &&
@@ -10621,16 +10681,29 @@ function PSTCRM() {
         </nav>
 
         <div className="sidebar-bottom">
+          <div className="nav-pulse" title={`${kpiTotals.onTrack} on track · ${kpiTotals.atRisk} at risk · ${kpiTotals.offTrack} off track`}>
+            <div className="nav-pulse-head"><span>Portfolio health</span><b>{kpiTotals.total ? Math.round(kpiTotals.onTrack / kpiTotals.total * 100) : 0}%</b></div>
+            <div className="nav-pulse-bar">
+              <i className="good" style={{flex: kpiTotals.onTrack || 0.001}} />
+              <i className="warn" style={{flex: kpiTotals.atRisk || 0.001}} />
+              <i className="bad" style={{flex: kpiTotals.offTrack || 0.001}} />
+            </div>
+            <div className="nav-pulse-legend">
+              <span><em className="good" />{kpiTotals.onTrack}</span>
+              <span><em className="warn" />{kpiTotals.atRisk}</span>
+              <span><em className="bad" />{kpiTotals.offTrack}</span>
+            </div>
+          </div>
           <div className="nav-user" title={`${authUser.name} · ${authUser.role}`}>
             <i>{initialsOf(authUser.name)}</i>
             <div><b>{authUser.name}</b><span>{authUser.role}</span></div>
           </div>
           <div className="nav-divider" style={{margin:"8px 2px"}} />
-          <button className={`nav-item ${view === "settings" ? "nav-active" : ""}`} onClick={() => setView("settings")} title={navCollapsed ? "Settings" : ""}>
+          <button className={`nav-item ${view === "settings" ? "nav-active" : ""}`} onClick={() => setView("settings")} data-tip="Settings">
             <span className="nav-ico"><Icon name="settings" size={16} /></span>
             <span className="nav-txt"><b>Settings</b></span>
           </button>
-          <button className="nav-item" onClick={() => { setAuthUser(null); setView("kpi"); }} title={navCollapsed ? "Sign Out" : ""}>
+          <button className="nav-item" onClick={() => { setAuthUser(null); setView("kpi"); }} data-tip="Sign Out">
             <span className="nav-ico"><Icon name="signout" size={16} /></span>
             <span className="nav-txt"><b>Sign Out</b></span>
           </button>
