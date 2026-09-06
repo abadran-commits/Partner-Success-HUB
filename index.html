@@ -10009,7 +10009,42 @@ function KpiTrendChart({ rows, target, label }) {
   );
 }
 
-function OffersActivity({ merchants, authUser, pursuits, setPursuits }) {
+// Module scope: needed by both PSTCRM and OffersActivity. Pure function of the merchant row.
+function deriveChannel(m) {
+  const hasWalaplus = m.ch_walaoffer > 0 || m.ch_walaone > 0;
+  const hasDoam = m.ch_doam > 0;
+  if (hasWalaplus && hasDoam) return "WalaPlus + Doam";
+  if (hasDoam) return "Doam";
+  return "WalaPlus";
+}
+
+function quarterFromDate(d) {
+  const t = new Date(d); if (isNaN(t)) return "Q1";
+  return ["Q1","Q1","Q1","Q2","Q2","Q2","Q3","Q3","Q3","Q4","Q4","Q4"][t.getMonth()];
+}
+function monthFromDate(d) {
+  const t = new Date(d); if (isNaN(t)) return monthList[0];
+  return monthList[t.getMonth()];
+}
+
+function OffersActivity({ merchants, authUser, pursuits, setPursuits, setPromoRows, activityLog, setActivityLog }) {
+  const [logForm, setLogForm] = useState({ merchantId: "", channel: "Email", date: new Date().toISOString().slice(0,10), outcome: "Completed", notes: "" });
+  const [logFilter, setLogFilter] = useState("");
+  const channelMeta = { Email: "mail", Meeting: "meeting", Call: "phone", WhatsApp: "activities", Other: "activities" };
+
+  function addLogEntry(entry) {
+    setActivityLog(prev => [{ id: `AL-${Date.now()}-${Math.random().toString(36).slice(2,6)}`, ...entry }, ...prev]);
+  }
+  function submitLog() {
+    const m = merchants.find(x => x.id === logForm.merchantId);
+    if (!m) return;
+    addLogEntry({
+      date: logForm.date, merchantId: m.id, merchantName: m.name,
+      channel: logForm.channel, outcome: logForm.outcome, notes: logForm.notes,
+      by: authUser ? authUser.name : "", kind: "touchpoint",
+    });
+    setLogForm(f => ({ ...f, notes: "" }));
+  }
   const blank = {
     merchantId: "", ongoingOffer: "", ongoingPct: "", proposedOffer: "", proposedPct: "",
     valueKind: "", campaign: "", paidMarketing: "No", budget: "", expectedGrowth: "",
@@ -10040,12 +10075,62 @@ function OffersActivity({ merchants, authUser, pursuits, setPursuits }) {
   const canSubmit = !!form.merchantId && verdict.qualifies && checksDone && contacted && !!form.proposedOffer.trim();
 
   function submit() {
+    const when = new Date();
+    const today = when.toISOString().slice(0, 10);
+    const who = authUser ? authUser.name : "";
+    const promoId = `SP-${Date.now()}`;
+
     setPursuits(prev => [{
       id: `OP-${Date.now()}`, ...form,
       merchantName: merchant ? merchant.name : "", category,
       uplift: verdict.uplift, stage: "Submitted for Approval",
-      submittedAt: new Date().toISOString(), by: authUser ? authUser.name : "",
+      submittedAt: when.toISOString(), by: who, promoId,
     }, ...prev]);
+
+    // Hand off to Special Promos so the same offer is never typed twice.
+    setPromoRows(prev => [{
+      id: promoId,
+      am: who,
+      retailerId: merchant ? merchant.id : "",
+      merchantNameAr: "",
+      merchantNameEn: merchant ? merchant.name : "",
+      mainCategory: category || "",
+      subCategory: "",
+      offerType: (Number(form.ongoingPct) > 0 || form.ongoingOffer.trim()) ? "Upgraded Offer" : "New Offer",
+      ongoingOfferId: "",
+      ongoingOfferName: form.ongoingOffer,
+      specialOfferId: "",
+      specialOfferName: form.proposedOffer,
+      startDate: form.startDate,
+      endDate: form.endDate,
+      campaignType: form.campaign,
+      quarter: quarterFromDate(form.startDate || today),
+      month: monthFromDate(form.startDate || today),
+      competitive: "",
+      tier: merchant ? merchant.tier : "",
+      type: merchant && deriveChannel(merchant) === "Doam" ? "Offline" : "Online",
+      approvalStatus: "Pending",
+    }, ...prev]);
+
+    // Every channel worked becomes a dated entry, plus the submission itself.
+    const touchpoints = Object.keys(form.channels).filter(k => form.channels[k]);
+    const names = { E: "Email", M: "Meeting", C: "Call", W: "WhatsApp" };
+    const entries = touchpoints.map(k => ({
+      id: `AL-${Date.now()}-${k}`, date: today,
+      merchantId: merchant ? merchant.id : "", merchantName: merchant ? merchant.name : "",
+      channel: names[k], outcome: "Completed",
+      notes: `Worked the merchant on the ${form.proposedOffer || "special promo"}`,
+      by: who, kind: "touchpoint",
+    }));
+    entries.unshift({
+      id: `AL-${Date.now()}-sub`, date: today,
+      merchantId: merchant ? merchant.id : "", merchantName: merchant ? merchant.name : "",
+      channel: "Submission", outcome: "Submitted for Approval",
+      notes: `${form.ongoingPct || 0}% → ${form.proposedPct || 0}%${form.valueKind ? ` (${form.valueKind})` : ""} · ${form.proposedOffer}`,
+      by: who, kind: "promo",
+    });
+    setActivityLog(prev => [...entries, ...prev]);
+
     setForm(blank);
     setOpenForm(false);
   }
@@ -10142,8 +10227,71 @@ function OffersActivity({ merchants, authUser, pursuits, setPursuits }) {
         </div>}
       </div>
 
+      <div className="panel" style={{padding:"16px 18px", marginBottom:"16px"}}>
+        <div className="section-head inside" style={{padding:0, border:0, marginBottom:"14px"}}>
+          <div><h2>Log an activity</h2><p>Every contact with a merchant, dated — so the whole history is on record even when it does not end in a promo.</p></div>
+        </div>
+        <div className="form-grid">
+          <label className="field span-2"><span>Merchant</span>
+            <select value={logForm.merchantId} onChange={e => setLogForm(f => ({ ...f, merchantId: e.target.value }))}>
+              <option value="">Select a merchant…</option>
+              {merchants.slice(0, 400).map(m => <option key={m.id} value={m.id}>{m.name} · {m.id}</option>)}
+            </select>
+          </label>
+          <label className="field"><span>Channel</span>
+            <select value={logForm.channel} onChange={e => setLogForm(f => ({ ...f, channel: e.target.value }))}>
+              {Object.keys(channelMeta).map(c => <option key={c}>{c}</option>)}
+            </select>
+          </label>
+          <label className="field"><span>Date</span>
+            <input type="date" value={logForm.date} onChange={e => setLogForm(f => ({ ...f, date: e.target.value }))} />
+          </label>
+          <label className="field"><span>Outcome</span>
+            <select value={logForm.outcome} onChange={e => setLogForm(f => ({ ...f, outcome: e.target.value }))}>
+              {["Completed","No answer","Merchant interested","Merchant declined","Rescheduled","Awaiting reply"].map(o => <option key={o}>{o}</option>)}
+            </select>
+          </label>
+          <label className="field span-2"><span>What happened</span>
+            <textarea className="drawer-textarea" value={logForm.notes} onChange={e => setLogForm(f => ({ ...f, notes: e.target.value }))} placeholder="e.g. Called the owner — open to 30% for the weekend, wants to see artwork first" />
+          </label>
+        </div>
+        <div className="modal-actions" style={{padding:"12px 0 0", border:0}}>
+          <button className="primary" disabled={!logForm.merchantId} onClick={submitLog}><Icon name="plus" size={13} /> Log activity</button>
+        </div>
+      </div>
+
+      <div className="panel merchants-panel" style={{marginBottom:"16px"}}>
+        <div className="section-head inside">
+          <div><h2>Activity log</h2><p>{activityLog.length} entries · newest first</p></div>
+          <select value={logFilter} onChange={e => setLogFilter(e.target.value)} style={{maxWidth:"230px"}}>
+            <option value="">All merchants</option>
+            {Array.from(new Set(activityLog.map(a => a.merchantId))).filter(Boolean).map(id => {
+              const nm = (activityLog.find(a => a.merchantId === id) || {}).merchantName;
+              return <option key={id} value={id}>{nm}</option>;
+            })}
+          </select>
+        </div>
+        {activityLog.length === 0
+          ? <div className="empty-state"><p>No activity logged yet. Every call, email, meeting, and WhatsApp you record shows here with its date.</p></div>
+          : <div className="table-scroll"><table className="merchant-table">
+              <thead><tr><th>DATE</th><th>MERCHANT</th><th>ACTIVITY</th><th>OUTCOME</th><th>WHAT HAPPENED</th><th>BY</th></tr></thead>
+              <tbody>{activityLog.filter(a => !logFilter || a.merchantId === logFilter).map(a => (
+                <tr key={a.id}>
+                  <td><b>{a.date}</b></td>
+                  <td>{a.merchantName}<small className="muted-inline"> · {a.merchantId}</small></td>
+                  <td><span className="am-tag"><Icon name={channelMeta[a.channel] || "activities"} size={11} />{a.channel}</span></td>
+                  <td>{a.kind === "promo"
+                    ? <span className="kpi-status-pill warn">{a.outcome}</span>
+                    : <span className={`kpi-status-pill ${a.outcome === "Completed" || a.outcome === "Merchant interested" ? "good" : a.outcome === "Merchant declined" ? "bad" : "warn"}`}>{a.outcome}</span>}</td>
+                  <td className="notes-cell">{a.notes || <span className="muted">—</span>}</td>
+                  <td>{a.by}</td>
+                </tr>
+              ))}</tbody>
+            </table></div>}
+      </div>
+
       <div className="panel merchants-panel">
-        <div className="section-head inside"><div><h2>Submitted promos</h2><p>{pursuits.length} logged this session</p></div></div>
+        <div className="section-head inside"><div><h2>Submitted promos</h2><p>{pursuits.length} submitted · each one also created a Special Promos record</p></div></div>
         {pursuits.length === 0
           ? <div className="empty-state"><p>Nothing submitted yet. Use "New Special Promo" above to log the first one.</p></div>
           : <div className="table-scroll"><table className="merchant-table">
@@ -10638,6 +10786,7 @@ function PSTCRM() {
   const [opsMerchantId, setOpsMerchantId] = useState(null);
   const [opsTab, setOpsTab] = useState("offers");
   const [offerPursuits, setOfferPursuits] = useState([]);
+  const [activityLog, setActivityLog] = useState([]);
   const [opsExpanded, setOpsExpanded] = useState(null);
   const [opsAttachName, setOpsAttachName] = useState("");
   function saveRow() {
@@ -10659,13 +10808,6 @@ function PSTCRM() {
   }
 
   // ===== Operations Hub logic =====
-  function deriveChannel(m) {
-    const hasWalaplus = m.ch_walaoffer > 0 || m.ch_walaone > 0;
-    const hasDoam = m.ch_doam > 0;
-    if (hasWalaplus && hasDoam) return "WalaPlus + Doam";
-    if (hasDoam) return "Doam";
-    return "WalaPlus";
-  }
   function getOps(id) {
     return opsData[id] || emptyMerchantOps();
   }
@@ -11365,7 +11507,8 @@ function PSTCRM() {
           </>}
 
           {!opsMerchantId && opsTab === "offers" &&
-            <OffersActivity merchants={merchDash} authUser={authUser} pursuits={offerPursuits} setPursuits={setOfferPursuits} />}
+            <OffersActivity merchants={merchDash} authUser={authUser} pursuits={offerPursuits} setPursuits={setOfferPursuits}
+              setPromoRows={setPromoRows} activityLog={activityLog} setActivityLog={setActivityLog} />}
 
           {!opsMerchantId && !["offers", "merchants"].includes(opsTab) && (() => {
             const a = opsActivities.find(x => x.id === opsTab);
