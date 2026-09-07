@@ -212,29 +212,6 @@ button svg{flex-shrink:0;display:block}
 .chan-btn:hover{border-color:#0f8558;color:#0f8558}
 .chan-btn.on{background:#0f8558;border-color:#0f8558;color:#fff}
 
-/* ===== Offer Activity Tracker ===== */
-.oa-kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:11px;margin-bottom:16px}
-.oa-kpi{border:1px solid var(--line);border-radius:12px;background:#fff;padding:13px 14px;box-shadow:var(--shadow-xs)}
-.oa-kpi span{display:block;font-size:9px;font-weight:800;letter-spacing:1px;color:var(--muted);text-transform:uppercase}
-.oa-kpi b{display:block;font-size:22px;font-weight:650;letter-spacing:-.5px;color:var(--ink);margin-top:4px}
-.oa-kpi small{display:block;font-size:10px;color:var(--muted);font-weight:600;margin-top:2px}
-.oa-timeline{padding:6px 18px 18px}
-.oa-item{display:flex;gap:14px;position:relative;padding:14px 0}
-.oa-item:not(:last-child)::before{content:"";position:absolute;left:15px;top:44px;bottom:-6px;width:2px;background:var(--line)}
-.oa-dot{width:32px;height:32px;border-radius:50%;background:#e5f7ef;color:#0f8558;display:grid;place-items:center;flex-shrink:0;z-index:1;border:2px solid #fff;box-shadow:0 0 0 1px var(--line)}
-.oa-body{flex:1;min-width:0}
-.oa-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.oa-top>b{font-size:12.5px;font-weight:700;color:var(--ink)}
-.am-tag.paid{background:#fff6e0;border-color:#f0d9a8;color:#c9821c}
-.oa-send{height:26px;padding:0 11px;border:1px solid #a9e0c8;background:#f2fbf7;color:#0f8558;border-radius:7px;font-size:10.5px;font-weight:700}
-.oa-send:hover{background:#e5f7ef}
-.oa-detail{margin:8px 0 0;font-size:13px;font-weight:600;color:var(--ink);line-height:1.5}
-.oa-notes{margin:5px 0 0;font-size:11.5px;color:var(--muted);line-height:1.6}
-.oa-meta{display:flex;gap:16px;flex-wrap:wrap;margin-top:9px}
-.oa-meta span{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;color:var(--muted-2);font-weight:600}
-@media(max-width:1250px){.oa-kpis{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:700px){.oa-kpis{grid-template-columns:repeat(2,1fr)}}
-
 /* ===== Settings ===== */
 .set-layout{display:grid;grid-template-columns:238px 1fr;gap:36px;align-items:start;max-width:1180px}
 .set-nav{position:sticky;top:88px}
@@ -9774,7 +9751,6 @@ function qualifyPromo({ category, ongoingPct, proposedPct, valueKind, daysSinceL
 
 // The five activities the Hub organises. Only Offers is built so far.
 const opsActivities = [
-  { id: "offeract",  label: "🎯 Offer Activity", icon: "target",  built: true },
   { id: "offers",    label: "Special Offers",   icon: "gift",     built: true },
   { id: "renewals",  label: "Renewals",         icon: "refresh",  built: false },
   { id: "marketing", label: "Marketing Sales",  icon: "megaphone",built: false },
@@ -10033,54 +10009,6 @@ function KpiTrendChart({ rows, target, label }) {
   );
 }
 
-// ===== Offer Activity Tracker =====
-const offerMethods   = ["Phone Call", "WhatsApp", "Email", "Meeting", "Other"];
-const offerPurposes  = ["Get Special Offer", "New Offer", "Additional Offer", "Upgrade Existing Offer"];
-const offerResponses = ["Interested", "Under Progress", "Accepted", "Rejected", "Waiting for Merchant"];
-const offerPeriods   = ["30D", "60D", "90D", "MTD", "QTD", "YTD"];
-const methodIcon = { "Phone Call": "phone", WhatsApp: "activities", Email: "mail", Meeting: "meeting", Other: "activities" };
-
-// All period metrics are derived from activity dates — nothing is stored per-period.
-function periodStart(period, now) {
-  const d = new Date(now || Date.now());
-  if (period === "30D") { d.setDate(d.getDate() - 30); return d; }
-  if (period === "60D") { d.setDate(d.getDate() - 60); return d; }
-  if (period === "90D") { d.setDate(d.getDate() - 90); return d; }
-  if (period === "MTD") return new Date(d.getFullYear(), d.getMonth(), 1);
-  if (period === "QTD") return new Date(d.getFullYear(), Math.floor(d.getMonth() / 3) * 3, 1);
-  if (period === "YTD") return new Date(d.getFullYear(), 0, 1);
-  return new Date(0);
-}
-function inPeriod(dateStr, period) {
-  if (!period || period === "ALL") return true;
-  const t = new Date(dateStr);
-  if (isNaN(t)) return false;
-  return t >= periodStart(period);
-}
-function offerMetrics(acts) {
-  const m = { total: acts.length, special: 0, paid: 0, free: 0, underProgress: 0, accepted: 0, rejected: 0, interested: 0, waiting: 0, paidValue: 0 };
-  acts.forEach(a => {
-    if (String(a.purpose || "").toLowerCase().includes("special")) m.special++;
-    if (a.offerType === "Paid") { m.paid++; m.paidValue += Number(a.offerValue) || 0; }
-    if (a.offerType === "Free") m.free++;
-    if (a.response === "Under Progress") m.underProgress++;
-    if (a.response === "Accepted") m.accepted++;
-    if (a.response === "Rejected") m.rejected++;
-    if (a.response === "Interested") m.interested++;
-    if (a.response === "Waiting for Merchant") m.waiting++;
-  });
-  return m;
-}
-function latestDate(acts, field) {
-  const ds = acts.map(a => a[field]).filter(Boolean).sort();
-  return ds.length ? ds[ds.length - 1] : null;
-}
-function nextFollowUpOf(acts) {
-  const today = new Date().toISOString().slice(0, 10);
-  const ds = acts.map(a => a.nextFollowUp).filter(d => d && d >= today).sort();
-  return ds.length ? ds[0] : null;
-}
-
 // Module scope: needed by both PSTCRM and OffersActivity. Pure function of the merchant row.
 function deriveChannel(m) {
   const hasWalaplus = m.ch_walaoffer > 0 || m.ch_walaone > 0;
@@ -10097,265 +10025,6 @@ function quarterFromDate(d) {
 function monthFromDate(d) {
   const t = new Date(d); if (isNaN(t)) return monthList[0];
   return monthList[t.getMonth()];
-}
-
-function OfferActivityTracker({ merchants, authUser, activities, setActivities, setPromoRows }) {
-  const [mode, setMode] = useState("list");
-  const [selId, setSelId] = useState(null);
-  const [q, setQ] = useState("");
-  const [mgmtPeriod, setMgmtPeriod] = useState("90D");
-  const [promoFor, setPromoFor] = useState(null);
-  const today = new Date().toISOString().slice(0, 10);
-
-  const blank = {
-    method: "Phone Call", purpose: "Get Special Offer", offerType: "Free", offerValue: "",
-    offerDetails: "", response: "Under Progress", date: today,
-    notes: "", nextAction: "", nextFollowUp: "", attachment: "",
-  };
-  const [f, setF] = useState(blank);
-  const set = (k, v) => setF(p => ({ ...p, [k]: v }));
-
-  const merchant = merchants.find(m => m.id === selId) || null;
-  const actsFor = (id) => activities.filter(a => a.merchantId === id);
-  const mine = merchant ? actsFor(merchant.id) : [];
-  const sorted = [...mine].sort((a, b) => (b.date || "").localeCompare(a.date || "") || (b.createdAt || "").localeCompare(a.createdAt || ""));
-
-  // Append-only: a follow-up is always a new record, never an edit of the last one.
-  function logActivity() {
-    if (!merchant || !f.offerDetails.trim()) return;
-    setActivities(prev => [{
-      id: `OA-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
-      merchantId: merchant.id, merchantName: merchant.name,
-      am: authUser ? authUser.name : "", team: merchant.team, tier: merchant.tier,
-      ...f, createdAt: new Date().toISOString(),
-    }, ...prev]);
-    setF({ ...blank, date: today });
-  }
-
-  function sendToPromos(a) {
-    setPromoRows(prev => [{
-      id: `SP-${Date.now()}`, am: a.am, retailerId: a.merchantId,
-      merchantNameAr: "", merchantNameEn: a.merchantName,
-      mainCategory: (merchants.find(m => m.id === a.merchantId) || {}).category || "",
-      subCategory: "",
-      offerType: a.purpose === "Upgrade Existing Offer" ? "Upgraded Offer" : "New Offer",
-      ongoingOfferId: "", ongoingOfferName: "",
-      specialOfferId: "", specialOfferName: a.offerDetails,
-      startDate: a.date, endDate: "", campaignType: "",
-      quarter: quarterFromDate(a.date), month: monthFromDate(a.date),
-      competitive: "", tier: a.tier || "",
-      type: a.offerType === "Paid" ? "Online" : "Offline",
-      approvalStatus: "Pending",
-    }, ...prev]);
-    setActivities(prev => prev.map(x => x.id === a.id ? { ...x, sentToPromos: true } : x));
-    setPromoFor(null);
-  }
-
-  // ---------- Management (CEO) view ----------
-  if (mode === "mgmt") {
-    const scoped = activities.filter(a => inPeriod(a.date, mgmtPeriod));
-    const all = offerMetrics(scoped);
-    const byAM = {}; const byMerchant = {};
-    scoped.forEach(a => {
-      (byAM[a.am || "Unassigned"] = byAM[a.am || "Unassigned"] || []).push(a);
-      (byMerchant[a.merchantName] = byMerchant[a.merchantName] || []).push(a);
-    });
-    const rows = (obj) => Object.entries(obj).map(([k, v]) => ({ k, m: offerMetrics(v) })).sort((x, y) => y.m.total - x.m.total);
-    return (
-      <>
-        <div className="page-title" style={{marginBottom:"14px"}}>
-          <div><p className="eyebrow">MANAGEMENT VIEW</p><h1>Offer Performance</h1><p>How actively every merchant is being pursued, and what it produced</p></div>
-          <button onClick={() => setMode("list")}><Icon name="chevLeft" size={13} /> Back to merchants</button>
-        </div>
-        <div className="am-bar">
-          <div className="kpi-cat-pills" style={{marginLeft:0}}>
-            {["30D","60D","90D","MTD","QTD","YTD"].map(p => (
-              <button key={p} className={mgmtPeriod===p?"active":""} onClick={()=>setMgmtPeriod(p)}>{p}</button>
-            ))}
-          </div>
-        </div>
-        <div className="kpi-mgmt-stats">
-          <div className="kpi-stat neutral"><span className="kpi-stat-dot" /><div><b>{all.total}</b><span>Offers Requested</span></div></div>
-          <div className="kpi-stat good"><span className="kpi-stat-dot" /><div><b>{all.accepted}</b><span>Accepted</span></div></div>
-          <div className="kpi-stat warn"><span className="kpi-stat-dot" /><div><b>{all.underProgress}</b><span>Under Progress</span></div></div>
-          <div className="kpi-stat bad"><span className="kpi-stat-dot" /><div><b>{all.rejected}</b><span>Rejected</span></div></div>
-          <div className="kpi-stat neutral"><span className="kpi-stat-dot" /><div><b>SAR {fmt(all.paidValue)}</b><span>Paid Offer Value</span></div></div>
-        </div>
-        {[["By Account Manager", rows(byAM)], ["By Merchant", rows(byMerchant)]].map(([title, list]) => (
-          <div className="panel merchants-panel" key={title} style={{marginBottom:"16px"}}>
-            <div className="section-head inside"><div><h2>{title}</h2><p>{list.length} with activity in {mgmtPeriod}</p></div></div>
-            {list.length === 0 ? <div className="empty-state"><p>No activity logged in this period.</p></div> :
-            <div className="table-scroll"><table className="merchant-table">
-              <thead><tr><th>{title.replace("By ","").toUpperCase()}</th><th>ACTIVITIES</th><th>SPECIAL</th><th>PAID</th><th>FREE</th><th>UNDER PROGRESS</th><th>ACCEPTED</th><th>REJECTED</th><th>PAID VALUE</th></tr></thead>
-              <tbody>{list.map(r => (
-                <tr key={r.k}>
-                  <td><b>{r.k}</b></td><td>{r.m.total}</td><td>{r.m.special}</td>
-                  <td>{r.m.paid}</td><td>{r.m.free}</td>
-                  <td>{r.m.underProgress ? <span className="kpi-status-pill warn">{r.m.underProgress}</span> : "—"}</td>
-                  <td>{r.m.accepted ? <span className="kpi-status-pill good">{r.m.accepted}</span> : "—"}</td>
-                  <td>{r.m.rejected ? <span className="kpi-status-pill bad">{r.m.rejected}</span> : "—"}</td>
-                  <td><b>{r.m.paidValue ? `SAR ${fmt(r.m.paidValue)}` : "—"}</b></td>
-                </tr>
-              ))}</tbody>
-            </table></div>}
-          </div>
-        ))}
-      </>
-    );
-  }
-
-  // ---------- Merchant list ----------
-  if (mode === "list" || !merchant) {
-    const query = q.trim().toLowerCase();
-    const list = merchants
-      .filter(m => !query || m.name.toLowerCase().includes(query) || String(m.id).toLowerCase().includes(query))
-      .slice(0, 40);
-    return (
-      <>
-        <div className="am-bar">
-          <AdvancedSearch value={q} onChange={setQ} placeholder="Search merchant or ID..." results={[]} onSelect={()=>{}} />
-          <button onClick={() => setMode("mgmt")}><Icon name="reports" size={13} /> Management view</button>
-        </div>
-        <div className="am-list">
-          {list.map(m => {
-            const acts = actsFor(m.id);
-            const met = offerMetrics(acts);
-            const nf = nextFollowUpOf(acts);
-            return (
-              <div className="am-card" key={m.id}>
-                <div className="am-head">
-                  <div className="am-avatar"><Icon name="merchants" size={19} /></div>
-                  <div style={{minWidth:0,flex:1}}>
-                    <div className="am-name-row"><h3>{m.name}</h3>
-                      {met.accepted > 0 && <span className="am-badge converted">{met.accepted} accepted</span>}
-                      {met.underProgress > 0 && <span className="am-badge progress">{met.underProgress} in progress</span>}
-                      {acts.length === 0 && <span className="am-badge notstarted">No activity</span>}
-                    </div>
-                    <div className="am-id-row">
-                      <span className="am-meta">{m.id}</span>
-                      <span className="am-tag">Tier {m.tier}</span>
-                      <span className="am-meta"><Icon name="teams" size={11} />{m.manager}</span>
-                      <span className="am-meta"><Icon name="history" size={11} />{acts.length} activities</span>
-                      {latestDate(acts,"date") && <span className="am-meta">Last: {latestDate(acts,"date")}</span>}
-                      {nf && <span className="am-tag" style={{color:"#c9821c"}}><Icon name="calendar" size={11} />Follow-up {nf}</span>}
-                    </div>
-                  </div>
-                  <button className="primary" style={{height:"36px"}} onClick={() => { setSelId(m.id); setMode("merchant"); }}>🎯 Offer Activity</button>
-                </div>
-              </div>
-            );
-          })}
-          {list.length === 0 && <div className="empty-state"><p>No merchants match that search.</p></div>}
-        </div>
-      </>
-    );
-  }
-
-  // ---------- Merchant workspace ----------
-  const met = offerMetrics(mine);
-  return (
-    <>
-      <div className="page-title" style={{marginBottom:"14px"}}>
-        <div><p className="eyebrow">🎯 OFFER ACTIVITY</p><h1>{merchant.name}</h1>
-          <p>{merchant.id} · Tier {merchant.tier} · {merchant.category} · {merchant.manager}</p></div>
-        <button onClick={() => { setMode("list"); setSelId(null); }}><Icon name="chevLeft" size={13} /> All merchants</button>
-      </div>
-
-      <div className="oa-kpis">
-        {offerPeriods.map(p => {
-          const m2 = offerMetrics(mine.filter(a => inPeriod(a.date, p)));
-          return <div className="oa-kpi" key={p}><span>{p}</span><b>{m2.special || m2.total}</b><small>{m2.paidValue ? `SAR ${fmt(m2.paidValue)}` : `${m2.accepted} accepted`}</small></div>;
-        })}
-      </div>
-
-      <div className="kpi-mgmt-stats">
-        <div className="kpi-stat neutral"><span className="kpi-stat-dot" /><div><b>{met.special}</b><span>Special Offers</span></div></div>
-        <div className="kpi-stat neutral"><span className="kpi-stat-dot" /><div><b>{met.paid}</b><span>Paid Offers</span></div></div>
-        <div className="kpi-stat neutral"><span className="kpi-stat-dot" /><div><b>{met.free}</b><span>Free Offers</span></div></div>
-        <div className="kpi-stat warn"><span className="kpi-stat-dot" /><div><b>{met.underProgress}</b><span>Under Progress</span></div></div>
-        <div className="kpi-stat good"><span className="kpi-stat-dot" /><div><b>{met.accepted}</b><span>Accepted</span></div></div>
-        <div className="kpi-stat bad"><span className="kpi-stat-dot" /><div><b>{met.rejected}</b><span>Rejected</span></div></div>
-        <div className="kpi-stat neutral"><span className="kpi-stat-dot" /><div><b>{latestDate(mine,"date") || "—"}</b><span>Last Activity</span></div></div>
-        <div className="kpi-stat warn"><span className="kpi-stat-dot" /><div><b>{nextFollowUpOf(mine) || "—"}</b><span>Next Follow-up</span></div></div>
-      </div>
-
-      <div className="panel" style={{padding:"16px 18px", marginBottom:"16px"}}>
-        <div className="section-head inside" style={{padding:0,border:0,marginBottom:"14px"}}>
-          <div><h2>Log new activity</h2><p>Every contact is a new record — nothing overwrites what came before.</p></div>
-        </div>
-        <div className="form-grid">
-          <label className="field"><span>Communication method</span><select value={f.method} onChange={e=>set("method",e.target.value)}>{offerMethods.map(o=><option key={o}>{o}</option>)}</select></label>
-          <label className="field"><span>Purpose</span><select value={f.purpose} onChange={e=>set("purpose",e.target.value)}>{offerPurposes.map(o=><option key={o}>{o}</option>)}</select></label>
-          <label className="field"><span>Offer type</span><select value={f.offerType} onChange={e=>set("offerType",e.target.value)}><option>Free</option><option>Paid</option></select></label>
-          {f.offerType === "Paid" && <label className="field"><span>Offer value (SAR)</span><input type="number" value={f.offerValue} onChange={e=>set("offerValue",e.target.value)} placeholder="5000" /></label>}
-          <label className="field"><span>Merchant response</span><select value={f.response} onChange={e=>set("response",e.target.value)}>{offerResponses.map(o=><option key={o}>{o}</option>)}</select></label>
-          <label className="field"><span>Activity date</span><input type="date" value={f.date} onChange={e=>set("date",e.target.value)} /></label>
-          <label className="field span-2"><span>Offer details</span><input value={f.offerDetails} onChange={e=>set("offerDetails",e.target.value)} placeholder="e.g. 35% off weekend bundle" /></label>
-          <label className="field span-2"><span>Notes / discussion</span><textarea className="drawer-textarea" value={f.notes} onChange={e=>set("notes",e.target.value)} placeholder="What was discussed..." /></label>
-          <label className="field"><span>Next action</span><input value={f.nextAction} onChange={e=>set("nextAction",e.target.value)} placeholder="e.g. Send artwork" /></label>
-          <label className="field"><span>Next follow-up date</span><input type="date" value={f.nextFollowUp} onChange={e=>set("nextFollowUp",e.target.value)} /></label>
-          <label className="field span-2"><span>Attachment / evidence</span><input value={f.attachment} onChange={e=>set("attachment",e.target.value)} placeholder="Screenshot name, email subject, or link" /></label>
-        </div>
-        <div className="modal-actions" style={{padding:"12px 0 0",border:0}}>
-          <button className="primary" disabled={!f.offerDetails.trim()} onClick={logActivity}><Icon name="plus" size={13} /> Log activity</button>
-        </div>
-      </div>
-
-      <div className="panel merchants-panel">
-        <div className="section-head inside"><div><h2>Activity history</h2><p>{sorted.length} records · newest first</p></div></div>
-        {sorted.length === 0
-          ? <div className="empty-state"><p>No activity yet. Log the first contact above.</p></div>
-          : <div className="oa-timeline">
-              {sorted.map(a => (
-                <div className="oa-item" key={a.id}>
-                  <div className="oa-dot"><Icon name={methodIcon[a.method] || "activities"} size={13} /></div>
-                  <div className="oa-body">
-                    <div className="oa-top">
-                      <b>{a.date}</b>
-                      <span className="am-tag">{a.method}</span>
-                      <span className="am-tag">{a.purpose}</span>
-                      <span className={`am-tag ${a.offerType==="Paid"?"paid":""}`}>{a.offerType}{a.offerValue?` · SAR ${fmt(Number(a.offerValue))}`:""}</span>
-                      <span className={`kpi-status-pill ${a.response==="Accepted"?"good":a.response==="Rejected"?"bad":"warn"}`}>{a.response}</span>
-                      {a.response==="Accepted" && !a.sentToPromos && <button className="oa-send" onClick={()=>setPromoFor(a)}>→ Special Promos</button>}
-                      {a.sentToPromos && <span className="am-tag" style={{color:"#0f8558"}}>✓ In Special Promos</span>}
-                    </div>
-                    <p className="oa-detail">{a.offerDetails}</p>
-                    {a.notes && <p className="oa-notes">{a.notes}</p>}
-                    <div className="oa-meta">
-                      {a.nextAction && <span><Icon name="target" size={11} /> {a.nextAction}</span>}
-                      {a.nextFollowUp && <span><Icon name="calendar" size={11} /> Follow-up {a.nextFollowUp}</span>}
-                      {a.attachment && <span><Icon name="contracts" size={11} /> {a.attachment}</span>}
-                      <span><Icon name="teams" size={11} /> {a.am}</span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>}
-      </div>
-
-      {promoFor && <div className="modal-overlay" onClick={()=>setPromoFor(null)}>
-        <div className="modal" onClick={e=>e.stopPropagation()}>
-          <div className="modal-head"><h3>Send to Special Promos</h3><button className="icon-btn" onClick={()=>setPromoFor(null)}><Icon name="close" size={14} /></button></div>
-          <div style={{padding:"6px 22px 0"}}>
-            <p style={{fontSize:"12.5px",color:"var(--muted)",lineHeight:1.6,margin:0}}>
-              This creates the shared Special Promo record for <b>{promoFor.merchantName}</b> so CRM and the promo catalogue hold the same offer.
-            </p>
-            <div className="qual-box ok" style={{marginTop:"14px"}}>
-              <div className="qual-head"><b>{promoFor.offerDetails}</b></div>
-              <ul>
-                <li className="ok">✓ Accepted by the merchant on {promoFor.date}</li>
-                <li className="ok">✓ Logged as {promoFor.purpose} · {promoFor.offerType}</li>
-              </ul>
-            </div>
-          </div>
-          <div className="modal-actions">
-            <button onClick={()=>setPromoFor(null)}>Cancel</button>
-            <button className="primary" onClick={()=>sendToPromos(promoFor)}>Create Special Promo</button>
-          </div>
-        </div>
-      </div>}
-    </>
-  );
 }
 
 function OffersActivity({ merchants, authUser, pursuits, setPursuits, setPromoRows, activityLog, setActivityLog }) {
@@ -11115,10 +10784,9 @@ function PSTCRM() {
   const [opsStatus, setOpsStatus] = useState("All statuses");
   const [opsSearch, setOpsSearch] = useState("");
   const [opsMerchantId, setOpsMerchantId] = useState(null);
-  const [opsTab, setOpsTab] = useState("offeract");
+  const [opsTab, setOpsTab] = useState("offers");
   const [offerPursuits, setOfferPursuits] = useState([]);
   const [activityLog, setActivityLog] = useState([]);
-  const [offerActivities, setOfferActivities] = useState([]);
   const [opsExpanded, setOpsExpanded] = useState(null);
   const [opsAttachName, setOpsAttachName] = useState("");
   function saveRow() {
@@ -11838,15 +11506,11 @@ function PSTCRM() {
             </div>
           </>}
 
-          {!opsMerchantId && opsTab === "offeract" &&
-            <OfferActivityTracker merchants={merchDash} authUser={authUser}
-              activities={offerActivities} setActivities={setOfferActivities} setPromoRows={setPromoRows} />}
-
           {!opsMerchantId && opsTab === "offers" &&
             <OffersActivity merchants={merchDash} authUser={authUser} pursuits={offerPursuits} setPursuits={setOfferPursuits}
               setPromoRows={setPromoRows} activityLog={activityLog} setActivityLog={setActivityLog} />}
 
-          {!opsMerchantId && !["offers", "offeract", "merchants"].includes(opsTab) && (() => {
+          {!opsMerchantId && !["offers", "merchants"].includes(opsTab) && (() => {
             const a = opsActivities.find(x => x.id === opsTab);
             return <div className="panel" style={{padding:"44px 30px", textAlign:"center"}}>
               <div className="am-avatar" style={{margin:"0 auto 14px"}}><Icon name={a.icon} size={20} /></div>
