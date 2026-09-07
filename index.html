@@ -189,6 +189,61 @@ button svg{flex-shrink:0;display:block}
 .sidebar.collapsed .nav-user{justify-content:center;padding:9px 0}
 .sidebar.collapsed .nav-user div{display:none}
 
+/* ===== Merchant cards (AM Hub home) ===== */
+.am-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
+.am-stat{display:flex;align-items:center;gap:13px;padding:16px 18px;border:1.5px solid var(--line);border-radius:14px;background:#fff;text-align:left;transition:.15s}
+.am-stat:hover{border-color:#c5cbe0}
+.am-stat.active{border-color:#0f8558;box-shadow:0 0 0 3px #0f855814}
+.am-stat i{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;flex-shrink:0}
+.am-stat.total i,.am-stat.conv i{background:#e5f7ef;color:#0f8558}
+.am-stat.prog i{background:#eef0f5;color:#4d5b73}
+.am-stat.none i{background:#fff6e0;color:#c9821c}
+.am-stat b{display:block;font-size:22px;font-weight:650;letter-spacing:-.5px;color:var(--ink)}
+.am-stat span{display:block;font-size:11.5px;color:var(--muted);font-weight:600;margin-top:1px}
+.am-bar{display:flex;align-items:center;gap:11px;flex-wrap:wrap;margin-bottom:14px}
+.am-bar .adv-search{flex:1;min-width:230px}
+.am-pagebar{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;font-size:12px;color:var(--muted);font-weight:600}
+.am-pagebar>div{display:flex;align-items:center;gap:9px}
+.am-pagebar button{width:32px;height:32px;border:1px solid var(--line);background:#fff;border-radius:9px;color:var(--ink-soft);padding:0}
+.am-pagebar button:hover:not(:disabled){border-color:#c5cbe0;background:#f8f9fd}
+.am-pagebar button:disabled{opacity:.4;cursor:not-allowed}
+.am-list{display:flex;flex-direction:column;gap:12px}
+.am-card{border:1px solid var(--line);border-radius:14px;background:#fff;padding:15px 17px;box-shadow:var(--shadow-xs);transition:.15s}
+.am-card:hover{border-color:#c5cbe0;box-shadow:var(--shadow-sm)}
+.am-head{display:flex;align-items:flex-start;gap:13px}
+.am-avatar{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;flex-shrink:0;background:#e5f7ef;color:#0f8558}
+.am-name-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.am-name-row h3{margin:0;font-size:15px;font-weight:650;letter-spacing:-.25px;color:var(--ink)}
+.am-id-row{display:flex;align-items:center;gap:11px;flex-wrap:wrap;margin-top:6px}
+.am-meta{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);font-weight:600}
+.am-tag{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:650;color:#4d5b73;background:var(--line-soft);border:1px solid var(--line);border-radius:7px;padding:3px 8px}
+.am-badge{font-size:10px;font-weight:700;padding:4px 11px;border-radius:20px;display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.am-badge.rejected{background:#ef4444;color:#fff}
+.am-badge.progress{background:#fff;border:1px solid var(--line);color:#4d5b73}
+.am-badge.notstarted{background:#fff;border:1px solid #f0d9a8;color:#c9821c}
+.am-badge.converted{background:#e5f7ef;border:1px solid #a9e0c8;color:#0f8558}
+.am-mini{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.am-mini span{display:inline-flex;align-items:center;gap:6px;font-size:10.5px;font-weight:650;color:#4d5b73;background:var(--line-soft);border:1px solid var(--line);border-radius:8px;padding:5px 10px}
+.am-mini span b{font-weight:750;color:var(--ink)}
+.am-mini span.good{background:#eefaf4;border-color:#a9e0c8;color:#0f8558}
+.am-mini span.warn{background:#fff8e8;border-color:#f0d9a8;color:#a9701a}
+.am-mini span.bad{background:#fdf3f4;border-color:#f0cdd2;color:#a2404e}
+
+/* ===== Merchant 360 summary ===== */
+.m360{display:grid;grid-template-columns:repeat(5,1fr);gap:13px;margin-bottom:18px}
+.m360-card{border:1px solid var(--line);border-radius:14px;background:#fff;padding:15px 16px;box-shadow:var(--shadow-xs);display:flex;flex-direction:column;min-height:120px}
+.m360-card>span{display:flex;align-items:center;gap:7px;font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+.m360-card>b{display:block;font-size:25px;font-weight:650;letter-spacing:-.7px;color:var(--ink);margin-top:9px;line-height:1.1}
+.m360-card>small{display:block;font-size:11px;color:var(--muted);font-weight:600;margin-top:4px}
+.m360-foot{margin-top:auto;padding-top:10px}
+.m360-pill{font-size:9.5px;font-weight:700;padding:4px 10px;border-radius:20px}
+.m360-pill.good{background:#e5f7ef;color:#0f8558}
+.m360-pill.warn{background:#fff6e0;color:#c9821c}
+.m360-pill.bad{background:#fdeaec;color:#c73847}
+.m360-pill.neutral{background:var(--line-soft);color:#5c6883}
+@media(max-width:1250px){.m360{grid-template-columns:repeat(3,1fr)}.am-stats{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.m360{grid-template-columns:1fr}.am-stats{grid-template-columns:1fr}}
+
 /* ===== Ops Hub activity tabs + promo qualifier ===== */
 .ops-tabstrip{display:flex;gap:6px;flex-wrap:wrap;background:var(--line-soft);border-radius:12px;padding:4px;margin-bottom:18px}
 .ops-tabstrip button{border:0;background:transparent;padding:9px 15px;border-radius:9px;font-size:12px;font-weight:650;color:#5c6883;display:flex;align-items:center;gap:7px}
@@ -9785,8 +9840,8 @@ function statusColor(status, good, warn) {
 function emptyMerchantOps() {
   return {
     offers: { status: "Not Started", notes: "", nextFollowUp: "" },
-    renewal: { status: "Not Started", notes: "", nextFollowUp: "" },
-    marketing: { status: "Not Started", packageType: "", notes: "", nextFollowUp: "" },
+    renewal: { status: "Not Started", notes: "", nextFollowUp: "", paid: "Not paid", fee: "" },
+    marketing: { status: "Not Started", packageType: "", notes: "", nextFollowUp: "", paid: "Not paid", value: "" },
     meetings: { status: "Not Scheduled", meetingType: meetingTypes[0], notes: "", nextMeetingDate: "" },
     csat: { latestScore: 0, previousScore: 0, health: "Neutral", feedback: "", openComplaints: 0, improvementActions: "", nextFollowUp: "" },
     timeline: [], attachments: [],
@@ -11520,69 +11575,134 @@ function PSTCRM() {
           })()}
 
           {opsTab === "merchants" && !opsMerchantId ? (<>
-            <div className="kpi-mgmt-stats">
-              <div className="kpi-stat neutral"><span className="kpi-stat-dot" /><div><b>{opsKpis.active}</b><span>Active Merchants</span></div></div>
-              <div className="kpi-stat warn"><span className="kpi-stat-dot" /><div><b>{opsKpis.followUp}</b><span>Requiring Follow-up (7d)</span></div></div>
-              <div className="kpi-stat neutral"><span className="kpi-stat-dot" /><div><b>{opsKpis.offersActive}</b><span>Offers In Progress</span></div></div>
-              <div className="kpi-stat neutral"><span className="kpi-stat-dot" /><div><b>{opsKpis.renewalsActive}</b><span>Renewals In Progress</span></div></div>
-              <div className="kpi-stat neutral"><span className="kpi-stat-dot" /><div><b>{opsKpis.marketingActive}</b><span>Marketing Opportunities</span></div></div>
-              <div className="kpi-stat good"><span className="kpi-stat-dot" /><div><b>{opsKpis.meetingsUpcoming}</b><span>Upcoming Meetings</span></div></div>
-              <div className="kpi-stat warn"><span className="kpi-stat-dot" /><div><b>{opsKpis.csatOpen}</b><span>Open CSAT Actions</span></div></div>
-              <div className="kpi-stat bad"><span className="kpi-stat-dot" /><div><b>{opsKpis.overdue}</b><span>Overdue Activities</span></div></div>
+            <div className="am-stats">
+              <div className="am-stat total"><i><Icon name="merchants" size={18} /></i><div><b>{opsFilteredMerchants.length}</b><span>Merchants</span></div></div>
+              <div className="am-stat conv"><i><Icon name="gift" size={18} /></i><div><b>{opsFilteredMerchants.filter(m=>promoRows.some(p=>p.retailerId===m.id)).length}</b><span>With Special Offers</span></div></div>
+              <div className="am-stat none"><i><Icon name="refresh" size={18} /></i><div><b>{opsFilteredMerchants.filter(m=>{const d=daysUntil(m.expiryDate); return d!==null && d<90;}).length}</b><span>Renewal Due (90d)</span></div></div>
+              <div className="am-stat prog"><i><Icon name="trendUp" size={18} /></i><div><b>{opsFilteredMerchants.filter(m=>(Number(m.q2_26)||0)>(Number(m.q1_26)||0)).length}</b><span>Growing Q/Q</span></div></div>
             </div>
 
-            <div className="kpi-filter-row">
+            <div className="am-bar">
               <AdvancedSearch value={opsSearch} onChange={setOpsSearch} placeholder="Search merchant or ID..." results={opsSearchResults} onSelect={(r)=>setOpsMerchantId(r.id)} />
-              <select value={opsTeam} onChange={e=>{setOpsTeam(e.target.value); setOpsAM("All AMs");}}><option value="All teams">All Teams</option>{Object.keys(realTeamManagers).filter(t=>realTeamManagers[t].length>0).map(t=><option key={t} value={t}>{t} Team</option>)}</select>
+              <select value={opsTeam} onChange={e=>setOpsTeam(e.target.value)}><option value="All teams">All Teams</option>{Object.keys(realTeamManagers).map(t=><option key={t} value={t}>{t}</option>)}</select>
               <select value={opsAM} onChange={e=>setOpsAM(e.target.value)}><option value="All AMs">All Account Managers</option>{opsAMOptions.map(a=><option key={a} value={a}>{a}</option>)}</select>
-              <select value={opsCountry} onChange={e=>setOpsCountry(e.target.value)}><option value="All countries">All Countries</option>{opsCountries.map(c=><option key={c} value={c}>{c}</option>)}</select>
               <select value={opsTier} onChange={e=>setOpsTier(e.target.value)}><option value="All tiers">All Tiers</option>{tierOptions.map(t=><option key={t} value={t}>{t}</option>)}</select>
-              <select value={opsChannel} onChange={e=>setOpsChannel(e.target.value)}><option value="All channels">All Channels</option>{businessChannelOptions.filter(c=>c!=="Partnerships").map(c=><option key={c} value={c}>{c}</option>)}</select>
-              <select value={opsStatus} onChange={e=>setOpsStatus(e.target.value)}><option value="All statuses">All Statuses</option>{statusOptions.map(s=><option key={s} value={s}>{s}</option>)}</select>
             </div>
 
-            <div className="panel merchants-panel">
-              <div className="section-head inside"><div><h2>Merchants</h2><p>{opsFilteredMerchants.length} of {merchDash.length} · click a row to open the workspace</p></div></div>
-              <div className="table-scroll"><table className="merchant-table">
-                <thead><tr>
-                  <th>MERCHANT</th><th>RETAILER ID</th><th>COUNTRY</th><th>TIER</th><th>CHANNEL</th><th>AM</th><th>STATUS</th>
-                  <th>EXPIRES</th><th>LAST TRX</th>
-                  <th title="Active Offers">OFFERS</th><th title="Active Renewals">RENEWALS</th><th title="Open Marketing Opportunities">MKTG</th><th title="Upcoming Meetings">MEETINGS</th><th title="Open CSAT Actions">CSAT</th>
-                </tr></thead>
-                <tbody>{opsFilteredMerchants.slice(0,60).map(m => {
-                  const ops = opsData[m.id];
-                  const activeOffers = ops && ["In Progress","Waiting Merchant","Approved","Live"].includes(ops.offers.status) ? 1 : 0;
-                  const activeRenewals = ops && ["In Progress","Waiting Merchant"].includes(ops.renewal.status) ? 1 : 0;
-                  const openMarketing = ops && !["Not Started","Won","Lost"].includes(ops.marketing.status) ? 1 : 0;
-                  const upcomingMeetings = ops && ops.meetings.status === "Scheduled" ? 1 : 0;
-                  const openCsat = ops && (ops.csat.health === "At Risk" || ops.csat.openComplaints > 0) ? 1 : 0;
-                  const days = daysUntil(m.expiryDate);
-                  return (
-                    <tr key={m.id} onClick={()=>{setOpsMerchantId(m.id); setOpsExpanded(null);}}>
-                      <td><div className="merchant-name"><span>{m.name.slice(0,2).toUpperCase()}</span><p><b>{m.name}</b></p></div></td>
-                      <td>{m.id}</td>
-                      <td>{m.country}</td>
-                      <td><span className="tier">{m.tier}</span></td>
-                      <td>{deriveChannel(m)}</td>
-                      <td>{m.manager}</td>
-                      <td><span className={`dot-status ${m.retailerStatus==="ACTIVE"?"active":"inactive"}`}>● {m.retailerStatus}</span></td>
-                      <td className={days<=30?"negative":""}>{days}d</td>
-                      <td>{m.lastTransaction}</td>
-                      <td className="ops-count-cell"><Icon name="gift" size={11}/> {activeOffers}</td>
-                      <td className="ops-count-cell"><Icon name="refresh" size={11}/> {activeRenewals}</td>
-                      <td className="ops-count-cell"><Icon name="megaphone" size={11}/> {openMarketing}</td>
-                      <td className="ops-count-cell"><Icon name="calendar" size={11}/> {upcomingMeetings}</td>
-                      <td className="ops-count-cell"><Icon name="heart" size={11}/> {openCsat}</td>
-                    </tr>
-                  );
-                })}</tbody>
-              </table></div>
+            <div className="am-pagebar"><span>Showing {Math.min(opsFilteredMerchants.length,40)} of {opsFilteredMerchants.length} merchants</span></div>
+
+            <div className="am-list">
+              {opsFilteredMerchants.slice(0,40).map(m => {
+                const ops = opsData[m.id];
+                const specials = promoRows.filter(p=>p.retailerId===m.id).length;
+                const dLeft = daysUntil(m.expiryDate);
+                const prevQ = Number(m.q1_26)||0, curQ = Number(m.q2_26)||0;
+                const growth = prevQ>0 ? Number(((curQ-prevQ)/prevQ*100).toFixed(1)) : null;
+                const csat = ops ? Number(ops.csat.latestScore)||0 : 0;
+                const pkg = ops && ops.marketing.packageType ? ops.marketing.packageType : null;
+                const pkgPaid = ops && ops.marketing.paid === "Paid";
+                const renPaid = ops && ops.renewal.paid === "Paid";
+                return (
+                  <button className="am-card" key={m.id} onClick={()=>setOpsMerchantId(m.id)} style={{display:"block",width:"100%",textAlign:"left"}}>
+                    <div className="am-head">
+                      <div className="am-avatar"><Icon name="merchants" size={19} /></div>
+                      <div style={{minWidth:0,flex:1}}>
+                        <div className="am-name-row">
+                          <h3>{m.name}</h3>
+                          <span className="am-badge progress">Tier {m.tier}</span>
+                          <span className={`am-badge ${m.retailerStatus==="ACTIVE"?"converted":"notstarted"}`}>{m.retailerStatus}</span>
+                        </div>
+                        <div className="am-id-row">
+                          <span className="am-meta">{m.id}</span>
+                          <span className="am-tag">{m.category}</span>
+                          <span className="am-meta"><Icon name="teams" size={11} />{m.manager}</span>
+                          <span className="am-meta">{m.country}</span>
+                        </div>
+                      </div>
+                      <span className="am-open"><span style={{display:"flex",transform:"rotate(45deg)"}}><Icon name="trendUp" size={15} /></span></span>
+                    </div>
+                    <div className="am-mini">
+                      <span className={specials?"good":""}><Icon name="gift" size={11} />Special Offers <b>{specials}</b></span>
+                      <span className={renPaid?"good":dLeft!==null&&dLeft<90?"warn":""}><Icon name="refresh" size={11} />Renewal <b>{renPaid?"Paid":dLeft===null?"—":dLeft<0?"Expired":`${dLeft}d`}</b></span>
+                      <span className={pkgPaid?"good":""}><Icon name="megaphone" size={11} />Package <b>{pkg||"None"}{pkgPaid?" · Paid":""}</b></span>
+                      <span className={csat>=8?"good":csat?"warn":""}><Icon name="smile" size={11} />CSAT <b>{csat||"—"}</b></span>
+                      <span className={growth===null?"":growth>=0?"good":"bad"}><Icon name="trendUp" size={11} />Q/Q <b>{growth===null?"—":`${growth>=0?"+":""}${growth}%`}</b></span>
+                    </div>
+                  </button>
+                );
+              })}
               {opsFilteredMerchants.length===0 && <div className="empty-state"><p>No merchants match these filters.</p></div>}
-              {opsFilteredMerchants.length>60 && <p className="muted-inline" style={{padding:"0 18px 16px"}}>Showing first 60 — narrow with filters or search to find a specific merchant.</p>}
             </div>
           </>) : opsSelectedMerchant && opsSelectedOps ? (<>
             <button className="back-link" onClick={()=>{setOpsMerchantId(null); setOpsExpanded(null);}}><Icon name="chevLeft" size={13}/> Back to Operations Hub</button>
             <div className="page-title"><div><p className="eyebrow">MERCHANT WORKSPACE</p><h1>{opsSelectedMerchant.name}</h1><p>{opsSelectedMerchant.id} · {opsSelectedMerchant.manager} · {opsSelectedMerchant.team} Team</p></div></div>
+
+            {(() => {
+              const m = opsSelectedMerchant, o = opsSelectedOps;
+              const specials = promoRows.filter(p => p.retailerId === m.id);
+              const accepted = specials.filter(p => p.approvalStatus === "Accepted").length;
+              const dLeft = daysUntil(m.expiryDate);
+              const prevQ = Number(m.q1_26) || 0, curQ = Number(m.q2_26) || 0;
+              const growth = prevQ > 0 ? Number(((curQ - prevQ) / prevQ * 100).toFixed(1)) : null;
+              const csat = Number(o.csat.latestScore) || 0;
+              const csatPrev = Number(o.csat.previousScore) || 0;
+              return (
+                <div className="m360">
+                  <div className="m360-card">
+                    <span><Icon name="gift" size={12} /> Special Offers</span>
+                    <b>{specials.length}</b>
+                    <small>{accepted} approved{specials.length ? ` · ${specials.length - accepted} pending` : ""}</small>
+                    <div className="m360-foot"><span className={`m360-pill ${specials.length ? "good" : "neutral"}`}>{specials.length ? "Secured" : "None yet"}</span></div>
+                  </div>
+
+                  <div className="m360-card">
+                    <span><Icon name="refresh" size={12} /> Renewal</span>
+                    <b>{dLeft === null ? "—" : dLeft < 0 ? "Expired" : `${dLeft}d`}</b>
+                    <small>{m.expiryDate ? `Expires ${m.expiryDate}` : "No expiry on record"}</small>
+                    <div className="m360-foot">
+                      <span className={`m360-pill ${o.renewal.paid === "Paid" ? "good" : dLeft !== null && dLeft < 90 ? "warn" : "neutral"}`}>
+                        {o.renewal.paid === "Paid" ? `Paid${o.renewal.fee ? ` · SAR ${o.renewal.fee}` : ""}` : dLeft !== null && dLeft < 90 ? "Renewal needed" : "Not paid"}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="m360-card">
+                    <span><Icon name="megaphone" size={12} /> Marketing Package</span>
+                    <b style={{fontSize: o.marketing.packageType ? "16px" : "25px", marginTop: o.marketing.packageType ? "11px" : "9px"}}>
+                      {o.marketing.packageType || "—"}
+                    </b>
+                    <small>{o.marketing.status}</small>
+                    <div className="m360-foot">
+                      <span className={`m360-pill ${o.marketing.paid === "Paid" ? "good" : "neutral"}`}>
+                        {o.marketing.paid === "Paid" ? `Paid${o.marketing.value ? ` · SAR ${o.marketing.value}` : ""}` : "Not paid"}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="m360-card">
+                    <span><Icon name="smile" size={12} /> Last CSAT</span>
+                    <b>{csat ? csat : "—"}{csat ? <small style={{display:"inline",fontSize:"13px",color:"var(--muted)"}}>/10</small> : null}</b>
+                    <small>{csatPrev ? `Previous ${csatPrev}` : "No previous score"}</small>
+                    <div className="m360-foot">
+                      <span className={`m360-pill ${o.csat.health === "Good" ? "good" : o.csat.health === "At Risk" ? "bad" : "neutral"}`}>{o.csat.health}</span>
+                    </div>
+                  </div>
+
+                  <div className="m360-card">
+                    <span><Icon name="trendUp" size={12} /> TRX Growth Q/Q</span>
+                    <b className={growth === null ? "" : growth >= 0 ? "positive" : "negative"}>
+                      {growth === null ? "—" : `${growth >= 0 ? "+" : ""}${growth}%`}
+                    </b>
+                    <small>Q2 {fmt(curQ)} vs Q1 {fmt(prevQ)}</small>
+                    <div className="m360-foot">
+                      <span className={`m360-pill ${growth === null ? "neutral" : growth >= 0 ? "good" : "bad"}`}>
+                        {growth === null ? "No baseline" : growth >= 0 ? "Growing" : "Declining"}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
 
             <div className="panel"><div className="section-head inside"><div><h2>Merchant profile</h2></div></div>
               <div className="details ops-profile-details">
@@ -11631,11 +11751,15 @@ function PSTCRM() {
                         </>}
                         {key==="renewal" && <>
                           <label className="field"><span>Status</span><select value={opsSelectedOps.renewal.status} onChange={e=>updateWorkstream(opsSelectedMerchant.id,"renewal",{status:e.target.value},`Status → ${e.target.value}`)}>{renewalStatuses.map(s=><option key={s}>{s}</option>)}</select></label>
+                          <label className="field"><span>Renewal fee paid?</span><select value={opsSelectedOps.renewal.paid || "Not paid"} onChange={e=>updateWorkstream(opsSelectedMerchant.id,"renewal",{paid:e.target.value},`Renewal → ${e.target.value}`)}><option>Not paid</option><option>Paid</option></select></label>
+                          <label className="field"><span>Renewal fee (SAR)</span><input type="number" value={opsSelectedOps.renewal.fee || ""} onChange={e=>updateWorkstream(opsSelectedMerchant.id,"renewal",{fee:e.target.value},"Renewal fee set")} placeholder="e.g. 12000" /></label>
                           <label className="field"><span>Next follow-up</span><input type="date" value={opsSelectedOps.renewal.nextFollowUp} onChange={e=>updateWorkstream(opsSelectedMerchant.id,"renewal",{nextFollowUp:e.target.value},"Follow-up date set")} /></label>
                           <label className="field span-2"><span>Notes</span><textarea className="drawer-textarea" value={opsSelectedOps.renewal.notes} onChange={e=>setOpsData(prev=>({...prev,[opsSelectedMerchant.id]:{...(prev[opsSelectedMerchant.id]||emptyMerchantOps()),renewal:{...(prev[opsSelectedMerchant.id]||emptyMerchantOps()).renewal,notes:e.target.value}}}))} onBlur={e=>logActivity(opsSelectedMerchant.id,"Renewal note updated",e.target.value)} placeholder="Negotiation notes..." /></label>
                         </>}
                         {key==="marketing" && <>
                           <label className="field"><span>Status</span><select value={opsSelectedOps.marketing.status} onChange={e=>updateWorkstream(opsSelectedMerchant.id,"marketing",{status:e.target.value},`Status → ${e.target.value}`)}>{marketingStatuses.map(s=><option key={s}>{s}</option>)}</select></label>
+                          <label className="field"><span>Package paid?</span><select value={opsSelectedOps.marketing.paid || "Not paid"} onChange={e=>updateWorkstream(opsSelectedMerchant.id,"marketing",{paid:e.target.value},`Package → ${e.target.value}`)}><option>Not paid</option><option>Paid</option></select></label>
+                          <label className="field"><span>Package value (SAR)</span><input type="number" value={opsSelectedOps.marketing.value || ""} onChange={e=>updateWorkstream(opsSelectedMerchant.id,"marketing",{value:e.target.value},"Package value set")} placeholder="e.g. 25000" /></label>
                           <label className="field"><span>Package type</span><input value={opsSelectedOps.marketing.packageType} onChange={e=>setOpsData(prev=>({...prev,[opsSelectedMerchant.id]:{...(prev[opsSelectedMerchant.id]||emptyMerchantOps()),marketing:{...(prev[opsSelectedMerchant.id]||emptyMerchantOps()).marketing,packageType:e.target.value}}}))} onBlur={e=>logActivity(opsSelectedMerchant.id,"Package type set",e.target.value)} placeholder="e.g. Growth Package" /></label>
                           <label className="field"><span>Next follow-up</span><input type="date" value={opsSelectedOps.marketing.nextFollowUp} onChange={e=>updateWorkstream(opsSelectedMerchant.id,"marketing",{nextFollowUp:e.target.value},"Follow-up date set")} /></label>
                           <label className="field span-2"><span>Notes</span><textarea className="drawer-textarea" value={opsSelectedOps.marketing.notes} onChange={e=>setOpsData(prev=>({...prev,[opsSelectedMerchant.id]:{...(prev[opsSelectedMerchant.id]||emptyMerchantOps()),marketing:{...(prev[opsSelectedMerchant.id]||emptyMerchantOps()).marketing,notes:e.target.value}}}))} onBlur={e=>logActivity(opsSelectedMerchant.id,"Marketing note updated",e.target.value)} placeholder="Note: invoices/payments live in Revenue Pipeline, not here." /></label>
