@@ -11610,7 +11610,11 @@ function PSTCRM() {
             return (<>
               <div className="page-title" style={{marginBottom:"14px"}}>
                 <div><p className="eyebrow">MERCHANT TRACKING</p><h1>All Merchants</h1><p>Renewals, tiers, ownership, and next actions across the team</p></div>
-                <button onClick={() => exportMerchantsCsv(sorted)}><Icon name="export" size={13} /> Export Details</button>
+                <div className="page-actions">
+                  <span className="scope-pill">{opsAM !== "All AMs" ? opsAM : opsTeam !== "All teams" ? `${opsTeam} Team` : "All Teams"}</span>
+                  <button className={mrShowFilters ? "primary" : ""} onClick={() => setMrShowFilters(v => !v)}><Icon name="tasks" size={13} /> Filters</button>
+                  <button onClick={() => exportMerchantsCsv(sorted)}><Icon name="export" size={13} /> Export</button>
+                </div>
               </div>
 
               <div className="am-stats">
@@ -11624,10 +11628,9 @@ function PSTCRM() {
                   <i><Icon name="help" size={18} /></i><div><b>{cExpired}</b><span>Expired</span></div></button>
               </div>
 
-              <div className="am-bar">
-                <AdvancedSearch value={opsSearch} onChange={(v)=>{setOpsSearch(v); setMrPage(1);}} placeholder="Search by name or ID..." results={opsSearchResults} onSelect={(r)=>setOpsMerchantId(r.id)} />
+              <div className="kpi-filter-row">
+                <AdvancedSearch className="kpi-search" value={opsSearch} onChange={(v)=>{setOpsSearch(v); setMrPage(1);}} placeholder="Search by name or ID..." results={opsSearchResults} onSelect={(r)=>setOpsMerchantId(r.id)} />
                 <select value={opsStatus} onChange={e=>{setOpsStatus(e.target.value); setMrPage(1);}}><option value="All statuses">All Statuses</option>{statusOptions.map(s=><option key={s} value={s}>{s}</option>)}</select>
-                <button className={mrShowFilters?"primary":""} onClick={()=>setMrShowFilters(v=>!v)}><Icon name="tasks" size={13} /> Filters</button>
                 <select value={mrSort} onChange={e=>setMrSort(e.target.value)}>
                   <option value="renewal">Sort: Renewal date</option>
                   <option value="id">Sort: ID</option>
@@ -11636,6 +11639,11 @@ function PSTCRM() {
                   <option value="am">Sort: Account Manager</option>
                   <option value="created">Sort: Created at</option>
                 </select>
+                <div className="kpi-cat-pills">
+                  {[["All","All"],["30","≤30d"],["60","≤60d"],["90","≤90d"],["Expired","Expired"]].map(([v,label]) => (
+                    <button key={v} className={mrRenewal===v?"active":""} onClick={()=>{setMrRenewal(v); setMrPage(1);}}>{label}</button>
+                  ))}
+                </div>
               </div>
 
               {mrShowFilters && <div className="panel" style={{padding:"16px 18px", marginBottom:"14px"}}>
