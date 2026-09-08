@@ -191,14 +191,26 @@ button svg{flex-shrink:0;display:block}
 
 /* ===== Merchant cards (AM Hub home) ===== */
 .am-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
-.am-stat{display:flex;align-items:center;gap:13px;padding:16px 18px;border:1.5px solid var(--line);border-radius:14px;background:#fff;text-align:left;transition:.15s}
-.am-stat:hover{border-color:#c5cbe0}
+/* Same visual language as the Revenue Pipeline stat tiles: soft tinted panel,
+   status dot, big figure, quiet label. */
+.am-stat{display:flex;align-items:center;gap:13px;padding:15px 18px;border:1px solid transparent;border-radius:13px;background:#eef0f5;text-align:left;transition:.15s}
+.am-stat:hover{filter:brightness(.985)}
 .am-stat.active{border-color:#0f8558;box-shadow:0 0 0 3px #0f855814}
-.am-stat i{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;flex-shrink:0}
-.am-stat.total i,.am-stat.conv i{background:#e5f7ef;color:#0f8558}
-.am-stat.prog i{background:#eef0f5;color:#4d5b73}
-.am-stat.none i{background:#fff6e0;color:#c9821c}
-.am-stat b{display:block;font-size:22px;font-weight:650;letter-spacing:-.5px;color:var(--ink)}
+.am-stat i{width:9px;height:9px;border-radius:50%;flex-shrink:0;display:block}
+.am-stat i>svg{display:none}
+.am-stat.neutral,.am-stat.total{background:#eef0f5}
+.am-stat.neutral i,.am-stat.total i{background:#3f4b63}
+.am-stat.neutral b,.am-stat.total b{color:#1e2740}
+.am-stat.good,.am-stat.conv{background:#e5f7ef}
+.am-stat.good i,.am-stat.conv i{background:#0f8558}
+.am-stat.good b,.am-stat.conv b{color:#0f8558}
+.am-stat.warn,.am-stat.none{background:#fff6e0}
+.am-stat.warn i,.am-stat.none i{background:#c9821c}
+.am-stat.warn b,.am-stat.none b{color:#c9821c}
+.am-stat.bad,.am-stat.prog{background:#fdeaec}
+.am-stat.bad i,.am-stat.prog i{background:#c73847}
+.am-stat.bad b,.am-stat.prog b{color:#c73847}
+.am-stat b{display:block;font-size:21px;font-weight:650;letter-spacing:-.5px}
 .am-stat span{display:block;font-size:11.5px;color:var(--muted);font-weight:600;margin-top:1px}
 .am-bar{display:flex;align-items:center;gap:11px;flex-wrap:wrap;margin-bottom:14px}
 .am-bar .adv-search{flex:1;min-width:230px}
@@ -229,37 +241,9 @@ button svg{flex-shrink:0;display:block}
 .am-mini span.warn{background:#fff8e8;border-color:#f0d9a8;color:#a9701a}
 .am-mini span.bad{background:#fdf3f4;border-color:#f0cdd2;color:#a2404e}
 
-/* ===== Merchant hero ===== */
-.m-hero{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:18px;padding:22px 24px;margin-bottom:18px;
-  background:linear-gradient(135deg,#f4fbf8 0%,#eef6ff 55%,#f7f4ff 100%);box-shadow:var(--shadow-sm)}
-.m-hero::before{content:"";position:absolute;top:-55%;right:-10%;width:44%;height:210%;border-radius:50%;
-  background:radial-gradient(circle at 35% 35%,#ffffffb0,#ffffff00 70%);pointer-events:none}
-.m-hero-row{position:relative;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
-.m-hero-mark{width:54px;height:54px;border-radius:16px;background:linear-gradient(135deg,#34d8b0,#0f9c7f);color:#04231e;
-  display:grid;place-items:center;font-size:17px;font-weight:800;flex-shrink:0;box-shadow:0 10px 22px #0f9c7f3d;letter-spacing:-.5px}
-.m-hero h1{margin:0;font-size:23px;font-weight:600;letter-spacing:-.6px;color:#11322a}
-.m-hero-sub{margin:6px 0 0;display:flex;gap:9px;flex-wrap:wrap;align-items:center}
-.m-hero-sub span{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;color:#4a6a60}
-.m-hero-chip{background:#ffffffc4;border:1px solid #ffffff;border-radius:20px;padding:4px 11px;font-size:10.5px;font-weight:700;color:#0f8558}
-.m-hero-chip.warn{color:#a9701a}
-.m-hero-chip.bad{color:#b8404f}
-.m-hero-back{position:relative;margin-left:auto;height:36px;padding:0 14px;border:1px solid #ffffff;background:#ffffffc4;border-radius:10px;font-size:12px;font-weight:650;color:#3f6459;gap:7px}
-.m-hero-back:hover{background:#fff}
 
-/* ===== Merchant 360 summary ===== */
-.m360{display:grid;grid-template-columns:repeat(5,1fr);gap:13px;margin-bottom:18px}
-.m360-card{border:1px solid var(--line);border-radius:14px;background:#fff;padding:15px 16px;box-shadow:var(--shadow-xs);display:flex;flex-direction:column;min-height:120px}
-.m360-card>span{display:flex;align-items:center;gap:7px;font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
-.m360-card>b{display:block;font-size:25px;font-weight:650;letter-spacing:-.7px;color:var(--ink);margin-top:9px;line-height:1.1}
-.m360-card>small{display:block;font-size:11px;color:var(--muted);font-weight:600;margin-top:4px}
-.m360-foot{margin-top:auto;padding-top:10px}
-.m360-pill{font-size:9.5px;font-weight:700;padding:4px 10px;border-radius:20px}
-.m360-pill.good{background:#e5f7ef;color:#0f8558}
-.m360-pill.warn{background:#fff6e0;color:#c9821c}
-.m360-pill.bad{background:#fdeaec;color:#c73847}
-.m360-pill.neutral{background:var(--line-soft);color:#5c6883}
-@media(max-width:1250px){.m360{grid-template-columns:repeat(3,1fr)}.am-stats{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:760px){.m360{grid-template-columns:1fr}.am-stats{grid-template-columns:1fr}}
+@media(max-width:1250px){.am-stats{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.am-stats{grid-template-columns:1fr}}
 
 /* ===== Ops Hub activity tabs + promo qualifier ===== */
 .ops-tabstrip{display:flex;gap:6px;flex-wrap:wrap;background:var(--line-soft);border-radius:12px;padding:4px;margin-bottom:18px}
@@ -11632,11 +11616,11 @@ function PSTCRM() {
               <div className="am-stats">
                 <button className={`am-stat total ${mrRenewal==="All"?"active":""}`} onClick={()=>{setMrRenewal("All"); setMrPage(1);}}>
                   <i><Icon name="merchants" size={18} /></i><div><b>{withDays.length}</b><span>Total</span></div></button>
-                <button className={`am-stat none ${mrRenewal==="30"?"active":""}`} onClick={()=>{setMrRenewal("30"); setMrPage(1);}}>
+                <button className={`am-stat bad ${mrRenewal==="30"?"active":""}`} onClick={()=>{setMrRenewal("30"); setMrPage(1);}}>
                   <i><Icon name="calendar" size={18} /></i><div><b>{c30}</b><span>Renewal in 30 Days</span></div></button>
-                <button className={`am-stat prog ${mrRenewal==="90"?"active":""}`} onClick={()=>{setMrRenewal("90"); setMrPage(1);}}>
+                <button className={`am-stat warn ${mrRenewal==="90"?"active":""}`} onClick={()=>{setMrRenewal("90"); setMrPage(1);}}>
                   <i><Icon name="refresh" size={18} /></i><div><b>{c90}</b><span>Renewal in 90 Days</span></div></button>
-                <button className={`am-stat conv ${mrRenewal==="Expired"?"active":""}`} onClick={()=>{setMrRenewal("Expired"); setMrPage(1);}}>
+                <button className={`am-stat bad ${mrRenewal==="Expired"?"active":""}`} onClick={()=>{setMrRenewal("Expired"); setMrPage(1);}}>
                   <i><Icon name="help" size={18} /></i><div><b>{cExpired}</b><span>Expired</span></div></button>
               </div>
 
@@ -11730,27 +11714,16 @@ function PSTCRM() {
               const m = opsSelectedMerchant;
               const d = daysUntil(m.expiryDate);
               return (
-                <div className="m-hero">
-                  <div className="m-hero-row">
-                    <div className="m-hero-mark">{m.name.slice(0,2).toUpperCase()}</div>
-                    <div style={{minWidth:0}}>
-                      <h1>{m.name}</h1>
-                      <div className="m-hero-sub">
-                        <span className="m-hero-chip">{m.id}</span>
-                        <span className="m-hero-chip">Tier {m.tier}</span>
-                        <span className={`m-hero-chip ${m.retailerStatus==="ACTIVE"?"":"bad"}`}>{m.retailerStatus}</span>
-                        {d !== null && <span className={`m-hero-chip ${d<0?"bad":d<=90?"warn":""}`}>
-                          {d < 0 ? `Renewal ${Math.abs(d)}d overdue` : `Renews in ${d}d`}
-                        </span>}
-                        <span><Icon name="teams" size={12} />{m.manager}</span>
-                        <span>{m.team} Team</span>
-                        <span>{m.category}</span>
-                        <span>{m.country}</span>
-                      </div>
-                    </div>
-                    <button className="m-hero-back" onClick={()=>{setOpsMerchantId(null); setOpsExpanded(null);}}>
-                      <Icon name="chevLeft" size={13}/> All merchants
-                    </button>
+                <div className="page-title">
+                  <div>
+                    <p className="eyebrow">MERCHANT WORKSPACE</p>
+                    <h1>{m.name}</h1>
+                    <p>{m.id} · Tier {m.tier} · {m.category} · {m.manager} · {m.team} Team · {m.country}</p>
+                  </div>
+                  <div className="page-actions">
+                    <span className={`scope-pill ${m.retailerStatus === "ACTIVE" ? "" : "bad"}`}>● {m.retailerStatus}</span>
+                    {d !== null && <div className="date-pill">● {d < 0 ? `Renewal ${Math.abs(d)}d overdue` : `Renews in ${d}d`}</div>}
+                    <button onClick={()=>{setOpsMerchantId(null); setOpsExpanded(null);}}><Icon name="chevLeft" size={13}/> All merchants</button>
                   </div>
                 </div>
               );
@@ -11764,60 +11737,31 @@ function PSTCRM() {
               const prevQ = Number(m.q1_26) || 0, curQ = Number(m.q2_26) || 0;
               const growth = prevQ > 0 ? Number(((curQ - prevQ) / prevQ * 100).toFixed(1)) : null;
               const csat = Number(o.csat.latestScore) || 0;
-              const csatPrev = Number(o.csat.previousScore) || 0;
+              const renewTone = o.renewal.paid === "Paid" ? "good" : dLeft === null ? "neutral" : dLeft < 0 ? "bad" : dLeft <= 90 ? "warn" : "neutral";
               return (
-                <div className="m360">
-                  <div className="m360-card">
-                    <span><Icon name="gift" size={12} /> Special Offers</span>
-                    <b>{specials.length}</b>
-                    <small>{accepted} approved{specials.length ? ` · ${specials.length - accepted} pending` : ""}</small>
-                    <div className="m360-foot"><span className={`m360-pill ${specials.length ? "good" : "neutral"}`}>{specials.length ? "Secured" : "None yet"}</span></div>
+                <div className="kpi-mgmt-stats">
+                  <div className={`kpi-stat ${specials.length ? "good" : "neutral"}`}>
+                    <span className="kpi-stat-dot" />
+                    <div><b>{specials.length}</b><span>Special Offers{specials.length ? ` · ${accepted} approved` : ""}</span></div>
                   </div>
-
-                  <div className="m360-card">
-                    <span><Icon name="refresh" size={12} /> Renewal</span>
-                    <b>{dLeft === null ? "—" : dLeft < 0 ? "Expired" : `${dLeft}d`}</b>
-                    <small>{m.expiryDate ? `Expires ${m.expiryDate}` : "No expiry on record"}</small>
-                    <div className="m360-foot">
-                      <span className={`m360-pill ${o.renewal.paid === "Paid" ? "good" : dLeft !== null && dLeft < 90 ? "warn" : "neutral"}`}>
-                        {o.renewal.paid === "Paid" ? `Paid${o.renewal.fee ? ` · SAR ${o.renewal.fee}` : ""}` : dLeft !== null && dLeft < 90 ? "Renewal needed" : "Not paid"}
-                      </span>
-                    </div>
+                  <div className={`kpi-stat ${renewTone}`}>
+                    <span className="kpi-stat-dot" />
+                    <div><b>{dLeft === null ? "—" : dLeft < 0 ? `${Math.abs(dLeft)}d` : `${dLeft}d`}</b>
+                      <span>{dLeft !== null && dLeft < 0 ? "Renewal overdue" : "To Renewal"} · {o.renewal.paid === "Paid" ? "Paid" : "Not paid"}</span></div>
                   </div>
-
-                  <div className="m360-card">
-                    <span><Icon name="megaphone" size={12} /> Marketing Package</span>
-                    <b style={{fontSize: o.marketing.packageType ? "16px" : "25px", marginTop: o.marketing.packageType ? "11px" : "9px"}}>
-                      {o.marketing.packageType || "—"}
-                    </b>
-                    <small>{o.marketing.status}</small>
-                    <div className="m360-foot">
-                      <span className={`m360-pill ${o.marketing.paid === "Paid" ? "good" : "neutral"}`}>
-                        {o.marketing.paid === "Paid" ? `Paid${o.marketing.value ? ` · SAR ${o.marketing.value}` : ""}` : "Not paid"}
-                      </span>
-                    </div>
+                  <div className={`kpi-stat ${o.marketing.paid === "Paid" ? "good" : "neutral"}`}>
+                    <span className="kpi-stat-dot" />
+                    <div><b>{o.marketing.packageType || "—"}</b>
+                      <span>Marketing Package · {o.marketing.paid === "Paid" ? `Paid${o.marketing.value ? ` SAR ${o.marketing.value}` : ""}` : "Not paid"}</span></div>
                   </div>
-
-                  <div className="m360-card">
-                    <span><Icon name="smile" size={12} /> Last CSAT</span>
-                    <b>{csat ? csat : "—"}{csat ? <small style={{display:"inline",fontSize:"13px",color:"var(--muted)"}}>/10</small> : null}</b>
-                    <small>{csatPrev ? `Previous ${csatPrev}` : "No previous score"}</small>
-                    <div className="m360-foot">
-                      <span className={`m360-pill ${o.csat.health === "Good" ? "good" : o.csat.health === "At Risk" ? "bad" : "neutral"}`}>{o.csat.health}</span>
-                    </div>
+                  <div className={`kpi-stat ${csat >= 8 ? "good" : csat ? "warn" : "neutral"}`}>
+                    <span className="kpi-stat-dot" />
+                    <div><b>{csat ? csat : "—"}</b><span>Last CSAT · {o.csat.health}</span></div>
                   </div>
-
-                  <div className="m360-card">
-                    <span><Icon name="trendUp" size={12} /> TRX Growth Q/Q</span>
-                    <b className={growth === null ? "" : growth >= 0 ? "positive" : "negative"}>
-                      {growth === null ? "—" : `${growth >= 0 ? "+" : ""}${growth}%`}
-                    </b>
-                    <small>Q2 {fmt(curQ)} vs Q1 {fmt(prevQ)}</small>
-                    <div className="m360-foot">
-                      <span className={`m360-pill ${growth === null ? "neutral" : growth >= 0 ? "good" : "bad"}`}>
-                        {growth === null ? "No baseline" : growth >= 0 ? "Growing" : "Declining"}
-                      </span>
-                    </div>
+                  <div className={`kpi-stat ${growth === null ? "neutral" : growth >= 0 ? "good" : "bad"}`}>
+                    <span className="kpi-stat-dot" />
+                    <div><b>{growth === null ? "—" : `${growth >= 0 ? "+" : ""}${growth}%`}</b>
+                      <span>TRX Q/Q · {fmt(curQ)} vs {fmt(prevQ)}</span></div>
                   </div>
                 </div>
               );
