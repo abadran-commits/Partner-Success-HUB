@@ -37,8 +37,8 @@ b,strong{font-weight:600}
 table{letter-spacing:-.004em}
 th{font-weight:600!important;letter-spacing:.4px!important;color:#8892a6!important}
 .page-title h1{font-weight:600!important;letter-spacing:-.045em!important}
-.set-panel h1,.auth-card h1,.auth-right h2{font-weight:600!important}
-.kpi-stat b,.auth-stat b{font-weight:650!important;letter-spacing:-.035em}
+.set-panel h1,.auth-card h1{font-weight:600!important}
+.kpi-stat b{font-weight:650!important;letter-spacing:-.035em}
 *{box-sizing:border-box}
 html{scrollbar-width:thin;scrollbar-color:#c7cde0 transparent}
 body{margin:0;background:
@@ -55,8 +55,11 @@ button svg{flex-shrink:0;display:block}
 .app-shell{min-height:100vh}
 
 /* ===== Sign-in ===== */
-.auth-wrap{display:grid;grid-template-columns:minmax(400px,38%) 1fr;min-height:100vh;background:#fff}
-.auth-left{display:flex;align-items:center;justify-content:center;padding:40px 34px}
+.auth-wrap{display:flex;align-items:center;justify-content:center;min-height:100vh;position:relative;overflow:hidden;
+  background:linear-gradient(165deg,#f6fcf9 0%,#eef6f2 45%,#f4f7fb 100%)}
+.auth-wrap::before{content:"";position:absolute;top:-30%;left:50%;transform:translateX(-50%);width:120%;height:90%;
+  border-radius:50%;background:radial-gradient(circle at 50% 40%,#ffffffcc,#ffffff00 65%);pointer-events:none}
+.auth-left{position:relative;display:flex;align-items:center;justify-content:center;padding:40px 24px;width:100%}
 .auth-card{width:100%;max-width:400px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:34px 32px 26px;box-shadow:0 18px 50px rgba(15,23,55,.07)}
 .auth-brand{display:flex;flex-direction:column;align-items:center;margin-bottom:20px}
 .auth-logo{width:60px;height:60px;border-radius:18px;background:linear-gradient(135deg,#34d8b0,#0f9c7f);color:#fff;display:grid;place-items:center;font-size:19px;font-weight:800;box-shadow:0 10px 26px #0f9c7f4d;margin-bottom:15px;letter-spacing:-.5px}
@@ -82,25 +85,6 @@ button svg{flex-shrink:0;display:block}
 .auth-err{margin-top:14px;background:#fdeaec;border:1px solid #f3c3c9;color:#c73847;border-radius:9px;padding:10px 13px;font-size:11.5px;font-weight:600;line-height:1.5}
 .auth-hint{margin-top:16px;background:#eef4ff;border:1px solid #d6e2fb;color:#3b6fd4;border-radius:9px;padding:10px 13px;font-size:10.5px;font-weight:550;line-height:1.6}
 .auth-hint b{font-weight:750}
-.auth-right{position:relative;overflow:hidden;background:linear-gradient(160deg,#f2fbf7 0%,#e6f7ef 55%,#d9f1e7 100%);padding:52px 54px;display:flex;flex-direction:column;justify-content:center}
-.auth-right::before{content:"";position:absolute;top:-30%;right:-20%;width:80%;height:135%;border-radius:50%;background:radial-gradient(circle at 32% 32%,#ffffff90,#ffffff00 70%)}
-.auth-right-inner{position:relative;max-width:780px}
-.auth-pill{display:inline-flex;align-items:center;gap:7px;background:#ffffffcc;border:1px solid #bfe6d4;color:#0f8558;border-radius:20px;padding:6px 14px;font-size:11px;font-weight:700}
-.auth-right h2{margin:18px 0 0;font-size:36px;line-height:1.17;font-weight:750;letter-spacing:-1.1px;color:#12352b}
-.auth-right h2 em{font-style:normal;color:#0f9c7f;display:block}
-.auth-right-inner>p{margin:16px 0 0;font-size:14px;color:#426157;line-height:1.68;max-width:560px}
-.auth-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:28px}
-.auth-stat{background:#ffffffb5;border:1px solid #fff;border-radius:14px;padding:16px;text-align:center;box-shadow:0 6px 18px rgba(15,110,90,.06)}
-.auth-stat b{display:block;font-size:24px;font-weight:750;color:#0f9c7f;letter-spacing:-.6px}
-.auth-stat span{display:block;font-size:11px;color:#4d6f65;font-weight:600;margin-top:4px}
-.auth-feats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
-.auth-feat{background:#ffffffab;border:1px solid #fff;border-radius:12px;padding:13px 14px;display:flex;gap:11px;align-items:flex-start}
-.auth-feat i{width:30px;height:30px;border-radius:9px;background:#e3f5ec;color:#0f8558;display:grid;place-items:center;flex-shrink:0}
-.auth-feat b{display:block;font-size:12.5px;font-weight:700;color:#12352b}
-.auth-feat span{display:block;font-size:11px;color:#4d6f65;margin-top:2px;line-height:1.5}
-.auth-badges{display:flex;gap:24px;margin-top:24px;font-size:11.5px;font-weight:650;color:#3f6459;flex-wrap:wrap}
-.auth-badges span{display:flex;align-items:center;gap:7px}
-@media(max-width:1050px){.auth-wrap{grid-template-columns:1fr}.auth-right{display:none}}
 
 /* ===== Sidebar ===== */
 .sidebar{position:fixed;inset:0 auto 0 0;width:268px;
@@ -1036,15 +1020,6 @@ function GoogleMark({ size = 16 }) {
   );
 }
 
-const authFeatures = [
-  { icon: "trendUp",  title: "KPI Management",   desc: "Track every KPI against target with quarterly pace" },
-  { icon: "diamond",  title: "Revenue Pipeline", desc: "Quotation through to payment, per merchant" },
-  { icon: "gift",     title: "Special Promos",   desc: "Log offers, campaigns, and competitive read" },
-  { icon: "target",   title: "Tier A Dashboard", desc: "Performance segmentation across the cohort" },
-  { icon: "teams",    title: "Operations Hub",   desc: "Renewals, meetings, and relationship health" },
-  { icon: "history",  title: "Full Audit Trail", desc: "Every target and actual edit, attributed" },
-];
-
 function SignIn({ onSignIn }) {
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
@@ -1158,33 +1133,6 @@ function SignIn({ onSignIn }) {
         </form>
       </div>
 
-      <div className="auth-right">
-        <div className="auth-right-inner">
-          <span className="auth-pill"><Icon name="star" size={13} /> Partner Success, reimagined</span>
-          <h2>The Complete Platform for<em>Partner Success Teams</em></h2>
-          <p>Manage your full merchant portfolio, track KPIs against target, run the revenue pipeline, and keep every special promo and renewal moving — in one place.</p>
-
-          <div className="auth-stats">
-            <div className="auth-stat"><b>5,842</b><span>Merchants Tracked</span></div>
-            <div className="auth-stat"><b>13</b><span>KPIs Monitored</span></div>
-            <div className="auth-stat"><b>4</b><span>Regional Teams</span></div>
-          </div>
-
-          <div className="auth-feats">
-            {authFeatures.map(f => (
-              <div className="auth-feat" key={f.title}>
-                <i><Icon name={f.icon} size={15} /></i>
-                <div><b>{f.title}</b><span>{f.desc}</span></div>
-              </div>
-            ))}
-          </div>
-
-          <div className="auth-badges">
-            <span><Icon name="lock" size={14} /> Internal use only</span>
-            <span><Icon name="check" size={14} /> Change history attributed</span>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }
