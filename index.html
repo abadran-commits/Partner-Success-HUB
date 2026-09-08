@@ -9844,6 +9844,7 @@ function emptyMerchantOps() {
     marketing: { status: "Not Started", packageType: "", notes: "", nextFollowUp: "", paid: "Not paid", value: "" },
     meetings: { status: "Not Scheduled", meetingType: meetingTypes[0], notes: "", nextMeetingDate: "" },
     csat: { latestScore: 0, previousScore: 0, health: "Neutral", feedback: "", openComplaints: 0, improvementActions: "", nextFollowUp: "" },
+    nextCall: "",
     timeline: [], attachments: [],
   };
 }
@@ -10840,6 +10841,29 @@ function PSTCRM() {
   const [opsSearch, setOpsSearch] = useState("");
   const [opsMerchantId, setOpsMerchantId] = useState(null);
   const [opsTab, setOpsTab] = useState("offers");
+  const [mrShowFilters, setMrShowFilters] = useState(false);
+  const [mrRenewal, setMrRenewal] = useState("All");
+  const [mrSort, setMrSort] = useState("renewal");
+  const [mrPage, setMrPage] = useState(1);
+  const MR_PAGE = 20;
+  function setNextCall(id, date) {
+    setOpsData(prev => ({ ...prev, [id]: { ...(prev[id] || emptyMerchantOps()), nextCall: date } }));
+  }
+  function exportMerchantsCsv(rows) {
+    const head = ["Merchant","Retailer ID","Tier","Account Manager","Team","Status","Category","Created At","Renewal Date","Days To Renewal","Next Action Call"];
+    const body = rows.map(m => {
+      const d = daysUntil(m.expiryDate);
+      const nc = (opsData[m.id] || {}).nextCall || "";
+      return [m.name, m.id, m.tier, m.manager, m.team, m.retailerStatus, m.category, m.createdAt || "", m.expiryDate || "", d === null ? "" : d, nc]
+        .map(v => `"${String(v).replace(/"/g, '""')}"`).join(",");
+    });
+    const csv = [head.join(","), ...body].join("\n");
+    const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8;" }));
+    const a = document.createElement("a");
+    a.href = url; a.download = `merchants-${new Date().toISOString().slice(0,10)}.csv`;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
   const [offerPursuits, setOfferPursuits] = useState([]);
   const [activityLog, setActivityLog] = useState([]);
   const [opsExpanded, setOpsExpanded] = useState(null);
@@ -11574,66 +11598,139 @@ function PSTCRM() {
             </div>;
           })()}
 
-          {opsTab === "merchants" && !opsMerchantId ? (<>
-            <div className="am-stats">
-              <div className="am-stat total"><i><Icon name="merchants" size={18} /></i><div><b>{opsFilteredMerchants.length}</b><span>Merchants</span></div></div>
-              <div className="am-stat conv"><i><Icon name="gift" size={18} /></i><div><b>{opsFilteredMerchants.filter(m=>promoRows.some(p=>p.retailerId===m.id)).length}</b><span>With Special Offers</span></div></div>
-              <div className="am-stat none"><i><Icon name="refresh" size={18} /></i><div><b>{opsFilteredMerchants.filter(m=>{const d=daysUntil(m.expiryDate); return d!==null && d<90;}).length}</b><span>Renewal Due (90d)</span></div></div>
-              <div className="am-stat prog"><i><Icon name="trendUp" size={18} /></i><div><b>{opsFilteredMerchants.filter(m=>(Number(m.q2_26)||0)>(Number(m.q1_26)||0)).length}</b><span>Growing Q/Q</span></div></div>
-            </div>
+          {opsTab === "merchants" && !opsMerchantId ? (() => {
+            const withDays = opsFilteredMerchants.map(m => ({ ...m, _d: daysUntil(m.expiryDate) }));
+            const inWindow = (d, w) => {
+              if (w === "All") return true;
+              if (d === null) return false;
+              if (w === "Expired") return d < 0;
+              if (w === "30") return d >= 0 && d <= 30;
+              if (w === "60") return d >= 0 && d <= 60;
+              if (w === "90") return d >= 0 && d <= 90;
+              return true;
+            };
+            const rows = withDays.filter(m => inWindow(m._d, mrRenewal));
+            const sorted = [...rows].sort((a, b) => {
+              if (mrSort === "name") return a.name.localeCompare(b.name);
+              if (mrSort === "tier") return String(a.tier).localeCompare(String(b.tier));
+              if (mrSort === "am") return String(a.manager).localeCompare(String(b.manager));
+              if (mrSort === "created") return String(b.createdAt || "").localeCompare(String(a.createdAt || ""));
+              if (mrSort === "renewal") {
+                if (a._d === null) return 1;
+                if (b._d === null) return -1;
+                return a._d - b._d;
+              }
+              return String(a.id).localeCompare(String(b.id), undefined, { numeric: true });
+            });
+            const pages = Math.max(1, Math.ceil(sorted.length / MR_PAGE));
+            const page = Math.min(mrPage, pages);
+            const paged = sorted.slice((page - 1) * MR_PAGE, page * MR_PAGE);
+            const cExpired = withDays.filter(m => m._d !== null && m._d < 0).length;
+            const c30 = withDays.filter(m => m._d !== null && m._d >= 0 && m._d <= 30).length;
+            const c90 = withDays.filter(m => m._d !== null && m._d >= 0 && m._d <= 90).length;
+            return (<>
+              <div className="page-title" style={{marginBottom:"14px"}}>
+                <div><p className="eyebrow">MERCHANT TRACKING</p><h1>All Merchants</h1><p>Renewals, tiers, ownership, and next actions across the team</p></div>
+                <button onClick={() => exportMerchantsCsv(sorted)}><Icon name="export" size={13} /> Export Details</button>
+              </div>
 
-            <div className="am-bar">
-              <AdvancedSearch value={opsSearch} onChange={setOpsSearch} placeholder="Search merchant or ID..." results={opsSearchResults} onSelect={(r)=>setOpsMerchantId(r.id)} />
-              <select value={opsTeam} onChange={e=>setOpsTeam(e.target.value)}><option value="All teams">All Teams</option>{Object.keys(realTeamManagers).map(t=><option key={t} value={t}>{t}</option>)}</select>
-              <select value={opsAM} onChange={e=>setOpsAM(e.target.value)}><option value="All AMs">All Account Managers</option>{opsAMOptions.map(a=><option key={a} value={a}>{a}</option>)}</select>
-              <select value={opsTier} onChange={e=>setOpsTier(e.target.value)}><option value="All tiers">All Tiers</option>{tierOptions.map(t=><option key={t} value={t}>{t}</option>)}</select>
-            </div>
+              <div className="am-stats">
+                <button className={`am-stat total ${mrRenewal==="All"?"active":""}`} onClick={()=>{setMrRenewal("All"); setMrPage(1);}}>
+                  <i><Icon name="merchants" size={18} /></i><div><b>{withDays.length}</b><span>Total</span></div></button>
+                <button className={`am-stat none ${mrRenewal==="30"?"active":""}`} onClick={()=>{setMrRenewal("30"); setMrPage(1);}}>
+                  <i><Icon name="calendar" size={18} /></i><div><b>{c30}</b><span>Renewal in 30 Days</span></div></button>
+                <button className={`am-stat prog ${mrRenewal==="90"?"active":""}`} onClick={()=>{setMrRenewal("90"); setMrPage(1);}}>
+                  <i><Icon name="refresh" size={18} /></i><div><b>{c90}</b><span>Renewal in 90 Days</span></div></button>
+                <button className={`am-stat conv ${mrRenewal==="Expired"?"active":""}`} onClick={()=>{setMrRenewal("Expired"); setMrPage(1);}}>
+                  <i><Icon name="help" size={18} /></i><div><b>{cExpired}</b><span>Expired</span></div></button>
+              </div>
 
-            <div className="am-pagebar"><span>Showing {Math.min(opsFilteredMerchants.length,40)} of {opsFilteredMerchants.length} merchants</span></div>
+              <div className="am-bar">
+                <AdvancedSearch value={opsSearch} onChange={(v)=>{setOpsSearch(v); setMrPage(1);}} placeholder="Search by name or ID..." results={opsSearchResults} onSelect={(r)=>setOpsMerchantId(r.id)} />
+                <select value={opsStatus} onChange={e=>{setOpsStatus(e.target.value); setMrPage(1);}}><option value="All statuses">All Statuses</option>{statusOptions.map(s=><option key={s} value={s}>{s}</option>)}</select>
+                <button className={mrShowFilters?"primary":""} onClick={()=>setMrShowFilters(v=>!v)}><Icon name="tasks" size={13} /> Filters</button>
+                <select value={mrSort} onChange={e=>setMrSort(e.target.value)}>
+                  <option value="renewal">Sort: Renewal date</option>
+                  <option value="id">Sort: ID</option>
+                  <option value="name">Sort: Name</option>
+                  <option value="tier">Sort: Tier</option>
+                  <option value="am">Sort: Account Manager</option>
+                  <option value="created">Sort: Created at</option>
+                </select>
+              </div>
 
-            <div className="am-list">
-              {opsFilteredMerchants.slice(0,40).map(m => {
-                const ops = opsData[m.id];
-                const specials = promoRows.filter(p=>p.retailerId===m.id).length;
-                const dLeft = daysUntil(m.expiryDate);
-                const prevQ = Number(m.q1_26)||0, curQ = Number(m.q2_26)||0;
-                const growth = prevQ>0 ? Number(((curQ-prevQ)/prevQ*100).toFixed(1)) : null;
-                const csat = ops ? Number(ops.csat.latestScore)||0 : 0;
-                const pkg = ops && ops.marketing.packageType ? ops.marketing.packageType : null;
-                const pkgPaid = ops && ops.marketing.paid === "Paid";
-                const renPaid = ops && ops.renewal.paid === "Paid";
-                return (
-                  <button className="am-card" key={m.id} onClick={()=>setOpsMerchantId(m.id)} style={{display:"block",width:"100%",textAlign:"left"}}>
-                    <div className="am-head">
-                      <div className="am-avatar"><Icon name="merchants" size={19} /></div>
-                      <div style={{minWidth:0,flex:1}}>
-                        <div className="am-name-row">
-                          <h3>{m.name}</h3>
-                          <span className="am-badge progress">Tier {m.tier}</span>
-                          <span className={`am-badge ${m.retailerStatus==="ACTIVE"?"converted":"notstarted"}`}>{m.retailerStatus}</span>
+              {mrShowFilters && <div className="panel" style={{padding:"16px 18px", marginBottom:"14px"}}>
+                <p className="sec-label" style={{marginBottom:"12px"}}>Advanced filters</p>
+                <div className="form-grid">
+                  <label className="field"><span>Tier</span><select value={opsTier} onChange={e=>{setOpsTier(e.target.value); setMrPage(1);}}><option value="All tiers">All Tiers</option>{tierOptions.map(t=><option key={t}>{t}</option>)}</select></label>
+                  <label className="field"><span>Assigned to</span><select value={opsAM} onChange={e=>{setOpsAM(e.target.value); setMrPage(1);}}><option value="All AMs">All Members</option>{opsAMOptions.map(a=><option key={a}>{a}</option>)}</select></label>
+                  <label className="field"><span>Team</span><select value={opsTeam} onChange={e=>{setOpsTeam(e.target.value); setMrPage(1);}}><option value="All teams">All Teams</option>{Object.keys(realTeamManagers).map(t=><option key={t}>{t}</option>)}</select></label>
+                  <label className="field"><span>Renewal window</span><select value={mrRenewal} onChange={e=>{setMrRenewal(e.target.value); setMrPage(1);}}>
+                    <option value="All">All</option>
+                    <option value="30">Next 30 days</option>
+                    <option value="60">Next 60 days</option>
+                    <option value="90">Next 90 days</option>
+                    <option value="Expired">Expired</option>
+                  </select></label>
+                  <label className="field"><span>Country</span><select value={opsCountry} onChange={e=>{setOpsCountry(e.target.value); setMrPage(1);}}><option value="All countries">All Countries</option>{opsCountries.map(c=><option key={c}>{c}</option>)}</select></label>
+                </div>
+              </div>}
+
+              <div className="am-pagebar">
+                <span>Showing {sorted.length===0?0:(page-1)*MR_PAGE+1}&ndash;{Math.min(sorted.length, page*MR_PAGE)} of {sorted.length} merchants</span>
+                <div>
+                  <button onClick={()=>setMrPage(p=>Math.max(1,p-1))} disabled={page<=1}><Icon name="chevLeft" size={14} /></button>
+                  <span>Page {page} of {pages}</span>
+                  <button onClick={()=>setMrPage(p=>Math.min(pages,p+1))} disabled={page>=pages}><span style={{display:"flex",transform:"rotate(180deg)"}}><Icon name="chevLeft" size={14} /></span></button>
+                </div>
+              </div>
+
+              <div className="am-list">
+                {paged.map(m => {
+                  const d = m._d;
+                  const nc = (opsData[m.id] || {}).nextCall || "";
+                  const renewCls = d === null ? "" : d < 0 ? "bad" : d <= 30 ? "bad" : d <= 90 ? "warn" : "good";
+                  return (
+                    <div className="am-card" key={m.id}>
+                      <div className="am-head">
+                        <div className="am-avatar"><Icon name="merchants" size={19} /></div>
+                        <div style={{minWidth:0,flex:1}}>
+                          <div className="am-name-row">
+                            <h3>{m.name}</h3>
+                            <span className={`am-badge ${m.retailerStatus==="ACTIVE"?"converted":"rejected"}`}>{m.retailerStatus}</span>
+                            <span className="am-badge progress">Tier {m.tier}</span>
+                          </div>
+                          <div className="am-id-row">
+                            <span className="am-meta">{m.id}</span>
+                            <span className="am-tag">{m.category}</span>
+                            <span className="am-meta"><Icon name="teams" size={11} />{m.manager}</span>
+                            <span className="am-meta">{m.team} Team</span>
+                            <span className="am-meta">{m.country}</span>
+                          </div>
                         </div>
-                        <div className="am-id-row">
-                          <span className="am-meta">{m.id}</span>
-                          <span className="am-tag">{m.category}</span>
-                          <span className="am-meta"><Icon name="teams" size={11} />{m.manager}</span>
-                          <span className="am-meta">{m.country}</span>
-                        </div>
+                        <button className="am-open" title="Open merchant workspace" onClick={()=>setOpsMerchantId(m.id)}>
+                          <span style={{display:"flex",transform:"rotate(45deg)"}}><Icon name="trendUp" size={15} /></span>
+                        </button>
                       </div>
-                      <span className="am-open"><span style={{display:"flex",transform:"rotate(45deg)"}}><Icon name="trendUp" size={15} /></span></span>
+                      <div className="am-mini">
+                        <span className={renewCls}>
+                          <Icon name="refresh" size={11} />Renewal <b>{m.expiryDate || "—"}</b>
+                          {d !== null && <b style={{marginLeft:"4px"}}>({d < 0 ? `${Math.abs(d)}d overdue` : `${d}d left`})</b>}
+                        </span>
+                        <span><Icon name="calendar" size={11} />Created <b>{m.createdAt || "—"}</b></span>
+                        <span className={nc ? "good" : ""}>
+                          <Icon name="phone" size={11} />Next call
+                          <input type="date" value={nc} onChange={e=>setNextCall(m.id, e.target.value)}
+                            style={{border:0,background:"transparent",font:"inherit",fontWeight:750,color:"inherit",padding:0,width:"122px",outline:0}} />
+                        </span>
+                      </div>
                     </div>
-                    <div className="am-mini">
-                      <span className={specials?"good":""}><Icon name="gift" size={11} />Special Offers <b>{specials}</b></span>
-                      <span className={renPaid?"good":dLeft!==null&&dLeft<90?"warn":""}><Icon name="refresh" size={11} />Renewal <b>{renPaid?"Paid":dLeft===null?"—":dLeft<0?"Expired":`${dLeft}d`}</b></span>
-                      <span className={pkgPaid?"good":""}><Icon name="megaphone" size={11} />Package <b>{pkg||"None"}{pkgPaid?" · Paid":""}</b></span>
-                      <span className={csat>=8?"good":csat?"warn":""}><Icon name="smile" size={11} />CSAT <b>{csat||"—"}</b></span>
-                      <span className={growth===null?"":growth>=0?"good":"bad"}><Icon name="trendUp" size={11} />Q/Q <b>{growth===null?"—":`${growth>=0?"+":""}${growth}%`}</b></span>
-                    </div>
-                  </button>
-                );
-              })}
-              {opsFilteredMerchants.length===0 && <div className="empty-state"><p>No merchants match these filters.</p></div>}
-            </div>
-          </>) : opsSelectedMerchant && opsSelectedOps ? (<>
+                  );
+                })}
+                {sorted.length===0 && <div className="empty-state"><p>No merchants match these filters.</p></div>}
+              </div>
+            </>);
+          })() : opsSelectedMerchant && opsSelectedOps ? (<>
             <button className="back-link" onClick={()=>{setOpsMerchantId(null); setOpsExpanded(null);}}><Icon name="chevLeft" size={13}/> Back to Operations Hub</button>
             <div className="page-title"><div><p className="eyebrow">MERCHANT WORKSPACE</p><h1>{opsSelectedMerchant.name}</h1><p>{opsSelectedMerchant.id} · {opsSelectedMerchant.manager} · {opsSelectedMerchant.team} Team</p></div></div>
 
