@@ -229,6 +229,23 @@ button svg{flex-shrink:0;display:block}
 .am-mini span.warn{background:#fff8e8;border-color:#f0d9a8;color:#a9701a}
 .am-mini span.bad{background:#fdf3f4;border-color:#f0cdd2;color:#a2404e}
 
+/* ===== Merchant hero ===== */
+.m-hero{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:18px;padding:22px 24px;margin-bottom:18px;
+  background:linear-gradient(135deg,#f4fbf8 0%,#eef6ff 55%,#f7f4ff 100%);box-shadow:var(--shadow-sm)}
+.m-hero::before{content:"";position:absolute;top:-55%;right:-10%;width:44%;height:210%;border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,#ffffffb0,#ffffff00 70%);pointer-events:none}
+.m-hero-row{position:relative;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.m-hero-mark{width:54px;height:54px;border-radius:16px;background:linear-gradient(135deg,#34d8b0,#0f9c7f);color:#04231e;
+  display:grid;place-items:center;font-size:17px;font-weight:800;flex-shrink:0;box-shadow:0 10px 22px #0f9c7f3d;letter-spacing:-.5px}
+.m-hero h1{margin:0;font-size:23px;font-weight:600;letter-spacing:-.6px;color:#11322a}
+.m-hero-sub{margin:6px 0 0;display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+.m-hero-sub span{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;color:#4a6a60}
+.m-hero-chip{background:#ffffffc4;border:1px solid #ffffff;border-radius:20px;padding:4px 11px;font-size:10.5px;font-weight:700;color:#0f8558}
+.m-hero-chip.warn{color:#a9701a}
+.m-hero-chip.bad{color:#b8404f}
+.m-hero-back{position:relative;margin-left:auto;height:36px;padding:0 14px;border:1px solid #ffffff;background:#ffffffc4;border-radius:10px;font-size:12px;font-weight:650;color:#3f6459;gap:7px}
+.m-hero-back:hover{background:#fff}
+
 /* ===== Merchant 360 summary ===== */
 .m360{display:grid;grid-template-columns:repeat(5,1fr);gap:13px;margin-bottom:18px}
 .m360-card{border:1px solid var(--line);border-radius:14px;background:#fff;padding:15px 16px;box-shadow:var(--shadow-xs);display:flex;flex-direction:column;min-height:120px}
@@ -9849,11 +9866,11 @@ function emptyMerchantOps() {
   };
 }
 const workstreamMeta = {
-  offers: { label: "Offers & Campaigns", icon: "gift" },
-  renewal: { label: "Subscription Renewals", icon: "refresh" },
-  marketing: { label: "Marketing Package Sales", icon: "megaphone" },
-  meetings: { label: "Official Progress Meetings", icon: "calendar" },
-  csat: { label: "CSAT & Relationship Health", icon: "heart" },
+  offers: { label: "Special Offers", icon: "gift" },
+  renewal: { label: "Renewals", icon: "refresh" },
+  marketing: { label: "Marketing Sales", icon: "megaphone" },
+  meetings: { label: "Meetings", icon: "calendar" },
+  csat: { label: "CSAT & Health", icon: "heart" },
 };
 
 const iconPaths = {
@@ -10867,6 +10884,7 @@ function PSTCRM() {
   const [offerPursuits, setOfferPursuits] = useState([]);
   const [activityLog, setActivityLog] = useState([]);
   const [opsExpanded, setOpsExpanded] = useState(null);
+  const [merchTab, setMerchTab] = useState("offers");
   const [opsAttachName, setOpsAttachName] = useState("");
   function saveRow() {
     if (!rowForm.retailerId || !rowForm.merchantName.trim()) {
@@ -11574,31 +11592,8 @@ function PSTCRM() {
 
 
         {view === "ophub" && <section className="content">
-          {!opsMerchantId && <>
-            <div className="page-title"><div><p className="eyebrow">DAILY WORKSPACE</p><h1>AM Operations Hub</h1><p>The daily routines an Account Manager runs against their merchant portfolio</p></div></div>
-            <div className="ops-tabstrip">
-              {opsActivities.map(a => (
-                <button key={a.id} className={opsTab === a.id ? "active" : ""} onClick={() => setOpsTab(a.id)}>
-                  <Icon name={a.icon} size={14} /> {a.label}{!a.built && <em>soon</em>}
-                </button>
-              ))}
-            </div>
-          </>}
 
-          {!opsMerchantId && opsTab === "offers" &&
-            <OffersActivity merchants={merchDash} authUser={authUser} pursuits={offerPursuits} setPursuits={setOfferPursuits}
-              setPromoRows={setPromoRows} activityLog={activityLog} setActivityLog={setActivityLog} />}
-
-          {!opsMerchantId && !["offers", "merchants"].includes(opsTab) && (() => {
-            const a = opsActivities.find(x => x.id === opsTab);
-            return <div className="panel" style={{padding:"44px 30px", textAlign:"center"}}>
-              <div className="am-avatar" style={{margin:"0 auto 14px"}}><Icon name={a.icon} size={20} /></div>
-              <h2 style={{margin:"0 0 6px", fontSize:"17px", fontWeight:600}}>{a.label}</h2>
-              <p className="muted" style={{margin:0, fontSize:"12.5px"}}>Planned, not built yet. We agreed to do these one at a time — Special Offers first.</p>
-            </div>;
-          })()}
-
-          {opsTab === "merchants" && !opsMerchantId ? (() => {
+          {!opsMerchantId ? (() => {
             const withDays = opsFilteredMerchants.map(m => ({ ...m, _d: daysUntil(m.expiryDate) }));
             const inWindow = (d, w) => {
               if (w === "All") return true;
@@ -11731,8 +11726,35 @@ function PSTCRM() {
               </div>
             </>);
           })() : opsSelectedMerchant && opsSelectedOps ? (<>
-            <button className="back-link" onClick={()=>{setOpsMerchantId(null); setOpsExpanded(null);}}><Icon name="chevLeft" size={13}/> Back to Operations Hub</button>
-            <div className="page-title"><div><p className="eyebrow">MERCHANT WORKSPACE</p><h1>{opsSelectedMerchant.name}</h1><p>{opsSelectedMerchant.id} · {opsSelectedMerchant.manager} · {opsSelectedMerchant.team} Team</p></div></div>
+            {(() => {
+              const m = opsSelectedMerchant;
+              const d = daysUntil(m.expiryDate);
+              return (
+                <div className="m-hero">
+                  <div className="m-hero-row">
+                    <div className="m-hero-mark">{m.name.slice(0,2).toUpperCase()}</div>
+                    <div style={{minWidth:0}}>
+                      <h1>{m.name}</h1>
+                      <div className="m-hero-sub">
+                        <span className="m-hero-chip">{m.id}</span>
+                        <span className="m-hero-chip">Tier {m.tier}</span>
+                        <span className={`m-hero-chip ${m.retailerStatus==="ACTIVE"?"":"bad"}`}>{m.retailerStatus}</span>
+                        {d !== null && <span className={`m-hero-chip ${d<0?"bad":d<=90?"warn":""}`}>
+                          {d < 0 ? `Renewal ${Math.abs(d)}d overdue` : `Renews in ${d}d`}
+                        </span>}
+                        <span><Icon name="teams" size={12} />{m.manager}</span>
+                        <span>{m.team} Team</span>
+                        <span>{m.category}</span>
+                        <span>{m.country}</span>
+                      </div>
+                    </div>
+                    <button className="m-hero-back" onClick={()=>{setOpsMerchantId(null); setOpsExpanded(null);}}>
+                      <Icon name="chevLeft" size={13}/> All merchants
+                    </button>
+                  </div>
+                </div>
+              );
+            })()}
 
             {(() => {
               const m = opsSelectedMerchant, o = opsSelectedOps;
@@ -11817,8 +11839,22 @@ function PSTCRM() {
             </div>
 
             <div className="panel"><div className="section-head inside"><div><h2>Operations workstreams</h2><p>Click a card to update it</p></div></div>
-              <div className="ops-workstream-grid">
-                {Object.keys(workstreamMeta).map(key => {
+              <div className="ops-tabstrip" style={{marginTop:"4px"}}>
+                {Object.keys(workstreamMeta).map(k => {
+                  const meta = workstreamMeta[k];
+                  const st = k === "csat" ? opsSelectedOps.csat.health : opsSelectedOps[k].status;
+                  const touched = k === "csat" ? (Number(opsSelectedOps.csat.latestScore) > 0) : st !== "Not Started" && st !== "Not Scheduled";
+                  return (
+                    <button key={k} className={merchTab === k ? "active" : ""} onClick={() => setMerchTab(k)}>
+                      <Icon name={meta.icon} size={14} /> {meta.label}
+                      {touched && <em style={{background:"#e5f7ef",color:"#0f8558"}}>●</em>}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div className="ops-workstream-grid" style={{gridTemplateColumns:"1fr"}}>
+                {Object.keys(workstreamMeta).filter(k => k === merchTab).map(key => {
                   const meta = workstreamMeta[key];
                   const st = key === "csat" ? opsSelectedOps.csat.health : opsSelectedOps[key].status;
                   const list = key==="offers"?offerStatuses:key==="renewal"?renewalStatuses:key==="marketing"?marketingStatuses:key==="meetings"?meetingStatuses:healthOptions;
@@ -11827,8 +11863,8 @@ function PSTCRM() {
                   const nextFollow = key==="offers"?opsSelectedOps.offers.nextFollowUp:key==="renewal"?opsSelectedOps.renewal.nextFollowUp:key==="marketing"?opsSelectedOps.marketing.nextFollowUp:key==="meetings"?opsSelectedOps.meetings.nextMeetingDate:opsSelectedOps.csat.nextFollowUp;
                   const notes = key==="csat" ? opsSelectedOps.csat.feedback : opsSelectedOps[key].notes;
                   return (
-                    <div key={key} className={`ops-ws-card ${opsExpanded===key?"expanded":""}`}>
-                      <button className="ops-ws-head" onClick={()=>setOpsExpanded(opsExpanded===key?null:key)}>
+                    <div key={key} className="ops-ws-card expanded">
+                      <button className="ops-ws-head" style={{cursor:"default"}}>
                         <span className="ops-ws-icon" style={{background:color+"18", color}}><Icon name={meta.icon} size={14}/></span>
                         <span className="ops-ws-title"><b>{meta.label}</b><small style={{color}}>{st}</small></span>
                         <Icon name="chevDown" size={13}/>
@@ -11840,7 +11876,7 @@ function PSTCRM() {
                         <span>{opsSelectedOps.attachments.length} files</span>
                       </div>
 
-                      {opsExpanded===key && <div className="ops-ws-editor">
+                      {<div className="ops-ws-editor">
                         {key==="offers" && <>
                           <label className="field"><span>Status</span><select value={opsSelectedOps.offers.status} onChange={e=>updateWorkstream(opsSelectedMerchant.id,"offers",{status:e.target.value},`Status → ${e.target.value}`)}>{offerStatuses.map(s=><option key={s}>{s}</option>)}</select></label>
                           <label className="field"><span>Next follow-up</span><input type="date" value={opsSelectedOps.offers.nextFollowUp} onChange={e=>updateWorkstream(opsSelectedMerchant.id,"offers",{nextFollowUp:e.target.value},"Follow-up date set")} /></label>
