@@ -882,11 +882,6 @@ th.sortable:hover{color:#3f4b63}
 .ops-card-counters{display:flex;justify-content:space-between;margin-top:4px;padding-top:9px;border-top:1px solid var(--line-soft)}
 .ops-card-counters span{display:flex;align-items:center;gap:4px;font-size:9.5px;font-weight:700;color:#5c6883}
 
-.ops-profile-details{grid-template-columns:repeat(3,1fr)}
-.details.ops-profile-details{display:grid;gap:12px;padding:16px 18px}
-.details.ops-profile-details>div{display:flex;flex-direction:column;gap:2px}
-.details.ops-profile-details span{font-size:9px;color:#9aa4b5;font-weight:650;text-transform:uppercase;letter-spacing:.3px}
-.details.ops-profile-details b{font-size:11.5px;font-weight:650;color:var(--ink)}
 
 .ops-workstream-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;padding:16px 18px}
 .ops-ws-card{border:1px solid var(--line);border-radius:13px;overflow:hidden;background:#fff}
@@ -11722,21 +11717,6 @@ function PSTCRM() {
                 </div>
               );
             })()}
-
-            <div className="panel"><div className="section-head inside"><div><h2>Merchant profile</h2></div></div>
-              <div className="details ops-profile-details">
-                {[
-                  ["Country", opsSelectedMerchant.country], ["Retailer ID", opsSelectedMerchant.id], ["Retailer Name (EN)", opsSelectedMerchant.name],
-                  ["Retailer Created At", opsSelectedMerchant.createdAt], ["Retailer Status", opsSelectedMerchant.retailerStatus],
-                  ["Last Transaction", opsSelectedMerchant.lastTransaction], ["Stores Count", String(opsSelectedMerchant.stores)],
-                  ["Main Category", opsSelectedMerchant.category], ["Expiry Date", opsSelectedMerchant.expiryDate], ["Days Left", String(daysUntil(opsSelectedMerchant.expiryDate))],
-                  ["WalaPlus Availability", opsSelectedMerchant.ch_walaoffer>0||opsSelectedMerchant.ch_walaone>0 ? "Available" : "Not Active"],
-                  ["DOAM Availability", opsSelectedMerchant.ch_doam>0 ? "Available" : "Not Active"],
-                  ["Final Account Manager", opsSelectedMerchant.manager], ["Merchant Tier", opsSelectedMerchant.tier],
-                  ["Direct / Aggregator", opsSelectedMerchant.team === "Aggregator" ? "Aggregator" : "Direct"],
-                ].map(d => <div key={d[0]}><span>{d[0]}</span><b>{d[1]}</b></div>)}
-              </div>
-            </div>
 
             <div className="panel"><div className="section-head inside"><div><h2>Operations workstreams</h2><p>Pick an activity below to work on it — a green dot marks the ones already started</p></div></div>
               <div className="ops-tabstrip" style={{marginTop:"4px"}}>
