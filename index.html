@@ -515,7 +515,7 @@ tbody tr:hover{background:#f8f9ff}
 .empty-state{padding:48px 20px;text-align:center;color:#8a94a7;font-size:11.5px}
 
 .modal-overlay{position:fixed;inset:0;background:#0b122466;backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;z-index:50;padding:20px}
-.modal{width:100%;max-width:560px;background:#fff;border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);overflow:hidden;border:1px solid var(--line)}
+.modal{width:100%;max-width:560px;max-height:calc(100vh - 40px);display:flex;flex-direction:column;background:#fff;border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);overflow:hidden;border:1px solid var(--line)}
 .modal-head{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--line)}
 .modal-head h3{margin:0;font-size:15px;font-weight:650}
 .form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;padding:20px}
@@ -716,34 +716,36 @@ th.sortable:hover{color:#3f4b63}
 /* ===== KPI detail / sequence view ===== */
 .kpi-row-click{cursor:pointer}
 .kpi-row-click:hover{background:#f7f9ff}
-.kpi-detail-head{padding:18px 22px 16px;border-bottom:1px solid var(--line)}
-.kpi-detail-head h3{margin:0;font-size:17px;font-weight:700;letter-spacing:-.25px;color:var(--ink)}
+.kpi-detail-head{padding:14px 20px 12px;border-bottom:1px solid var(--line)}
+.kpi-detail-head,.modal-head,.modal-actions{flex-shrink:0}
+.kpi-detail-head h3{margin:0;font-size:15.5px;font-weight:700;letter-spacing:-.25px;color:var(--ink)}
 .kpi-detail-sub{margin:5px 0 0;font-size:11.5px;color:var(--muted)}
 .kpi-detail-align{margin:9px 0 0;font-size:11px;color:#0f8558;font-weight:600;display:flex;gap:6px;align-items:flex-start;line-height:1.45}
 .hint{display:inline-grid;place-items:center;width:13px;height:13px;border-radius:50%;background:#dfe4ef;color:#77839b;font-size:8px;font-weight:700;cursor:help;margin-left:6px;flex-shrink:0;letter-spacing:0}
 .hint:hover{background:#c9d1e2;color:var(--ink-soft)}
-.cv-box{background:var(--line-soft);border:1px solid var(--line);border-radius:12px;padding:14px 15px;margin-top:14px}
-.cv-label{display:flex;align-items:center;font-size:9.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+.cv-box{background:var(--line-soft);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-top:10px}
+.cv-label{display:flex;align-items:center;font-size:9.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin:0 0 7px}
 .cv-row{display:flex;gap:10px;align-items:stretch}
-.cv-value{flex:1;background:#fff;border:1px solid var(--line);border-radius:9px;padding:11px 13px;font-size:15px;font-weight:700;color:var(--ink);display:flex;align-items:center}
+.cv-value{flex:1;background:#fff;border:1px solid var(--line);border-radius:9px;padding:8px 11px;font-size:13.5px;font-weight:700;color:var(--ink);display:flex;align-items:center}
 .cv-note{display:flex;align-items:center;gap:7px;background:#eef4ff;border:1px solid #d6e2fb;color:#3b6fd4;border-radius:9px;padding:10px 13px;font-size:11px;font-weight:600;white-space:nowrap}
-.kpi-detail-status{display:flex;align-items:center;gap:12px;margin-top:14px}
+.kpi-detail-status{display:flex;align-items:center;gap:12px;margin-top:10px}
 .kpi-detail-status .muted-inline{font-size:11.5px;font-weight:600;color:var(--ink-soft)}
-.sec-label{font-size:9.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin:0 0 11px}
-.annual-bar{background:var(--line-soft);border:1px solid var(--line);border-radius:11px;padding:13px 15px;margin-top:14px}
+.sec-label{font-size:9.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+.annual-bar{background:var(--line-soft);border:1px solid var(--line);border-radius:11px;padding:10px 13px;margin-top:11px}
 .annual-bar-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;font-size:11.5px;font-weight:650}
 .annual-bar-foot{display:flex;justify-content:space-between;margin-top:7px;font-size:10px;color:var(--muted);font-weight:600}
 .qtrack-table td,.qtrack-table th{white-space:nowrap}
 .qtrack-pending{color:var(--muted-2);font-weight:600}
-.perf-card{border:1px solid var(--line);border-radius:14px;padding:16px 18px 10px;background:#fff;box-shadow:var(--shadow-xs)}
-.perf-card h4{margin:0 0 10px;font-size:14px;font-weight:700;color:#0f8558;letter-spacing:-.15px}
+.perf-card{border:1px solid var(--line);border-radius:14px;padding:13px 15px 8px;background:#fff;box-shadow:var(--shadow-xs)}
+.perf-card h4{margin:0 0 7px;font-size:13px;font-weight:700;color:#0f8558;letter-spacing:-.15px}
 .perf-foot{display:flex;align-items:center;gap:24px;padding:8px 4px 6px;font-size:11px;color:var(--muted);font-weight:600;flex-wrap:wrap}
 .perf-foot b{color:var(--ink);font-weight:700;margin-left:6px}
 .perf-dash{display:inline-block;width:40px;border-top:2px dashed #f0525f;margin:0 9px 3px;vertical-align:middle}
 .perf-trend{margin-left:auto;display:flex;align-items:center;gap:6px}
 .perf-trend .up{color:#0f8558;font-weight:800}
 .perf-trend .down{color:#c73847;font-weight:800}
-.qtrack-table input{width:112px;border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:11.5px;font-weight:650;background:#fff;outline:0;color:var(--ink)}
+.qtrack-table td,.qtrack-table th{padding:6px 12px}
+.qtrack-table input{width:92px;border:1px solid var(--line);border-radius:8px;padding:6px 9px;font-size:11.5px;font-weight:650;background:#fff;outline:0;color:var(--ink)}
 .qtrack-table input:focus{border-color:#b7bdf7;box-shadow:0 0 0 3px #4f5bf01a}
 .qtrack-table input:disabled{background:#eef0f5;color:#7d899f;cursor:not-allowed;border-color:#e3e7f0}
 .qtrack-row.locked{background:#fafbfe}
@@ -826,8 +828,8 @@ th.sortable:hover{color:#3f4b63}
 @keyframes slideIn{from{transform:translateX(24px);opacity:.5}to{transform:translateX(0);opacity:1}}
 .drawer-head{display:flex;justify-content:space-between;align-items:flex-start;padding:20px;border-bottom:1px solid var(--line)}
 .drawer-head h3{margin:0 0 4px;font-size:15px;font-weight:650}
-.drawer-body{flex:1;overflow-y:auto;padding:6px 20px 20px}
-.drawer-section{padding:14px 0;border-bottom:1px solid var(--line-soft)}
+.drawer-body{flex:1;min-height:0;overflow-y:auto;padding:6px 20px 20px}
+.drawer-section{padding:11px 0;border-bottom:1px solid var(--line-soft)}
 .drawer-section:last-child{border-bottom:0}
 .drawer-section h4{margin:0 0 10px;font-size:11px;font-weight:700;color:#5c6883;text-transform:uppercase;letter-spacing:.4px}
 .drawer-textarea{width:100%;min-height:70px;border:1px solid var(--line);border-radius:9px;padding:10px;font-size:11.5px;font-family:inherit;resize:vertical}
@@ -836,7 +838,7 @@ th.sortable:hover{color:#3f4b63}
 .danger-btn{border:1px solid #f3c3c9;background:#fff;color:#c73847;border-radius:9px;padding:10px 14px;font-size:11px;font-weight:650}
 .danger-btn:hover{background:#fdeef0}
 
-.modal.wide{max-width:680px}
+.modal.wide{max-width:720px}
 .merchant-picker{margin-top:6px;border:1px solid var(--line);border-radius:9px;background:#fff;box-shadow:var(--shadow-sm);max-height:220px;overflow-y:auto}
 .merchant-picker button{display:block;width:100%;text-align:left;border:0;background:transparent;padding:10px 12px;font-size:11px;border-bottom:1px solid var(--line-soft)}
 .merchant-picker button:hover{background:var(--line-soft)}
@@ -12298,7 +12300,7 @@ function PSTCRM() {
       {addRowOpen && <div className="modal-overlay" onClick={() => { setAddRowOpen(false); setRowError(null); }}>
         <div className="modal wide" onClick={(e) => e.stopPropagation()}>
           <div className="modal-head"><h3>{editingRowId ? "Edit revenue opportunity" : "Add revenue opportunity"}</h3><button className="icon-btn" onClick={() => { setAddRowOpen(false); setRowError(null); }}><Icon name="close" size={14} /></button></div>
-          <div className="drawer-body" style={{maxHeight:"72vh", padding:"18px 22px"}}>
+          <div className="drawer-body" style={{padding:"12px 20px"}}>
 
             <div className="drawer-section" style={{paddingTop:0}}><h4>Merchant (auto-fills AM, Team, Name, Tier)</h4>
               <div className="form-grid">
@@ -12355,7 +12357,7 @@ function PSTCRM() {
       {addPromoOpen && <div className="modal-overlay" onClick={() => { setAddPromoOpen(false); setPromoError(null); }}>
         <div className="modal wide" onClick={(e) => e.stopPropagation()}>
           <div className="modal-head"><h3>{editingPromoId ? "Edit promo" : "Add promo"}</h3><button className="icon-btn" onClick={() => { setAddPromoOpen(false); setPromoError(null); }}><Icon name="close" size={14} /></button></div>
-          <div className="drawer-body" style={{maxHeight:"72vh", padding:"18px 22px"}}>
+          <div className="drawer-body" style={{padding:"12px 20px"}}>
 
             <div className="drawer-section" style={{paddingTop:0}}><h4>Merchant</h4>
               <div className="form-grid">
@@ -12452,7 +12454,7 @@ function PSTCRM() {
               </div>
             </div>
 
-            <div className="drawer-body" style={{maxHeight:"62vh", padding:"18px 22px"}}>
+            <div className="drawer-body" style={{padding:"12px 20px"}}>
 
               <div className="drawer-section" style={{paddingTop:0}}>
                 <p className="sec-label">Performance Trend</p>
