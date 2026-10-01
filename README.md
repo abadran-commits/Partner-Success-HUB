@@ -40,6 +40,37 @@ python -m http.server 8791
 
 Then visit `http://localhost:8791`.
 
+## Hosting it on Replit
+
+The repo carries `.replit` and `replit.nix`, so Replit can run it with no setup.
+
+**Import it (do not copy the file by hand — `index.html` is 1.6 MB):**
+
+1. In Replit: **Create Repl → Import from GitHub**
+2. Paste `https://github.com/abadran-commits/Partner-Success-HUB`
+3. Press **Run** — the webview serves the app on port 8000
+4. Press **Deploy → Static** for a permanent URL that stays up when the Repl sleeps
+
+Two things must be done for a new domain, or sign-in will not work:
+
+**1. Register the Replit URL with Google.** The Google sign-in button only works on
+origins listed in the Google Cloud Console. Open the OAuth client
+(`3366206189-…apps.googleusercontent.com`) → **Authorized JavaScript origins** → add the
+Replit URL exactly, with no trailing slash, for example:
+
+```
+https://partner-success-hub.<your-replit-username>.repl.co
+```
+
+Until that is added, Google sign-in fails on Replit while continuing to work on GitHub
+Pages. Add the deployment URL too if it differs from the dev URL.
+
+**2. Decide who can reach it.** The email/password box on the sign-in screen accepts
+**any password** — it is a demo shortcut, not authentication, and there is no backend to
+check anything against. A public Replit URL therefore means anyone with the link is in.
+To actually restrict access, either make the Repl private, or remove the password
+shortcut so Google (which is domain-locked to `@walaplus.com`) is the only way in.
+
 ## Data and persistence
 
 Edits made in the UI — promo rows, pipeline rows, KPI targets and actuals, the change log

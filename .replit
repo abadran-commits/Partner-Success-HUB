@@ -1,0 +1,25 @@
+# Partner Success Hub on Replit.
+#
+# The whole app is one self-contained index.html — React, ReactDOM and Babel load from a
+# CDN and compile in the browser. There is no build step and no backend, so Replit only
+# has to hand the file to the browser.
+#
+# Press Run and the webview serves it on port 8000.
+# Press Deploy (Static) for a permanent public URL that stays up when the Repl sleeps.
+
+run = "python3 -m http.server 8000 --bind 0.0.0.0"
+entrypoint = "index.html"
+modules = ["python-3.11"]
+
+# Replit maps the internal port to the standard web port for the webview URL.
+[[ports]]
+localPort = 8000
+externalPort = 80
+
+# Static deployment: no server process, Replit just serves the folder.
+[deployment]
+deploymentTarget = "static"
+publicDir = "."
+
+[env]
+PYTHONUNBUFFERED = "1"
