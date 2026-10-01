@@ -225,6 +225,51 @@ button svg{flex-shrink:0;display:block}
 .am-mini span.warn{background:#fff8e8;border-color:#f0d9a8;color:#a9701a}
 .am-mini span.bad{background:#fdf3f4;border-color:#f0cdd2;color:#a2404e}
 
+/* Renewal urgency on the card edge: the same tone as the renewal chip, but readable
+   from the page margin — a long list can be triaged without reading any of it. */
+.am-card{position:relative;overflow:hidden}
+.am-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:transparent}
+.am-card.urg-bad::before{background:#c73847}
+.am-card.urg-warn::before{background:#c9821c}
+.am-card.urg-good::before{background:#0f8558}
+.am-card:hover{transform:translateY(-1px)}
+
+/* The primary action was an unlabelled rotated arrow with no CSS of its own. */
+.am-open{display:inline-flex;align-items:center;gap:7px;flex-shrink:0;font-size:11.5px;font-weight:650;
+  color:#0f8558;background:#eefaf4;border:1px solid #a9e0c8;border-radius:9px;padding:7px 13px;transition:.14s}
+.am-open:hover{background:#0f8558;border-color:#0f8558;color:#fff;box-shadow:0 2px 8px #0f855833}
+
+/* Quick actions — open the merchant already on the workstream you meant, instead of
+   landing on Special Offers every time and hunting for the right tab. */
+.am-quick{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:11px;padding-top:11px;border-top:1px dashed var(--line)}
+.am-quick>small{font-size:9.5px;font-weight:700;letter-spacing:.5px;color:var(--muted-2);text-transform:uppercase;margin-right:2px}
+.am-quick button{display:inline-flex;align-items:center;gap:6px;font-size:10.5px;font-weight:650;color:#4d5b73;
+  background:#fff;border:1px solid var(--line);border-radius:8px;padding:5px 10px;transition:.14s}
+.am-quick button:hover{border-color:#0f8558;color:#0f8558;background:#f2fbf7}
+.am-quick button.on{border-color:#a9e0c8;background:#eefaf4;color:#0f8558}
+.am-quick .qdot{width:5px;height:5px;border-radius:50%;background:#0f8558;flex-shrink:0}
+
+/* Same shortcuts inside the workspace, so switching workstream never means scrolling. */
+.ops-quickbar{display:flex;align-items:center;gap:7px;flex-wrap:wrap;background:#fff;border:1px solid var(--line);
+  border-radius:14px;padding:10px 13px;margin-bottom:16px;box-shadow:var(--shadow-xs)}
+.ops-quickbar>small{font-size:9.5px;font-weight:700;letter-spacing:.5px;color:var(--muted-2);text-transform:uppercase;margin-right:3px}
+.ops-quickbar button{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;font-weight:650;color:#4d5b73;
+  background:#fff;border:1px solid var(--line);border-radius:9px;padding:7px 12px;transition:.14s}
+.ops-quickbar button:hover{border-color:#0f8558;color:#0f8558;background:#f2fbf7}
+.ops-quickbar button.active{background:#0f8558;border-color:#0f8558;color:#fff;box-shadow:0 2px 8px #0f855833}
+.ops-quickbar button.active .qdot{background:#fff}
+.ops-quickbar .qdot{width:5px;height:5px;border-radius:50%;background:#0f8558;flex-shrink:0}
+.ops-quickbar .spacer{flex:1;min-width:8px}
+
+/* Five workspace tiles on one row, and scaled down so they read as a status strip
+   rather than five dashboard cards — the workspace below them is the point. */
+.ops-hero-stats{grid-template-columns:repeat(5,1fr)!important;gap:10px;margin-bottom:12px}
+.ops-hero-stats .kpi-stat{padding:11px 13px;gap:9px;border-radius:12px}
+.ops-hero-stats .kpi-stat b{font-size:18px}
+.ops-hero-stats .kpi-stat span{font-size:10px;margin-top:3px}
+@media(max-width:1080px){.ops-hero-stats{grid-template-columns:repeat(3,1fr)!important}}
+@media(max-width:820px){.ops-hero-stats{grid-template-columns:repeat(2,1fr)!important}}
+@media(max-width:560px){.ops-hero-stats{grid-template-columns:1fr!important}}
 
 @media(max-width:1250px){.am-stats{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:760px){.am-stats{grid-template-columns:1fr}}
@@ -888,7 +933,7 @@ th.sortable:hover{color:#3f4b63}
 .ops-workstream-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;padding:16px 18px}
 .ops-ws-card{border:1px solid var(--line);border-radius:13px;overflow:hidden;background:#fff}
 .ops-ws-card.expanded{border-color:#b7bdf7;box-shadow:0 0 0 3px #4f5bf01a}
-.ops-ws-head{display:flex;align-items:center;gap:10px;width:100%;border:0;background:transparent;padding:12px;text-align:left;cursor:pointer}
+.ops-ws-head{display:flex;align-items:center;gap:10px;width:100%;border:0;background:transparent;padding:12px;text-align:left}
 .ops-ws-icon{width:28px;height:28px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .ops-ws-title{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
 .ops-ws-title b{font-size:11.5px;font-weight:650;color:var(--ink)}
@@ -898,6 +943,82 @@ th.sortable:hover{color:#3f4b63}
 .ops-ws-meta{display:flex;justify-content:space-between;padding:9px 12px 12px;font-size:9px;color:#9aa4b5;font-weight:600}
 .ops-ws-editor{padding:14px;border-top:1px solid var(--line-soft);background:#fbfbfe;display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .ops-ws-editor .span-2{grid-column:span 2}
+/* Offers carries sections rather than a flat field pair, so it opts out of the grid. */
+.ops-ws-editor.stacked{display:block;padding:4px 16px 14px}
+.ops-ws-editor.stacked .form-grid{gap:13px}
+
+/* One-line capture for a dated contact with the merchant. */
+.tp-row{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+.tp-row select,.tp-row input{border:1px solid var(--line);border-radius:8px;padding:7px 9px;font-size:11.5px;font-weight:500;color:var(--ink);background:#fff}
+.tp-row select:focus,.tp-row input:focus{outline:0;border-color:#b7bdf7;box-shadow:0 0 0 3px #4f5bf01a}
+.tp-row .tp-notes{flex:2;min-width:150px}
+.tp-row .tp-next{flex:2;min-width:150px;border-color:#f0d9a8;background:#fffdf7}
+.tp-row .tp-next:focus{border-color:#c9821c;box-shadow:0 0 0 3px #c9821c1a}
+.tp-row button{flex-shrink:0;padding:7px 14px;font-size:11.5px}
+
+/* ===== Offers tab: compact boxes + enforced follow-up ===== */
+.ofr-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.ofr-box{border:1px solid var(--line);border-radius:12px;background:#fff;padding:12px 14px}
+.ofr-box.span-2{grid-column:1 / -1}
+.ofr-box.tight{padding:10px 12px}
+.ofr-box>h5{margin:0 0 10px;font-size:10px;font-weight:700;color:#5c6883;text-transform:uppercase;letter-spacing:.5px;display:flex;align-items:center;gap:6px}
+.ofr-fields{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.ofr-fields .span-2{grid-column:1 / -1}
+.ofr-fields .field span{font-size:9.5px;letter-spacing:.2px}
+.ofr-fields .field input,.ofr-fields .field select{padding:7px 9px;font-size:11.5px;border-radius:8px}
+.ofr-hint{margin:8px 0 0;font-size:10.5px;color:var(--muted);font-weight:600}
+@media(max-width:1050px){.ofr-grid{grid-template-columns:1fr}.ofr-box.span-2{grid-column:auto}}
+
+/* The open follow-up, always the first thing on the tab. */
+.act-banner{display:flex;align-items:center;gap:11px;border-radius:12px;padding:10px 13px;border:1px solid;margin-bottom:11px}
+.act-banner i{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;flex-shrink:0;background:#fff8}
+.act-banner b{display:block;font-size:12.5px;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.act-banner span{display:block;font-size:10.5px;font-weight:600;margin-top:2px}
+.act-banner button{flex-shrink:0;font-size:11px;padding:6px 12px;background:#fff;border:1px solid var(--line);border-radius:8px;font-weight:650}
+.act-banner.overdue{background:#fdeaec;border-color:#f0cdd2}
+.act-banner.overdue span{color:#a2404e}
+.act-banner.overdue i{color:#c73847}
+.act-banner.today{background:#fff6e0;border-color:#f0d9a8}
+.act-banner.today span{color:#a9701a}
+.act-banner.today i{color:#c9821c}
+.act-banner.ok{background:#eefaf4;border-color:#a9e0c8}
+.act-banner.ok span{color:#0f8558}
+.act-banner.ok i{color:#0f8558}
+.act-banner.none{background:var(--line-soft);border-color:var(--line)}
+.act-banner.none span,.act-banner.none i{color:var(--muted)}
+.act-banner.none b{color:var(--muted)}
+
+/* Verdict as a single strip rather than a tall card. */
+.qual-strip{display:flex;align-items:center;gap:11px;flex-wrap:wrap;border-radius:10px;padding:9px 12px;border:1px solid}
+.qual-strip.ok{background:#eefaf4;border-color:#a9e0c8}
+.qual-strip.no{background:#fdf3f4;border-color:#f0cdd2}
+.qual-strip>b{font-size:12px;font-weight:700;flex-shrink:0}
+.qual-strip.ok>b{color:#0f8558}
+.qual-strip.no>b{color:#c73847}
+.qual-strip>em{font-style:normal;font-size:10.5px;font-weight:700;background:#fff;border-radius:20px;padding:3px 9px;flex-shrink:0}
+.qual-strip ul{margin:0;padding:0;list-style:none;flex:1;min-width:170px;display:flex;flex-direction:column;gap:3px}
+.qual-strip li{font-size:11px;font-weight:600;line-height:1.45}
+.qual-strip li.ok{color:#0f8558}
+.qual-strip li.no{color:#a2404e}
+.qual-strip .qual-rule{font-size:10px;font-weight:650;color:var(--muted);flex-shrink:0}
+.qual-strip button{flex-shrink:0;padding:7px 14px;font-size:11.5px}
+
+/* Compact activity feed with the follow-up state on each entry. */
+.act-feed{margin-top:11px;border-top:1px solid var(--line-soft);padding-top:10px;max-height:290px;overflow-y:auto;display:flex;flex-direction:column;gap:9px}
+.act-item{display:flex;gap:9px}
+.act-item>i{width:7px;height:7px;border-radius:50%;margin-top:5px;flex-shrink:0}
+.act-item>i.promo{background:#0f8558}
+.act-item>i.open{background:var(--indigo)}
+.act-item>i.done{background:var(--muted-2)}
+.act-line{display:flex;justify-content:space-between;gap:9px}
+.act-line b{font-size:11px;font-weight:700;color:var(--ink)}
+.act-line span{font-size:9.5px;color:#9aa4b5;font-weight:600;white-space:nowrap}
+.act-item p{margin:3px 0 0;font-size:10.5px;color:#5c6883;line-height:1.5}
+.act-next{font-weight:650;color:#4d5b73}
+.act-next em{font-style:normal;font-weight:600;color:var(--muted)}
+.act-next.late{color:#c73847}
+.act-next.late em{color:#c73847}
+.act-next.done{color:var(--muted-2);text-decoration:line-through}
 
 .ops-timeline{padding:14px 18px;display:flex;flex-direction:column;gap:0;max-height:400px;overflow-y:auto}
 .ops-timeline-item{display:flex;gap:11px;padding-bottom:16px;position:relative}
@@ -952,7 +1073,6 @@ const kpiQuality = [
   { name: "CSAT", unit: "%", target: 85, achieved: 88, previous: 81, real: false, owner: "Samar Mansour", desc: "Track merchant satisfaction across all touchpoints" },
   { name: "CRM Data Quality", unit: "%", target: 95, achieved: 0, previous: 0, real: true, owner: "Abobakr Ali", desc: "Ensure complete, accurate merchant profile data" },
   { name: "Resolution SLA", unit: "%", target: 95, achieved: 92, previous: 89, real: false, owner: "Doha Sadek", desc: "Meet resolution SLA targets for merchant support tickets" },
-  { name: "Approved Special Offers", unit: "", target: 0, achieved: 0, previous: 0, real: true, owner: "Donia Hesham", desc: "Track approved vs total special offers in the pipeline" },
 ];
 // ===== Account Manager sign-in =====
 // Front-end gate only: it identifies who is using the hub so edits can be attributed to
@@ -3728,6 +3848,17 @@ function daysUntil(dateStr) {
   const d = new Date(dateStr);
   if (isNaN(d.getTime())) return 9999;
   return Math.round((d.getTime() - new Date("2026-08-06").getTime()) / 86400000);
+}
+// daysUntil() is anchored to the merchant dataset's frozen reference date, which is right
+// for renewal countdowns but wrong for follow-ups the AM sets today. This measures from
+// the real clock, and returns null rather than a sentinel when there is no date.
+function daysFromToday(dateStr) {
+  if (!dateStr) return null;
+  const d = new Date(dateStr);
+  if (isNaN(d.getTime())) return null;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return Math.round((d.getTime() - today.getTime()) / 86400000);
 }
 
 // ===== Overall Dashboard data — ALL 5,842 merchants (every tier, not just Tier A),
@@ -9785,7 +9916,12 @@ function statusColor(status, good, warn) {
 
 function emptyMerchantOps() {
   return {
-    offers: { status: "Not Started", notes: "", nextFollowUp: "" },
+    offers: {
+      status: "Not Started", notes: "", nextFollowUp: "",
+      // Inputs the Q3 strategy engine needs to judge whether a promo qualifies.
+      ongoingOffer: "", ongoingPct: "", proposedOffer: "", proposedPct: "", valueKind: "",
+      campaign: "", paidMarketing: "No", budget: "", expectedGrowth: "", startDate: "", endDate: "",
+    },
     renewal: { status: "Not Started", notes: "", nextFollowUp: "", paid: "Not paid", fee: "" },
     marketing: { status: "Not Started", packageType: "", notes: "", nextFollowUp: "", paid: "Not paid", value: "" },
     meetings: { status: "Not Scheduled", meetingType: meetingTypes[0], notes: "", nextMeetingDate: "" },
@@ -9795,12 +9931,21 @@ function emptyMerchantOps() {
   };
 }
 const workstreamMeta = {
-  offers: { label: "Special Offers", icon: "gift" },
-  renewal: { label: "Renewals", icon: "refresh" },
-  marketing: { label: "Marketing Sales", icon: "megaphone" },
-  meetings: { label: "Meetings", icon: "calendar" },
-  csat: { label: "CSAT & Health", icon: "heart" },
+  offers: { label: "Special Offers", icon: "gift", short: "Offers" },
+  renewal: { label: "Renewals", icon: "refresh", short: "Renewal" },
+  marketing: { label: "Marketing Sales", icon: "megaphone", short: "Marketing" },
+  meetings: { label: "Meetings", icon: "calendar", short: "Meetings" },
+  csat: { label: "CSAT & Health", icon: "heart", short: "CSAT" },
 };
+
+// A workstream counts as started once it has moved off its default status. Used by both
+// the merchant list shortcuts and the workspace tab strip, so they can never disagree.
+function workstreamStarted(ops, key) {
+  if (!ops) return false;
+  if (key === "csat") return Number((ops.csat || {}).latestScore) > 0;
+  const st = (ops[key] || {}).status;
+  return !!st && st !== "Not Started" && st !== "Not Scheduled";
+}
 
 const iconPaths = {
   home: "M3 11.5 12 4l9 7.5M5.5 10v9a1 1 0 0 0 1 1H10v-6h4v6h3.5a1 1 0 0 0 1-1v-9",
@@ -10011,7 +10156,7 @@ function KpiTrendChart({ rows, target, label }) {
   );
 }
 
-// Module scope: needed by both PSTCRM and OffersActivity. Pure function of the merchant row.
+// Module scope. Pure function of the merchant row.
 function deriveChannel(m) {
   const hasWalaplus = m.ch_walaoffer > 0 || m.ch_walaone > 0;
   const hasDoam = m.ch_doam > 0;
@@ -10027,294 +10172,6 @@ function quarterFromDate(d) {
 function monthFromDate(d) {
   const t = new Date(d); if (isNaN(t)) return monthList[0];
   return monthList[t.getMonth()];
-}
-
-function OffersActivity({ merchants, authUser, pursuits, setPursuits, setPromoRows, activityLog, setActivityLog }) {
-  const [logForm, setLogForm] = useState({ merchantId: "", channel: "Email", date: new Date().toISOString().slice(0,10), outcome: "Completed", notes: "" });
-  const [logFilter, setLogFilter] = useState("");
-  const channelMeta = { Email: "mail", Meeting: "meeting", Call: "phone", WhatsApp: "activities", Other: "activities" };
-
-  function addLogEntry(entry) {
-    setActivityLog(prev => [{ id: `AL-${Date.now()}-${Math.random().toString(36).slice(2,6)}`, ...entry }, ...prev]);
-  }
-  function submitLog() {
-    const m = merchants.find(x => x.id === logForm.merchantId);
-    if (!m) return;
-    addLogEntry({
-      date: logForm.date, merchantId: m.id, merchantName: m.name,
-      channel: logForm.channel, outcome: logForm.outcome, notes: logForm.notes,
-      by: authUser ? authUser.name : "", kind: "touchpoint",
-    });
-    setLogForm(f => ({ ...f, notes: "" }));
-  }
-  const blank = {
-    merchantId: "", ongoingOffer: "", ongoingPct: "", proposedOffer: "", proposedPct: "",
-    valueKind: "", campaign: "", paidMarketing: "No", budget: "", expectedGrowth: "",
-    startDate: "", endDate: "",
-    channels: { E: false, M: false, C: false, W: false },
-    check: { merchantApproved: false, datesSet: false, tested: false },
-    notes: "",
-  };
-  const [form, setForm] = useState(blank);
-  const [openForm, setOpenForm] = useState(false);
-  const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
-
-  const merchant = merchants.find(m => m.id === form.merchantId) || null;
-  const category = merchant ? merchant.category : "";
-
-  // Days since this merchant's last submitted promo drives the 30-day block.
-  const daysSinceLast = useMemo(() => {
-    if (!form.merchantId) return null;
-    const prior = pursuits.filter(p => p.merchantId === form.merchantId && p.submittedAt);
-    if (!prior.length) return null;
-    const newest = Math.max(...prior.map(p => new Date(p.submittedAt).getTime()));
-    return Math.floor((Date.now() - newest) / 86400000);
-  }, [pursuits, form.merchantId]);
-
-  const verdict = qualifyPromo({ category, ongoingPct: form.ongoingPct, proposedPct: form.proposedPct, valueKind: form.valueKind, daysSinceLast });
-  const checksDone = form.check.merchantApproved && form.check.datesSet && form.check.tested;
-  const contacted = Object.values(form.channels).some(Boolean);
-  const canSubmit = !!form.merchantId && verdict.qualifies && checksDone && contacted && !!form.proposedOffer.trim();
-
-  function submit() {
-    const when = new Date();
-    const today = when.toISOString().slice(0, 10);
-    const who = authUser ? authUser.name : "";
-    const promoId = `SP-${Date.now()}`;
-
-    setPursuits(prev => [{
-      id: `OP-${Date.now()}`, ...form,
-      merchantName: merchant ? merchant.name : "", category,
-      uplift: verdict.uplift, stage: "Submitted for Approval",
-      submittedAt: when.toISOString(), by: who, promoId,
-    }, ...prev]);
-
-    // Hand off to Special Promos so the same offer is never typed twice.
-    setPromoRows(prev => [{
-      id: promoId,
-      am: who,
-      retailerId: merchant ? merchant.id : "",
-      merchantNameAr: "",
-      merchantNameEn: merchant ? merchant.name : "",
-      mainCategory: category || "",
-      subCategory: "",
-      offerType: (Number(form.ongoingPct) > 0 || form.ongoingOffer.trim()) ? "Upgraded Offer" : "New Offer",
-      ongoingOfferId: "",
-      ongoingOfferName: form.ongoingOffer,
-      specialOfferId: "",
-      specialOfferName: form.proposedOffer,
-      startDate: form.startDate,
-      endDate: form.endDate,
-      campaignType: form.campaign,
-      quarter: quarterFromDate(form.startDate || today),
-      month: monthFromDate(form.startDate || today),
-      competitive: "",
-      tier: merchant ? merchant.tier : "",
-      type: merchant && deriveChannel(merchant) === "Doam" ? "Offline" : "Online",
-      approvalStatus: "Pending",
-    }, ...prev]);
-
-    // Every channel worked becomes a dated entry, plus the submission itself.
-    const touchpoints = Object.keys(form.channels).filter(k => form.channels[k]);
-    const names = { E: "Email", M: "Meeting", C: "Call", W: "WhatsApp" };
-    const entries = touchpoints.map(k => ({
-      id: `AL-${Date.now()}-${k}`, date: today,
-      merchantId: merchant ? merchant.id : "", merchantName: merchant ? merchant.name : "",
-      channel: names[k], outcome: "Completed",
-      notes: `Worked the merchant on the ${form.proposedOffer || "special promo"}`,
-      by: who, kind: "touchpoint",
-    }));
-    entries.unshift({
-      id: `AL-${Date.now()}-sub`, date: today,
-      merchantId: merchant ? merchant.id : "", merchantName: merchant ? merchant.name : "",
-      channel: "Submission", outcome: "Submitted for Approval",
-      notes: `${form.ongoingPct || 0}% → ${form.proposedPct || 0}%${form.valueKind ? ` (${form.valueKind})` : ""} · ${form.proposedOffer}`,
-      by: who, kind: "promo",
-    });
-    setActivityLog(prev => [...entries, ...prev]);
-
-    setForm(blank);
-    setOpenForm(false);
-  }
-
-  const stageCount = (s) => pursuits.filter(p => p.stage === s).length;
-
-  return (
-    <>
-      <div className="kpi-mgmt-stats">
-        <div className="kpi-stat neutral"><span className="kpi-stat-dot" /><div><b>{pursuits.length}</b><span>Promos Logged</span></div></div>
-        <div className="kpi-stat warn"><span className="kpi-stat-dot" /><div><b>{stageCount("Submitted for Approval")}</b><span>Awaiting Approval</span></div></div>
-        <div className="kpi-stat good"><span className="kpi-stat-dot" /><div><b>{stageCount("Approved")}</b><span>Approved</span></div></div>
-        <div className="kpi-stat bad"><span className="kpi-stat-dot" /><div><b>{stageCount("Rejected")}</b><span>Rejected</span></div></div>
-      </div>
-
-      <div className="panel" style={{padding:"16px 18px", marginBottom:"16px"}}>
-        <div className="section-head inside" style={{padding:0, border:0}}>
-          <div><h2>Secure a special offer</h2><p>The strategy rules are applied as you type — the form tells you if it qualifies before you submit.</p></div>
-          <button className="primary" onClick={() => setOpenForm(v => !v)}><Icon name={openForm ? "close" : "plus"} size={13} /> {openForm ? "Close" : "New Special Promo"}</button>
-        </div>
-
-        {openForm && <div style={{marginTop:"16px"}}>
-          <div className="drawer-section" style={{paddingTop:0}}><h4>Merchant &amp; current offer</h4>
-            <div className="form-grid">
-              <label className="field span-2"><span>Merchant</span>
-                <select value={form.merchantId} onChange={e => set("merchantId", e.target.value)}>
-                  <option value="">Select a merchant…</option>
-                  {merchants.slice(0, 400).map(m => <option key={m.id} value={m.id}>{m.name} · {m.id}</option>)}
-                </select>
-              </label>
-              {merchant && <div className="field span-2 selected-merchant">
-                {merchant.name} · {merchant.category || "Uncategorised"} · Tier {merchant.tier} · {merchant.manager}
-                <span className="am-tag" style={{marginLeft:"8px"}}>Rule: {verdict.rule.guide}</span>
-              </div>}
-              <label className="field"><span>Ongoing offer (text)</span><input value={form.ongoingOffer} onChange={e => set("ongoingOffer", e.target.value)} placeholder="e.g. 10% off total bill" /></label>
-              <label className="field"><span>Ongoing discount %</span><input type="number" min={0} max={100} value={form.ongoingPct} onChange={e => set("ongoingPct", e.target.value)} placeholder="10" /></label>
-            </div>
-          </div>
-
-          <div className="drawer-section"><h4>Proposed special promo</h4>
-            <div className="form-grid">
-              <label className="field span-2"><span>Proposed offer</span><input value={form.proposedOffer} onChange={e => set("proposedOffer", e.target.value)} placeholder="e.g. 30% off everything for the weekend" /></label>
-              <label className="field"><span>Proposed discount %</span><input type="number" min={0} max={100} value={form.proposedPct} onChange={e => set("proposedPct", e.target.value)} placeholder="30" /></label>
-              <label className="field"><span>Or value promotion</span>
-                <select value={form.valueKind} onChange={e => set("valueKind", e.target.value)}>{promoValueKinds.map(v => <option key={v || "none"} value={v}>{v || "— none —"}</option>)}</select>
-              </label>
-              <label className="field"><span>Linked campaign</span>
-                <select value={form.campaign} onChange={e => set("campaign", e.target.value)}><option value="">—</option>{promoCampaignTypes.map(c => <option key={c}>{c}</option>)}</select>
-              </label>
-              <label className="field"><span>Paid marketing</span>
-                <select value={form.paidMarketing} onChange={e => set("paidMarketing", e.target.value)}><option>No</option><option>Yes</option></select>
-              </label>
-              {form.paidMarketing === "Yes" && <label className="field"><span>Budget (SAR)</span><input type="number" value={form.budget} onChange={e => set("budget", e.target.value)} placeholder="5000" /></label>}
-              <label className="field"><span>Expected TRX growth</span><input value={form.expectedGrowth} onChange={e => set("expectedGrowth", e.target.value)} placeholder="e.g. +25%" /></label>
-              <label className="field"><span>Start date</span><input type="date" value={form.startDate} onChange={e => set("startDate", e.target.value)} /></label>
-              <label className="field"><span>End date</span><input type="date" value={form.endDate} onChange={e => set("endDate", e.target.value)} /></label>
-            </div>
-          </div>
-
-          <div className={`qual-box ${verdict.qualifies ? "ok" : "no"}`}>
-            <div className="qual-head">
-              <b>{verdict.qualifies ? "✓ Qualifies as a Special Promo" : "✕ Does not qualify yet"}</b>
-              {!form.valueKind && form.proposedPct !== "" && <span className="qual-uplift">{verdict.uplift >= 0 ? "+" : ""}{verdict.uplift} pts uplift</span>}
-            </div>
-            <ul>{verdict.reasons.map((r, i) => <li key={i} className={r.ok ? "ok" : "no"}>{r.ok ? "✓" : "✕"} {r.text}</li>)}</ul>
-          </div>
-
-          <div className="drawer-section"><h4>How the merchant was worked</h4>
-            <div className="chan-row">
-              {[["E","Email","mail"],["M","Meeting","meeting"],["C","Call","phone"],["W","WhatsApp","activities"]].map(([k, label, ico]) => (
-                <button key={k} type="button" className={`chan-btn ${form.channels[k] ? "on" : ""}`}
-                  onClick={() => setForm(f => ({ ...f, channels: { ...f.channels, [k]: !f.channels[k] } }))}>
-                  <Icon name={ico} size={14} /> {label}
-                </button>
-              ))}
-            </div>
-            {!contacted && <p className="muted" style={{fontSize:"11px", margin:"9px 0 0"}}>Log at least one contact channel before submitting.</p>}
-          </div>
-
-          <div className="drawer-section"><h4>Before submitting</h4>
-            {[["merchantApproved","The merchant approved this offer"],["datesSet","Validity dates are clear and agreed"],["tested","Testing phase is done"]].map(([k, label]) => (
-              <label className="set-check" key={k}>
-                <input type="checkbox" checked={form.check[k]} onChange={e => setForm(f => ({ ...f, check: { ...f.check, [k]: e.target.checked } }))} />
-                <span><b>{label}</b></span>
-              </label>
-            ))}
-            <label className="field span-2"><span>Notes</span><textarea className="drawer-textarea" value={form.notes} onChange={e => set("notes", e.target.value)} placeholder="Anything the approver should know..." /></label>
-            <div className="modal-actions" style={{padding:"14px 0 0", border:0}}>
-              <button onClick={() => { setForm(blank); setOpenForm(false); }}>Cancel</button>
-              <button className="primary" disabled={!canSubmit} onClick={submit}>Submit for approval</button>
-            </div>
-            {!canSubmit && <p className="muted" style={{fontSize:"11px", margin:"8px 0 0", textAlign:"right"}}>Submit unlocks once the promo qualifies, a channel is logged, and all three checks are ticked.</p>}
-          </div>
-        </div>}
-      </div>
-
-      <div className="panel" style={{padding:"16px 18px", marginBottom:"16px"}}>
-        <div className="section-head inside" style={{padding:0, border:0, marginBottom:"14px"}}>
-          <div><h2>Log an activity</h2><p>Every contact with a merchant, dated — so the whole history is on record even when it does not end in a promo.</p></div>
-        </div>
-        <div className="form-grid">
-          <label className="field span-2"><span>Merchant</span>
-            <select value={logForm.merchantId} onChange={e => setLogForm(f => ({ ...f, merchantId: e.target.value }))}>
-              <option value="">Select a merchant…</option>
-              {merchants.slice(0, 400).map(m => <option key={m.id} value={m.id}>{m.name} · {m.id}</option>)}
-            </select>
-          </label>
-          <label className="field"><span>Channel</span>
-            <select value={logForm.channel} onChange={e => setLogForm(f => ({ ...f, channel: e.target.value }))}>
-              {Object.keys(channelMeta).map(c => <option key={c}>{c}</option>)}
-            </select>
-          </label>
-          <label className="field"><span>Date</span>
-            <input type="date" value={logForm.date} onChange={e => setLogForm(f => ({ ...f, date: e.target.value }))} />
-          </label>
-          <label className="field"><span>Outcome</span>
-            <select value={logForm.outcome} onChange={e => setLogForm(f => ({ ...f, outcome: e.target.value }))}>
-              {["Completed","No answer","Merchant interested","Merchant declined","Rescheduled","Awaiting reply"].map(o => <option key={o}>{o}</option>)}
-            </select>
-          </label>
-          <label className="field span-2"><span>What happened</span>
-            <textarea className="drawer-textarea" value={logForm.notes} onChange={e => setLogForm(f => ({ ...f, notes: e.target.value }))} placeholder="e.g. Called the owner — open to 30% for the weekend, wants to see artwork first" />
-          </label>
-        </div>
-        <div className="modal-actions" style={{padding:"12px 0 0", border:0}}>
-          <button className="primary" disabled={!logForm.merchantId} onClick={submitLog}><Icon name="plus" size={13} /> Log activity</button>
-        </div>
-      </div>
-
-      <div className="panel merchants-panel" style={{marginBottom:"16px"}}>
-        <div className="section-head inside">
-          <div><h2>Activity log</h2><p>{activityLog.length} entries · newest first</p></div>
-          <select value={logFilter} onChange={e => setLogFilter(e.target.value)} style={{maxWidth:"230px"}}>
-            <option value="">All merchants</option>
-            {Array.from(new Set(activityLog.map(a => a.merchantId))).filter(Boolean).map(id => {
-              const nm = (activityLog.find(a => a.merchantId === id) || {}).merchantName;
-              return <option key={id} value={id}>{nm}</option>;
-            })}
-          </select>
-        </div>
-        {activityLog.length === 0
-          ? <div className="empty-state"><p>No activity logged yet. Every call, email, meeting, and WhatsApp you record shows here with its date.</p></div>
-          : <div className="table-scroll"><table className="merchant-table">
-              <thead><tr><th>DATE</th><th>MERCHANT</th><th>ACTIVITY</th><th>OUTCOME</th><th>WHAT HAPPENED</th><th>BY</th></tr></thead>
-              <tbody>{activityLog.filter(a => !logFilter || a.merchantId === logFilter).map(a => (
-                <tr key={a.id}>
-                  <td><b>{a.date}</b></td>
-                  <td>{a.merchantName}<small className="muted-inline"> · {a.merchantId}</small></td>
-                  <td><span className="am-tag"><Icon name={channelMeta[a.channel] || "activities"} size={11} />{a.channel}</span></td>
-                  <td>{a.kind === "promo"
-                    ? <span className="kpi-status-pill warn">{a.outcome}</span>
-                    : <span className={`kpi-status-pill ${a.outcome === "Completed" || a.outcome === "Merchant interested" ? "good" : a.outcome === "Merchant declined" ? "bad" : "warn"}`}>{a.outcome}</span>}</td>
-                  <td className="notes-cell">{a.notes || <span className="muted">—</span>}</td>
-                  <td>{a.by}</td>
-                </tr>
-              ))}</tbody>
-            </table></div>}
-      </div>
-
-      <div className="panel merchants-panel">
-        <div className="section-head inside"><div><h2>Submitted promos</h2><p>{pursuits.length} submitted · each one also created a Special Promos record</p></div></div>
-        {pursuits.length === 0
-          ? <div className="empty-state"><p>Nothing submitted yet. Use "New Special Promo" above to log the first one.</p></div>
-          : <div className="table-scroll"><table className="merchant-table">
-              <thead><tr><th>MERCHANT</th><th>ONGOING → PROPOSED</th><th>UPLIFT</th><th>CAMPAIGN</th><th>PAID</th><th>EXP. GROWTH</th><th>CHANNELS</th><th>STAGE</th><th>BY</th></tr></thead>
-              <tbody>{pursuits.map(p => (
-                <tr key={p.id}>
-                  <td><b>{p.merchantName}</b><small className="muted-inline"> · {p.merchantId}</small></td>
-                  <td className="notes-cell">{p.valueKind || `${p.ongoingPct || 0}% → ${p.proposedPct || 0}%`}</td>
-                  <td>{p.valueKind ? <span className="am-tag">Value</span> : <b className="positive">+{p.uplift}</b>}</td>
-                  <td>{p.campaign || <span className="muted">—</span>}</td>
-                  <td>{p.paidMarketing === "Yes" ? <span className="kpi-status-pill warn">Paid</span> : <span className="muted">—</span>}</td>
-                  <td>{p.expectedGrowth || <span className="muted">—</span>}</td>
-                  <td>{Object.keys(p.channels).filter(k => p.channels[k]).join(" ") || <span className="muted">—</span>}</td>
-                  <td><span className="kpi-status-pill warn">{p.stage}</span></td>
-                  <td>{p.by}</td>
-                </tr>
-              ))}</tbody>
-            </table></div>}
-      </div>
-    </>
-  );
 }
 
 function PSTCRM() {
@@ -10616,9 +10473,6 @@ function PSTCRM() {
   const kpiRows = useMemo(() => {
     const dqCount = scopedMerchants.filter((m) => m.category && m.category !== "Other" && m.manager !== "Unassigned" && m.stores > 0).length;
     const dq = scopedMerchants.length ? Number((dqCount / scopedMerchants.length * 100).toFixed(1)) : 0;
-    const offersTotal = scopedMerchants.reduce((s, m) => s + m.totalOffers, 0);
-    const offersActive = scopedMerchants.reduce((s, m) => s + m.activeOffers, 0);
-
     const scopeOwner = kpiAM !== "All AMs" ? kpiAM : kpiDept !== "All teams" ? `${kpiDept} Team` : "Partner Success Org";
     const scopeDept = kpiAM !== "All AMs"
       ? (Object.keys(realTeamManagers).find((t) => realTeamManagers[t].includes(kpiAM)) ?? "Unassigned")
@@ -10626,7 +10480,6 @@ function PSTCRM() {
 
     const resolve = (k) => {
       if (k.name === "CRM Data Quality") return { ...k, achieved: dq };
-      if (k.name === "Approved Special Offers") return { ...k, achieved: offersActive, target: offersTotal || k.target };
       const vals = scopedAMs.map((am) => k.achieved * amVariance(k.name, am));
       const achieved = vals.length ? Number((vals.reduce((a, b) => a + b, 0) / vals.length).toFixed(1)) : k.achieved;
       return { ...k, achieved };
@@ -10792,6 +10645,13 @@ function PSTCRM() {
   const [mrSort, setMrSort] = useState("renewal");
   const [mrPage, setMrPage] = useState(1);
   const MR_PAGE = 20;
+  // Open a merchant already focused on the workstream the AM meant, instead of always
+  // landing on Special Offers and making them hunt for the right tab.
+  function openMerchantAt(id, tab) {
+    setMerchTab(tab);
+    setOpsExpanded(null);
+    setOpsMerchantId(id);
+  }
   function setNextCall(id, date) {
     setOpsData(prev => ({ ...prev, [id]: { ...(prev[id] || emptyMerchantOps()), nextCall: date } }));
   }
@@ -10815,6 +10675,13 @@ function PSTCRM() {
   const [opsExpanded, setOpsExpanded] = useState(null);
   const [merchTab, setMerchTab] = useState("offers");
   const [opsAttachName, setOpsAttachName] = useState("");
+  const [tpForm, setTpForm] = useState({ channel: "Call", date: new Date().toISOString().slice(0, 10), outcome: "Completed", notes: "", nextAction: "", dueDate: "" });
+  // Closing an action is the only way to clear the follow-up banner, so the AM either
+  // does the thing or logs why it moved — it cannot just be ignored.
+  function completeAction(entryId) {
+    setActivityLog(prev => prev.map(a => a.id === entryId
+      ? { ...a, done: true, doneAt: new Date().toISOString().slice(0, 10) } : a));
+  }
   function saveRow() {
     if (!rowForm.retailerId || !rowForm.merchantName.trim()) {
       setRowError("Select a merchant first — search the box above and click a result from the list.");
@@ -10838,11 +10705,27 @@ function PSTCRM() {
     return opsData[id] || emptyMerchantOps();
   }
   function logActivity(id, activity, notes) {
-    const entry = { id: `T-${Date.now()}`, date: "09 Aug 2026", user: "You", activity, notes };
+    // Was a hardcoded "09 Aug 2026" / "You" — useless for tracking who did what, when.
+    const entry = {
+      id: `T-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+      date: fmtLogDate(new Date()), user: authUser ? authUser.name : "Unknown", activity, notes,
+    };
     setOpsData(prev => {
       const current = prev[id] || emptyMerchantOps();
       return { ...prev, [id]: { ...current, timeline: [entry, ...current.timeline] } };
     });
+  }
+  // A dated contact with the merchant, captured by hand — the record of how the AM
+  // actually worked the account, separate from the field edits logActivity picks up.
+  function addTouchpoint(m, tp) {
+    if (!tp.notes.trim() && !tp.outcome) return;
+    setActivityLog(prev => [{
+      id: `AL-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+      date: tp.date, merchantId: m.id, merchantName: m.name,
+      channel: tp.channel, outcome: tp.outcome, notes: tp.notes.trim(),
+      nextAction: (tp.nextAction || "").trim(), dueDate: tp.dueDate || "", done: false,
+      by: authUser ? authUser.name : "Unknown", kind: "touchpoint",
+    }, ...prev]);
   }
   function updateWorkstream(id, key, patch, activityNote) {
     setOpsData(prev => {
@@ -10850,6 +10733,36 @@ function PSTCRM() {
       return { ...prev, [id]: { ...current, [key]: { ...current[key], ...patch } } };
     });
     logActivity(id, `Updated ${workstreamMeta[key].label}`, activityNote);
+  }
+  // Hands the qualified offer to Special Promos so the same thing is never typed twice.
+  function submitOfferForApproval(m, o) {
+    const when = new Date();
+    const who = authUser ? authUser.name : "Unknown";
+    const promoId = `SP-${Date.now()}`;
+    setPromoRows(prev => [{
+      id: promoId, am: who, retailerId: m.id,
+      merchantNameAr: "", merchantNameEn: m.name,
+      mainCategory: m.category || "", subCategory: "",
+      offerType: (Number(o.ongoingPct) > 0 || o.ongoingOffer.trim()) ? "Upgraded Offer" : "New Offer",
+      ongoingOfferId: "", ongoingOfferName: o.ongoingOffer,
+      specialOfferId: "", specialOfferName: o.proposedOffer,
+      startDate: o.startDate, endDate: o.endDate,
+      campaignType: o.campaign,
+      quarter: quarterFromDate(o.startDate || when.toISOString().slice(0, 10)),
+      month: monthFromDate(o.startDate || when.toISOString().slice(0, 10)),
+      competitive: "", tier: m.tier,
+      type: deriveChannel(m) === "Doam" ? "Offline" : "Online",
+      approvalStatus: "Pending",
+      submittedAt: when.toISOString(),
+    }, ...prev]);
+    setActivityLog(prev => [{
+      id: `AL-${Date.now()}-sub`, date: when.toISOString().slice(0, 10),
+      merchantId: m.id, merchantName: m.name,
+      channel: "Submission", outcome: "Submitted for approval",
+      notes: `${o.ongoingPct || 0}% → ${o.proposedPct || 0}%${o.valueKind ? ` (${o.valueKind})` : ""} · ${o.proposedOffer}`,
+      by: who, kind: "promo",
+    }, ...prev]);
+    updateWorkstream(m.id, "offers", { status: "Waiting Merchant" }, `Submitted "${o.proposedOffer}" for approval`);
   }
   function addOpsAttachment(id, name) {
     if (!name.trim()) return;
@@ -11622,8 +11535,9 @@ function PSTCRM() {
                   const d = m._d;
                   const nc = (opsData[m.id] || {}).nextCall || "";
                   const renewCls = d === null ? "" : d < 0 ? "bad" : d <= 30 ? "bad" : d <= 90 ? "warn" : "good";
+                  const ops = opsData[m.id];
                   return (
-                    <div className="am-card" key={m.id}>
+                    <div className={`am-card ${renewCls ? `urg-${renewCls}` : ""}`} key={m.id}>
                       <div className="am-head">
                         <div className="am-avatar"><Icon name="merchants" size={19} /></div>
                         <div style={{minWidth:0,flex:1}}>
@@ -11640,8 +11554,8 @@ function PSTCRM() {
                             <span className="am-meta">{m.country}</span>
                           </div>
                         </div>
-                        <button className="am-open" title="Open merchant workspace" onClick={()=>setOpsMerchantId(m.id)}>
-                          <span style={{display:"flex",transform:"rotate(45deg)"}}><Icon name="trendUp" size={15} /></span>
+                        <button className="am-open" title="Open merchant workspace" onClick={()=>openMerchantAt(m.id, "offers")}>
+                          Open<span style={{display:"flex",transform:"rotate(180deg)"}}><Icon name="chevLeft" size={13} /></span>
                         </button>
                       </div>
                       <div className="am-mini">
@@ -11655,6 +11569,19 @@ function PSTCRM() {
                           <input type="date" value={nc} onChange={e=>setNextCall(m.id, e.target.value)}
                             style={{border:0,background:"transparent",font:"inherit",fontWeight:750,color:"inherit",padding:0,width:"122px",outline:0}} />
                         </span>
+                      </div>
+                      <div className="am-quick">
+                        <small>Go to</small>
+                        {Object.keys(workstreamMeta).map(k => {
+                          const started = workstreamStarted(ops, k);
+                          return (
+                            <button key={k} className={started ? "on" : ""} onClick={()=>openMerchantAt(m.id, k)}
+                              title={`${workstreamMeta[k].label}${started ? " — already started" : ""}`}>
+                              <Icon name={workstreamMeta[k].icon} size={11} />{workstreamMeta[k].short}
+                              {started && <span className="qdot" />}
+                            </button>
+                          );
+                        })}
                       </div>
                     </div>
                   );
@@ -11682,6 +11609,24 @@ function PSTCRM() {
               );
             })()}
 
+            <div className="ops-quickbar">
+              <small>Jump to</small>
+              {Object.keys(workstreamMeta).map(k => {
+                const started = workstreamStarted(opsSelectedOps, k);
+                return (
+                  <button key={k} className={merchTab === k ? "active" : ""} onClick={()=>setMerchTab(k)}
+                    title={`${workstreamMeta[k].label}${started ? " — already started" : ""}`}>
+                    <Icon name={workstreamMeta[k].icon} size={12} />{workstreamMeta[k].label}
+                    {started && <span className="qdot" />}
+                  </button>
+                );
+              })}
+              <span className="spacer" />
+              <button onClick={()=>{setOpsMerchantId(null); setOpsExpanded(null);}}>
+                <Icon name="chevLeft" size={12} />All merchants
+              </button>
+            </div>
+
             {(() => {
               const m = opsSelectedMerchant, o = opsSelectedOps;
               const specials = promoRows.filter(p => p.retailerId === m.id);
@@ -11692,7 +11637,7 @@ function PSTCRM() {
               const csat = Number(o.csat.latestScore) || 0;
               const renewTone = o.renewal.paid === "Paid" ? "good" : dLeft === null ? "neutral" : dLeft < 0 ? "bad" : dLeft <= 90 ? "warn" : "neutral";
               return (
-                <div className="kpi-mgmt-stats">
+                <div className="kpi-mgmt-stats ops-hero-stats">
                   <div className={`kpi-stat ${specials.length ? "good" : "neutral"}`}>
                     <span className="kpi-stat-dot" />
                     <div><b>{specials.length}</b><span>Special Offers{specials.length ? ` · ${accepted} approved` : ""}</span></div>
@@ -11720,20 +11665,7 @@ function PSTCRM() {
               );
             })()}
 
-            <div className="panel"><div className="section-head inside"><div><h2>Operations workstreams</h2><p>Pick an activity below to work on it — a green dot marks the ones already started</p></div></div>
-              <div className="ops-tabstrip" style={{marginTop:"4px"}}>
-                {Object.keys(workstreamMeta).map(k => {
-                  const meta = workstreamMeta[k];
-                  const st = k === "csat" ? opsSelectedOps.csat.health : opsSelectedOps[k].status;
-                  const touched = k === "csat" ? (Number(opsSelectedOps.csat.latestScore) > 0) : st !== "Not Started" && st !== "Not Scheduled";
-                  return (
-                    <button key={k} className={merchTab === k ? "active" : ""} onClick={() => setMerchTab(k)}>
-                      <Icon name={meta.icon} size={14} /> {meta.label}
-                      {touched && <em style={{background:"#e5f7ef",color:"#0f8558"}}>●</em>}
-                    </button>
-                  );
-                })}
-              </div>
+            <div className="panel"><div className="section-head inside"><div><h2>Operations workstreams</h2><p>Switch workstream from the Jump to bar above — a green dot marks the ones already started</p></div></div>
 
               <div className="ops-workstream-grid" style={{gridTemplateColumns:"1fr"}}>
                 {Object.keys(workstreamMeta).filter(k => k === merchTab).map(key => {
@@ -11744,25 +11676,146 @@ function PSTCRM() {
                   const color = key === "csat" ? (st==="Good"?"#0f8558":st==="At Risk"?"#c73847":"#c9821c") : statusColor(st, ["Renewed","Live","Closed","Won"], ["In Progress","Waiting Merchant","Negotiation","Scheduled","Interested","Proposal Requested","Quotation Requested","Quotation Shared","Package Presented","Need Identified","Results Shared","Feedback Collected","Action Plan Set","Approved","Completed"]);
                   const nextFollow = key==="offers"?opsSelectedOps.offers.nextFollowUp:key==="renewal"?opsSelectedOps.renewal.nextFollowUp:key==="marketing"?opsSelectedOps.marketing.nextFollowUp:key==="meetings"?opsSelectedOps.meetings.nextMeetingDate:opsSelectedOps.csat.nextFollowUp;
                   const notes = key==="csat" ? opsSelectedOps.csat.feedback : opsSelectedOps[key].notes;
+
+                  // Offers tab: run the Q3 strategy engine live against what the AM has typed.
+                  const oOff = opsSelectedOps.offers;
+                  const priorPromos = promoRows.filter(p => p.retailerId === opsSelectedMerchant.id && p.submittedAt);
+                  const daysSinceLast = priorPromos.length
+                    ? Math.floor((Date.now() - Math.max(...priorPromos.map(p => new Date(p.submittedAt).getTime()))) / 86400000)
+                    : null;
+                  const verdict = key === "offers" ? qualifyPromo({
+                    category: opsSelectedMerchant.category, ongoingPct: oOff.ongoingPct,
+                    proposedPct: oOff.proposedPct, valueKind: oOff.valueKind, daysSinceLast,
+                  }) : null;
+                  const canSubmitOffer = !!verdict && verdict.qualifies
+                    && !!String(oOff.proposedOffer || "").trim() && !!oOff.startDate && !!oOff.endDate;
+                  const patchOffer = (patch) => setOpsData(prev => {
+                    const cur = prev[opsSelectedMerchant.id] || emptyMerchantOps();
+                    return { ...prev, [opsSelectedMerchant.id]: { ...cur, offers: { ...cur.offers, ...patch } } };
+                  });
+                  const merchActivity = activityLog.filter(a => a.merchantId === opsSelectedMerchant.id);
+
+                  // Strict follow-up: the newest logged action that has not been closed.
+                  const openAction = merchActivity.find(a => a.nextAction && !a.done) || null;
+                  const actDue = openAction ? daysFromToday(openAction.dueDate) : null;
+                  const actTone = !openAction ? "none"
+                    : actDue === null ? "ok"
+                    : actDue < 0 ? "overdue" : actDue === 0 ? "today" : "ok";
+                  const actLabel = !openAction
+                    ? "Log a contact below to set the next action for this merchant"
+                    : actDue === null ? `No due date · set by ${openAction.by}`
+                    : actDue < 0 ? `Overdue by ${Math.abs(actDue)} day${Math.abs(actDue) === 1 ? "" : "s"} · due ${openAction.dueDate} · ${openAction.by}`
+                    : actDue === 0 ? `Due today · ${openAction.by}`
+                    : `Due in ${actDue} day${actDue === 1 ? "" : "s"} · ${openAction.dueDate} · ${openAction.by}`;
+                  const tpCanLog = !!tpForm.notes.trim() && !!tpForm.nextAction.trim() && !!tpForm.dueDate;
+
                   return (
                     <div key={key} className="ops-ws-card expanded">
-                      <button className="ops-ws-head" style={{cursor:"default"}}>
+                      <div className="ops-ws-head">
                         <span className="ops-ws-icon" style={{background:color+"18", color}}><Icon name={meta.icon} size={14}/></span>
                         <span className="ops-ws-title"><b>{meta.label}</b><small style={{color}}>{st}</small></span>
-                        <Icon name="chevDown" size={13}/>
-                      </button>
+                      </div>
                       <div className="ops-ws-progress"><div style={{width:`${progress}%`, background:color}}/></div>
-                      <div className="ops-ws-meta">
+                      {/* Offers carries this in its follow-up banner and boxes already. */}
+                      {key !== "offers" && <div className="ops-ws-meta">
                         <span>Next: {nextFollow || "—"}</span>
                         <span>{notes ? "1 note" : "0 notes"}</span>
                         <span>{opsSelectedOps.attachments.length} files</span>
-                      </div>
+                      </div>}
 
-                      {<div className="ops-ws-editor">
+                      {<div className={`ops-ws-editor ${key==="offers" ? "stacked" : ""}`}>
                         {key==="offers" && <>
-                          <label className="field"><span>Status</span><select value={opsSelectedOps.offers.status} onChange={e=>updateWorkstream(opsSelectedMerchant.id,"offers",{status:e.target.value},`Status → ${e.target.value}`)}>{offerStatuses.map(s=><option key={s}>{s}</option>)}</select></label>
-                          <label className="field"><span>Next follow-up</span><input type="date" value={opsSelectedOps.offers.nextFollowUp} onChange={e=>updateWorkstream(opsSelectedMerchant.id,"offers",{nextFollowUp:e.target.value},"Follow-up date set")} /></label>
-                          <label className="field span-2"><span>Notes</span><textarea className="drawer-textarea" value={opsSelectedOps.offers.notes} onChange={e=>setOpsData(prev=>({...prev,[opsSelectedMerchant.id]:{...(prev[opsSelectedMerchant.id]||emptyMerchantOps()),offers:{...(prev[opsSelectedMerchant.id]||emptyMerchantOps()).offers,notes:e.target.value}}}))} onBlur={e=>logActivity(opsSelectedMerchant.id,"Offers note updated",e.target.value)} placeholder="Standard / Special / Subsidized offer notes..." /></label>
+                          <div className={`act-banner ${actTone}`}>
+                            <i><Icon name={actTone==="none"?"help":actTone==="overdue"?"bell":"target"} size={15} /></i>
+                            <div style={{flex:1,minWidth:0}}>
+                              <b>{openAction ? openAction.nextAction : "No action set"}</b>
+                              <span>{actLabel}</span>
+                            </div>
+                            {openAction && <button onClick={()=>completeAction(openAction.id)}><Icon name="check" size={12} /> Mark done</button>}
+                          </div>
+
+                          <div className="ofr-grid">
+                            <div className="ofr-box">
+                              <h5><Icon name="target" size={11} /> Where it stands</h5>
+                              <div className="ofr-fields">
+                                <label className="field"><span>Status</span><select value={oOff.status} onChange={e=>updateWorkstream(opsSelectedMerchant.id,"offers",{status:e.target.value},`Status → ${e.target.value}`)}>{offerStatuses.map(s=><option key={s}>{s}</option>)}</select></label>
+                                <label className="field"><span>Next follow-up</span><input type="date" value={oOff.nextFollowUp} onChange={e=>updateWorkstream(opsSelectedMerchant.id,"offers",{nextFollowUp:e.target.value},"Follow-up date set")} /></label>
+                                <label className="field span-2"><span>Ongoing offer</span><input value={oOff.ongoingOffer} onChange={e=>patchOffer({ongoingOffer:e.target.value})} placeholder="e.g. 10% off total bill" /></label>
+                                <label className="field"><span>Ongoing %</span><input type="number" min={0} max={100} value={oOff.ongoingPct} onChange={e=>patchOffer({ongoingPct:e.target.value})} placeholder="10" /></label>
+                                <label className="field"><span>Last promo</span><input readOnly value={daysSinceLast===null?"none yet":`${daysSinceLast}d ago`} style={{background:"var(--line-soft)",cursor:"default"}} /></label>
+                              </div>
+                            </div>
+
+                            <div className="ofr-box">
+                              <h5><Icon name="gift" size={11} /> Proposed offer</h5>
+                              <div className="ofr-fields">
+                                <label className="field span-2"><span>Offer</span><input value={oOff.proposedOffer} onChange={e=>patchOffer({proposedOffer:e.target.value})} placeholder="e.g. 30% off, weekend only" /></label>
+                                <label className="field"><span>Proposed %</span><input type="number" min={0} max={100} value={oOff.proposedPct} onChange={e=>patchOffer({proposedPct:e.target.value})} placeholder="30" /></label>
+                                <label className="field"><span>Or value promo</span><select value={oOff.valueKind} onChange={e=>patchOffer({valueKind:e.target.value})}>{promoValueKinds.map(v=><option key={v||"none"} value={v}>{v||"— none —"}</option>)}</select></label>
+                                <label className="field"><span>Campaign</span><select value={oOff.campaign} onChange={e=>patchOffer({campaign:e.target.value})}><option value="">—</option>{promoCampaignTypes.map(c=><option key={c}>{c}</option>)}</select></label>
+                                <label className="field"><span>Paid marketing</span><select value={oOff.paidMarketing} onChange={e=>patchOffer({paidMarketing:e.target.value})}><option>No</option><option>Yes</option></select></label>
+                                {oOff.paidMarketing==="Yes" && <label className="field"><span>Budget (SAR)</span><input type="number" value={oOff.budget} onChange={e=>patchOffer({budget:e.target.value})} placeholder="5000" /></label>}
+                                <label className="field"><span>Expected growth</span><input value={oOff.expectedGrowth} onChange={e=>patchOffer({expectedGrowth:e.target.value})} placeholder="+25%" /></label>
+                                <label className="field"><span>Start</span><input type="date" value={oOff.startDate} onChange={e=>patchOffer({startDate:e.target.value})} /></label>
+                                <label className="field"><span>End</span><input type="date" value={oOff.endDate} onChange={e=>patchOffer({endDate:e.target.value})} /></label>
+                              </div>
+                            </div>
+
+                            <div className="ofr-box span-2 tight">
+                              <div className={`qual-strip ${verdict.qualifies ? "ok" : "no"}`}>
+                                <b>{verdict.qualifies ? "✓ Qualifies" : "✕ Not yet"}</b>
+                                {!oOff.valueKind && oOff.proposedPct !== "" && <em>{verdict.uplift >= 0 ? "+" : ""}{verdict.uplift} pts</em>}
+                                <ul>{verdict.reasons.map((r,i)=><li key={i} className={r.ok?"ok":"no"}>{r.text}</li>)}</ul>
+                                <span className="qual-rule">{opsSelectedMerchant.category || "Category"}: {verdict.rule.guide}</span>
+                                <button className="primary" disabled={!canSubmitOffer} onClick={()=>submitOfferForApproval(opsSelectedMerchant, oOff)}>
+                                  <Icon name="check" size={12} /> Submit
+                                </button>
+                              </div>
+                              {!canSubmitOffer && <p className="ofr-hint">Submit needs a qualifying offer, an offer name, and both dates.</p>}
+                            </div>
+
+                            <div className="ofr-box span-2">
+                              <h5><Icon name="activities" size={11} /> Contact log — every entry must set the next action</h5>
+                              <div className="tp-row">
+                                <select value={tpForm.channel} onChange={e=>setTpForm(f=>({...f,channel:e.target.value}))}>
+                                  {["Call","Email","WhatsApp","Meeting","Visit"].map(c=><option key={c}>{c}</option>)}
+                                </select>
+                                <input type="date" title="When this happened" value={tpForm.date} onChange={e=>setTpForm(f=>({...f,date:e.target.value}))} />
+                                <select value={tpForm.outcome} onChange={e=>setTpForm(f=>({...f,outcome:e.target.value}))}>
+                                  {["Completed","Merchant interested","Awaiting reply","No answer","Merchant declined","Rescheduled"].map(o=><option key={o}>{o}</option>)}
+                                </select>
+                                <input className="tp-notes" value={tpForm.notes} onChange={e=>setTpForm(f=>({...f,notes:e.target.value}))} placeholder="What happened?" />
+                                <input className="tp-next" value={tpForm.nextAction} onChange={e=>setTpForm(f=>({...f,nextAction:e.target.value}))} placeholder="Next action (required)" />
+                                <input type="date" title="Next action due" value={tpForm.dueDate} onChange={e=>setTpForm(f=>({...f,dueDate:e.target.value}))} />
+                                <button className="primary" disabled={!tpCanLog} onClick={()=>{addTouchpoint(opsSelectedMerchant,tpForm); setTpForm(f=>({...f,notes:"",nextAction:"",dueDate:""}));}}>Log</button>
+                              </div>
+                              {!tpCanLog && <p className="ofr-hint">All four are required: what happened, the next action, and its due date.</p>}
+
+                              <div className="act-feed">
+                                {merchActivity.length===0 && <p className="ofr-hint" style={{textAlign:"center",padding:"14px 0"}}>No contact logged with this merchant yet.</p>}
+                                {merchActivity.slice(0,12).map(a=>{
+                                  const dd = a.nextAction && !a.done ? daysFromToday(a.dueDate) : null;
+                                  return (
+                                    <div className="act-item" key={a.id}>
+                                      <i className={a.kind==="promo"?"promo":a.done?"done":"open"} />
+                                      <div style={{flex:1,minWidth:0}}>
+                                        <div className="act-line"><b>{a.channel} · {a.outcome}</b><span>{a.date} · {a.by}</span></div>
+                                        {a.notes && <p>{a.notes}</p>}
+                                        {a.nextAction && <p className={`act-next ${a.done?"done":dd!==null&&dd<0?"late":""}`}>
+                                          {a.done ? "✓ Done" : "→"} {a.nextAction}
+                                          {!a.done && a.dueDate && <em> · due {a.dueDate}{dd!==null && (dd<0?` (${Math.abs(dd)}d late)`:dd===0?" (today)":` (${dd}d)`)}</em>}
+                                        </p>}
+                                      </div>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            </div>
+
+                            <div className="ofr-box span-2 tight">
+                              <label className="field"><span>Notes</span><textarea className="drawer-textarea" style={{minHeight:"52px"}} value={oOff.notes} onChange={e=>patchOffer({notes:e.target.value})} onBlur={e=>e.target.value && logActivity(opsSelectedMerchant.id,"Offers note updated",e.target.value)} placeholder="Standard / Special / Subsidized offer notes..." /></label>
+                            </div>
+                          </div>
                         </>}
                         {key==="renewal" && <>
                           <label className="field"><span>Status</span><select value={opsSelectedOps.renewal.status} onChange={e=>updateWorkstream(opsSelectedMerchant.id,"renewal",{status:e.target.value},`Status → ${e.target.value}`)}>{renewalStatuses.map(s=><option key={s}>{s}</option>)}</select></label>
